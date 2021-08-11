@@ -1,18 +1,17 @@
-from scipy.signal import medfilt, detrend
-import pandas as pd
 import numpy as np
+import pandas as pd
 import tqdm
-
+from scipy.signal import detrend, medfilt
 
 
 def detrend_norm(trace, wnd=3000):
-    """ Normalize trace by dividing it for a super low-pass filtered
+    """Normalize trace by dividing it for a super low-pass filtered
     version of it.
     """
     st = pd.Series(trace).rolling(wnd, center=True).mean().values
 
     # Fill nan values:
-    st[:wnd // 2] = st[wnd // 2]
+    st[: wnd // 2] = st[wnd // 2]
     st[-wnd // 2:] = st[-wnd // 2]
     return trace / st
 

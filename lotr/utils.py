@@ -3,9 +3,8 @@ from scipy.interpolate import interp1d
 
 
 def zscore(array):
-    """Nan zscoring function.
-    """
-    return (array - np.nanmean(array))/np.nanstd(array)
+    """Nan zscoring function."""
+    return (array - np.nanmean(array)) / np.nanstd(array)
 
 
 def interpolate(source_x, source_y, target_x):
@@ -13,7 +12,7 @@ def interpolate(source_x, source_y, target_x):
 
 
 def pearson_regressors(traces, regressors):
-    """ Gives the pearson correlation coefficient
+    """Gives the pearson correlation coefficient
 
     :param traces: the traces, with time in rows
     :param regressors: the regressors, with time in rows
@@ -27,17 +26,16 @@ def pearson_regressors(traces, regressors):
         denominator = (X.shape[0] - 1) * np.nanstd(X, 0) * np.nanstd(Y)
         result = numerator / denominator
     else:
-        numerator = np.dot(X.T, Y) - X.shape[0] * np.outer(np.nanmean(X, 0),
-                                                           np.nanmean(Y, 0))
-        denominator = (X.shape[0] - 1) * np.outer(np.nanstd(X, 0),
-                                                  np.nanstd(Y, 0))
+        numerator = np.dot(X.T, Y) - X.shape[0] * np.outer(
+            np.nanmean(X, 0), np.nanmean(Y, 0)
+        )
+        denominator = (X.shape[0] - 1) * np.outer(np.nanstd(X, 0), np.nanstd(Y, 0))
         result = (numerator / denominator).T
 
     return result
 
 
 def linear_regression(X, Y):
-    """Get slope and intercept of linear regression between two vectors.
-    """
-    X_mat=np.vstack((np.ones(len(X)), X)).T
+    """Get slope and intercept of linear regression between two vectors."""
+    X_mat = np.vstack((np.ones(len(X)), X)).T
     return np.linalg.inv(X_mat.T.dot(X_mat)).dot(X_mat.T).dot(Y)
