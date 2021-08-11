@@ -1,0 +1,7 @@
+numpy
+matplotlib
+flammkuchen
+bouter
+seaborn
+scipy
+svgpath2mpl
