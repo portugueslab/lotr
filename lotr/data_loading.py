@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
 from scipy.signal import detrend, medfilt
+from tqdm import tqdm
 
 
 def detrend_norm(trace, wnd=3000):
@@ -12,7 +12,7 @@ def detrend_norm(trace, wnd=3000):
 
     # Fill nan values:
     st[: wnd // 2] = st[wnd // 2]
-    st[-wnd // 2:] = st[-wnd // 2]
+    st[-wnd // 2 :] = st[-wnd // 2]
     return trace / st
 
 

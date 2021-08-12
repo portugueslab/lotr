@@ -1,4 +1,5 @@
 from shutil import copy
+
 from tqdm import tqdm
 
 
@@ -14,8 +15,12 @@ def mirror_all_subfolders(source_master_path, dest_master_path, file_patterns=No
 def mirror_fish_folder(source_path, dest_path, file_patterns=None):
 
     if file_patterns is None:
-        file_patterns = ["*behavior_log*", "*stimulus_log*",
-                          "*metadata.json", "data_from_suite2p_unfiltered.h5"]
+        file_patterns = [
+            "*behavior_log*",
+            "*stimulus_log*",
+            "*metadata.json",
+            "data_from_suite2p_unfiltered.h5",
+        ]
     # ["bouts_df.h5", , "*selected*.h5",
 
     dest_path.mkdir(exist_ok=True)
