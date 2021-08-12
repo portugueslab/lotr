@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import tqdm
+from tqdm import tqdm
 from scipy.signal import detrend, medfilt
 
 

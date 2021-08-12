@@ -1,5 +1,4 @@
 from shutil import copy
-from pathlib import Path
 from tqdm import tqdm
 
 
@@ -8,7 +7,7 @@ def mirror_all_subfolders(source_master_path, dest_master_path, file_patterns=No
 
     # paths = [source_path / f.name for f in dest_master_path.glob("*_f*")]
 
-    for path in tqdm(source_master_path.glob("*[0-9]_f[0-9]*")):
+    for path in tqdm(list(source_master_path.glob("*[0-9]_f[0-9]*"))):
         mirror_fish_folder(path, dest_master_path / path.name, file_patterns)
 
 

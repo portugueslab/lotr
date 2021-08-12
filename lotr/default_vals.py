@@ -1,0 +1,3 @@
+TURN_BIAS = 0.2
+
+GCAMP_TAU = 5
