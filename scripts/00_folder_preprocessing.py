@@ -24,7 +24,6 @@ def preprocess_folder(
 
         # Extract bout dataframe:
         if not (path / "bouts_df.h5").exists() or recompute_bout_df:
-            print(path.name)
             beh_df = exp.behavior_log
             theta_mat = beh_df.loc[:, [f"theta_0{i}" for i in range(9)]].values
             beh_df.loc[:, [f"theta_0{i}" for i in range(9)]] = predictive_tail_fill(
