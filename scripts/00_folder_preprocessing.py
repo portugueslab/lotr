@@ -87,7 +87,7 @@ if __name__ == "__main__":
     from pathlib import Path
 
     preprocess_folder(
-        Path("/Users/luigipetrucco/Desktop/source_data_batch1"),
+        Path("/Users/luigipetrucco/Desktop/source_data_batch2"),
         recompute_bout_df=False,
         recompute_regressors=False,
     )
