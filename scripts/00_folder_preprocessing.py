@@ -8,6 +8,7 @@ from tqdm import tqdm
 from lotr.behavior import create_motor_regressors
 from lotr.data_loading import preprocess_traces
 from lotr.utils import pearson_regressors
+from lotr.default_vals import TURN_BIAS, TRACES_SMOOTH_S
 
 
 def preprocess_folder(
@@ -44,8 +45,8 @@ def preprocess_folder(
             bouts_df["idx_imaging"] = np.round(bouts_df["t_start"] * fn).astype(np.int)
 
             bouts_df["direction"] = "fw"
-            bouts_df.loc[(bouts_df["bias"] > 0.2), "direction"] = "rt"
-            bouts_df.loc[(bouts_df["bias"] < -0.2), "direction"] = "lf"
+            bouts_df.loc[(bouts_df["bias"] > TURN_BIAS), "direction"] = "rt"
+            bouts_df.loc[(bouts_df["bias"] < -TURN_BIAS), "direction"] = "lf"
 
             fl.save(path / "bouts_df.h5", bouts_df)
 
@@ -53,10 +54,10 @@ def preprocess_folder(
         if not (path / "filtered_traces.h5").exists() or recompute_filtering:
             traces_raw = fl.load(path / "data_from_suite2p_unfiltered.h5", "/traces").T
             traces = preprocess_traces(
-                traces_raw, fn, smooth_wnd_s=5.5, detrend_wnd_s=900
+                traces_raw, fn, smooth_wnd_s=TRACES_SMOOTH_S, detrend_wnd_s=900
             )
             traces_und = preprocess_traces(
-                traces_raw, fn, smooth_wnd_s=5.5, detrend_wnd_s=None
+                traces_raw, fn, smooth_wnd_s=TRACES_SMOOTH_S, detrend_wnd_s=None
             )
             fl.save(path / "filtered_traces.h5", dict(detr=traces, undetr=traces_und))
 
@@ -87,7 +88,7 @@ if __name__ == "__main__":
     from pathlib import Path
 
     preprocess_folder(
-        Path("/Users/luigipetrucco/Desktop/source_data_batch2"),
+        Path("/Users/luigipetrucco/Desktop/hagar_data"),
         recompute_bout_df=False,
         recompute_regressors=False,
     )

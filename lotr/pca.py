@@ -67,11 +67,43 @@ def fit_phase_neurons(traces, phase):
     covs = np.full(n_cells, np.nan)
 
     for i in tqdm(range(traces.shape[1])):
-        try:
-            ph, c = phase_from_fit(phase, traces[:, i])
-            phase[i] = ph
-            covs[i] = c[0][0]
-        except RuntimeError:
-            pass
+        if not (traces[:, i] == 0).all():
+            try:
+                ph, c = phase_from_fit(phase, traces[:, i])
+                cell_phases[i] = ph
+                covs[i] = c[0][0]
+            except RuntimeError:
+                pass
 
     return cell_phases, covs
+
+
+def qap_sorting_and_phase(traces, t_lims=None):
+    n_pts, n = traces.shape
+
+    if t_lims is None:
+        t_lims = (0, n_pts)
+
+    distance = np.corrcoef(traces[t_lims[0]:t_lims[1], :].T)
+
+    flow = np.zeros((n, n))
+    toshift = np.cos(np.linspace(-np.pi, np.pi, n))
+    for i in range(n):
+        flow[i, :] = np.roll(toshift, i)
+
+    options = {"P0": "randomized"}
+    res = min([soo.quadratic_assignment(flow, distance, method="faq", options=options)
+               for i in range(1000)], key=lambda x: x.fun)
+
+    options = {"partial_guess": np.array([np.arange(n), res.col_ind]).T}
+    res = soo.quadratic_assignment(flow, distance, method="2opt", options=options)
+
+    perm = res["col_ind"]
+
+    traces_sorted = traces[:, perm]
+
+    base = np.linspace(0, 2 * np.pi, traces_sorted.shape[1])
+    com_phase = np.arctan2(np.sum(np.sin(base) * traces_sorted, 1),
+                           np.sum(np.cos(base) * traces_sorted, 1))
+
+    return perm, com_phase
