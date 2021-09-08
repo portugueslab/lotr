@@ -3,6 +3,7 @@ from circle_fit import hyper_fit
 from scipy.optimize import curve_fit
 from sklearn.decomposition import PCA
 from tqdm import tqdm
+from scipy.optimize import quadratic_assignment
 
 from lotr.behavior import get_fictive_trajectory
 from lotr.utils import linear_regression
@@ -92,11 +93,11 @@ def qap_sorting_and_phase(traces, t_lims=None):
         flow[i, :] = np.roll(toshift, i)
 
     options = {"P0": "randomized"}
-    res = min([soo.quadratic_assignment(flow, distance, method="faq", options=options)
+    res = min([quadratic_assignment(flow, distance, method="faq", options=options)
                for i in range(1000)], key=lambda x: x.fun)
 
     options = {"partial_guess": np.array([np.arange(n), res.col_ind]).T}
-    res = soo.quadratic_assignment(flow, distance, method="2opt", options=options)
+    res = quadratic_assignment(flow, distance, method="2opt", options=options)
 
     perm = res["col_ind"]
 
