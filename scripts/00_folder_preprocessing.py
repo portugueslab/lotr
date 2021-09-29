@@ -20,6 +20,7 @@ def preprocess_folder(
     paths = [f.parent for f in data_path.glob("*/*meta*")]
 
     for path in tqdm(paths):
+        print(path)
         try:
             exp = LightsheetExperiment(path)
             fn = int(exp.fs_imaging)
@@ -92,9 +93,10 @@ if __name__ == "__main__":
     from pathlib import Path
 
     preprocess_folder(
-        Path("/Users/luigipetrucco/Desktop/batch_210908"),
+        Path("/Users/luigipetrucco/Desktop/batch_210922"),
         recompute_bout_df=False,
-        recompute_regressors=False,
+        recompute_regressors=True,
+        recompute_filtering=True,
     )
     # preprocess_folder(Path("/Users/luigipetrucco/Desktop/source_data_batch1"),
     #                  recompute_bout_df=True)
