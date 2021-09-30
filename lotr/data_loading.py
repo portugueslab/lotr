@@ -41,8 +41,12 @@ def preprocess_traces(traces, fn, smooth_wnd_s=5, detrend_wnd_s=800):
 
     """
     traces_sm = traces.copy()
-    for i in tqdm(range(traces_sm.shape[1])):
-        traces_sm[:, i] = medfilt(traces[:, i], int(fn * smooth_wnd_s))
+
+    # solve problem for even-valued windows:
+    wnd_pts = int(fn * smooth_wnd_s) if (int(fn * smooth_wnd_s) % 2) == 1 else int(fn * smooth_wnd_s) + 1
+
+    for i in range(traces_sm.shape[1]):
+        traces_sm[:, i] = medfilt(traces[:, i], wnd_pts)
         if detrend_wnd_s is not None:
             traces_sm[:, i] = detrend_norm(traces_sm[:, i], wnd=int(fn * detrend_wnd_s))
     if detrend_wnd_s is None:

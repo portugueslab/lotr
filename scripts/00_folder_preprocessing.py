@@ -12,15 +12,11 @@ from lotr.default_vals import TURN_BIAS, TRACES_SMOOTH_S
 
 
 def preprocess_folder(
-    data_path,
+    path,
     recompute_bout_df=False,
     recompute_filtering=False,
     recompute_regressors=False,
 ):
-    paths = [f.parent for f in data_path.glob("*/*meta*")]
-
-    for path in tqdm(paths):
-        print(path)
         try:
             exp = LightsheetExperiment(path)
             fn = int(exp.fs_imaging)
@@ -91,12 +87,15 @@ def preprocess_folder(
 
 if __name__ == "__main__":
     from pathlib import Path
+    data_path = Path(r"\\FUNES\Shared\experiments\E0071_lotr")
+    paths = [f.parent for f in data_path.glob("*/*/*/*meta*")]
 
-    preprocess_folder(
-        Path("/Users/luigipetrucco/Desktop/batch_210922"),
-        recompute_bout_df=False,
-        recompute_regressors=True,
-        recompute_filtering=True,
-    )
+    for path in tqdm(paths):
+        preprocess_folder(
+            path,
+            recompute_bout_df=True,
+            recompute_regressors=True,
+            recompute_filtering=True,
+        )
     # preprocess_folder(Path("/Users/luigipetrucco/Desktop/source_data_batch1"),
     #                  recompute_bout_df=True)
