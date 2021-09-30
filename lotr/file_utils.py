@@ -1,6 +1,17 @@
 from shutil import copy
+import re
 
 from tqdm import tqdm
+
+
+def folder_2_fid(folder):
+    """take only actual fish id of date and fish number.
+    """
+
+    f_n = "".join(re.split(r"(\d+)", folder.name.split("_")[1])[:2])
+    date = folder.name.split("_")[0]
+
+    return f"{date}_{f_n}"
 
 
 def mirror_all_subfolders(source_master_path, dest_master_path, file_patterns=None):
