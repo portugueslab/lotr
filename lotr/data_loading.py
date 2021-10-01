@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 from scipy.signal import detrend, medfilt
-from tqdm import tqdm
 
 
 def detrend_norm(trace, wnd=3000):

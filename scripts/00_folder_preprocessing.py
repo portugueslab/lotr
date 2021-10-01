@@ -87,8 +87,8 @@ def preprocess_folder(
 
 if __name__ == "__main__":
     from pathlib import Path
-    data_path = Path(r"\\FUNES\Shared\experiments\E0071_lotr")
-    paths = [f.parent for f in data_path.glob("*/*/*/*meta*")]
+    data_path = Path(r"/Users/luigipetrucco/Desktop/all_source_data/full_ring")
+    paths = [f.parent for f in data_path.glob("*/*/*meta*")]
 
     for path in tqdm(paths):
         preprocess_folder(
