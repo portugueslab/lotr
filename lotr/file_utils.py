@@ -1,12 +1,11 @@
-from shutil import copy
 import re
+from shutil import copy
 
 from tqdm import tqdm
 
 
 def folder_2_fid(folder):
-    """take only actual fish id of date and fish number.
-    """
+    """take only actual fish id of date and fish number."""
 
     f_n = "".join(re.split(r"(\d+)", folder.name.split("_")[1])[:2])
     date = folder.name.split("_")[0]
@@ -23,8 +22,7 @@ def mirror_all_subfolders(source_master_path, dest_master_path, file_patterns=No
         mirror_fish_folder(path, dest_master_path / path.name, file_patterns)
 
 
-def mirror_fish_folder(source_path, dest_path, file_patterns=None,
-                       overwrite=False):
+def mirror_fish_folder(source_path, dest_path, file_patterns=None, overwrite=False):
 
     if file_patterns is None:
         file_patterns = [
@@ -34,7 +32,7 @@ def mirror_fish_folder(source_path, dest_path, file_patterns=None,
             "data_from_suite2p_unfiltered.h5",
             "bouts_df.h5",
             "*selected*.h5",
-            "filtered_traces.h5"
+            "filtered_traces.h5",
         ]
     # [
 

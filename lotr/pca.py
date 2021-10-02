@@ -1,9 +1,8 @@
 import numpy as np
 from circle_fit import hyper_fit
-from scipy.optimize import curve_fit
+from scipy.optimize import curve_fit, quadratic_assignment
 from sklearn.decomposition import PCA
 from tqdm import tqdm
-from scipy.optimize import quadratic_assignment
 
 from lotr.behavior import get_fictive_trajectory
 from lotr.utils import linear_regression
@@ -85,7 +84,7 @@ def qap_sorting_and_phase(traces, t_lims=None):
     if t_lims is None:
         t_lims = (0, n_pts)
 
-    distance = np.corrcoef(traces[t_lims[0]:t_lims[1], :].T)
+    distance = np.corrcoef(traces[t_lims[0] : t_lims[1], :].T)
 
     flow = np.zeros((n, n))
     toshift = np.cos(np.linspace(-np.pi, np.pi, n))
@@ -93,8 +92,13 @@ def qap_sorting_and_phase(traces, t_lims=None):
         flow[i, :] = np.roll(toshift, i)
 
     options = {"P0": "randomized"}
-    res = min([quadratic_assignment(flow, distance, method="faq", options=options)
-               for i in range(1000)], key=lambda x: x.fun)
+    res = min(
+        [
+            quadratic_assignment(flow, distance, method="faq", options=options)
+            for i in range(1000)
+        ],
+        key=lambda x: x.fun,
+    )
 
     options = {"partial_guess": np.array([np.arange(n), res.col_ind]).T}
     res = quadratic_assignment(flow, distance, method="2opt", options=options)
@@ -104,7 +108,8 @@ def qap_sorting_and_phase(traces, t_lims=None):
     traces_sorted = traces[:, perm]
 
     base = np.linspace(0, 2 * np.pi, traces_sorted.shape[1])
-    com_phase = np.arctan2(np.sum(np.sin(base) * traces_sorted, 1),
-                           np.sum(np.cos(base) * traces_sorted, 1))
+    com_phase = np.arctan2(
+        np.sum(np.sin(base) * traces_sorted, 1), np.sum(np.cos(base) * traces_sorted, 1)
+    )
 
     return perm, com_phase

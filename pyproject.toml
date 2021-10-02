@@ -8,6 +8,9 @@ exclude = '''
     | \.git
     | \.hg
     | \.mypy_cache
+    | \.md
+    | \.toml
+    | \.cfg
     | \.tox
     | \.venv
     | _build

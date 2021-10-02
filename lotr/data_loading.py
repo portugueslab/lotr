@@ -42,7 +42,11 @@ def preprocess_traces(traces, fn, smooth_wnd_s=5, detrend_wnd_s=800):
     traces_sm = traces.copy()
 
     # solve problem for even-valued windows:
-    wnd_pts = int(fn * smooth_wnd_s) if (int(fn * smooth_wnd_s) % 2) == 1 else int(fn * smooth_wnd_s) + 1
+    wnd_pts = (
+        int(fn * smooth_wnd_s)
+        if (int(fn * smooth_wnd_s) % 2) == 1
+        else int(fn * smooth_wnd_s) + 1
+    )
 
     for i in range(traces_sm.shape[1]):
         traces_sm[:, i] = medfilt(traces[:, i], wnd_pts)
