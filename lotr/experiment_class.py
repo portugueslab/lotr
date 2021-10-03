@@ -22,7 +22,9 @@ class LotrExperiment(EmbeddedExperiment):
     @property
     def fn(self):
         if self._fn is None:
-            self._fn = self.scope_config["lightsheet"]["scanning"]["z"]["frequency"]
+            self._fn = int(
+                self.scope_config["lightsheet"]["scanning"]["z"]["frequency"]
+            )
         return self._fn
 
     @property
@@ -62,6 +64,30 @@ class LotrExperiment(EmbeddedExperiment):
     @property
     def has_hdn(self):
         return (self.root / "selected.h5").exists()  # self.traces.shape[1]
+
+    @property
+    def pca_t_lims(self):
+        """Time slicing for the calculation of PCA, excluding the initial part of the
+        trace (where drifts/things related to the beginning of the experiment might be
+        happening) and the parts with strong stimuli in protocols with dir motion.
+        """
+        T_PAD_S = 150  # Beginning/end pad time in seconds
+        exp_end = int(self["stimulus"]["log"][-1]["t_stop"])
+
+        # TODO use experiment versions here
+        stim_type = self.root.name.split("_")[2]
+
+        if stim_type == "cwccw":
+            return T_PAD_S, int(self["stimulus"]["log"][1]["t_start"])
+        elif stim_type == "2dvr":
+            return T_PAD_S, int(self["stimulus"]["log"][2]["t_start"])
+        else:
+            return T_PAD_S, exp_end - T_PAD_S
+
+    @property
+    def pca_t_slice(self):
+        t_lims = self.pca_t_lims
+        return slice(*[t * self.fn for t in t_lims])
 
     def find_mirror_dir(self, parent_folder):
         """Find homonym directory in a new parent folder, for file mirroring."""
