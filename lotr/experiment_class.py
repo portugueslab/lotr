@@ -18,6 +18,8 @@ class LotrExperiment(EmbeddedExperiment):
         self._bouts_df = None
         self._traces = None
         self._hdn_indexes = None
+        self._motor_regressors = None
+        self._coords = None
 
     @property
     def fn(self):
@@ -42,10 +44,24 @@ class LotrExperiment(EmbeddedExperiment):
         return self._bouts_df
 
     @property
+    def motor_regressors(self):
+        if self._motor_regressors is None:
+            self._motor_regressors = fl.load(self.root / "motor_regressors.h5")
+        return self._motor_regressors
+
+    @property
     def traces(self):
         if self._traces is None:
             self._traces = fl.load(self.root / "filtered_traces.h5", "/detr")
         return self._traces
+
+    @property
+    def coords(self):
+        if self._coords is None:
+            self._coords = fl.load(
+                self.root / "data_from_suite2p_unfiltered.h5", "/coords"
+            )
+        return self._coords
 
     @property
     def hdn_indexes(self):

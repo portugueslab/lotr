@@ -36,9 +36,9 @@ def pca_and_phase(traces_fit, traces_transform=None, comp0=0, comp1=1):
     hf_c = hyper_fit(pcaed[:, [comp0, comp1]])
 
     # Compute phase, after subtracting center of the circle
-    phase = np.angle((pcaed[:, 0] - hf_c[0]) + 1j * (pcaed[:, 1] - hf_c[1]))
+    phase = np.angle((pcaed[:, comp0] - hf_c[0]) + 1j * (pcaed[:, comp1] - hf_c[1]))
 
-    return pcaed, phase
+    return pcaed, phase, pca
 
 
 def phase_from_fit(x, y):
