@@ -1,10 +1,16 @@
 from pathlib import Path
+import numpy as np
 
 import flammkuchen as fl
 from bouter import EmbeddedExperiment
 
 
 class LotrExperiment(EmbeddedExperiment):
+    """Main class for data loading. Look here to follow how any experimental
+    quantity loaded in a notebook is taken from the raw files. To follow
+    how semi-processed files are generated,
+    look into lotr/scripts/00_folder_preprocessing.py.
+    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -20,6 +26,7 @@ class LotrExperiment(EmbeddedExperiment):
         self._hdn_indexes = None
         self._motor_regressors = None
         self._coords = None
+        self._raw_traces = None
 
     @property
     def fn(self):
@@ -56,6 +63,14 @@ class LotrExperiment(EmbeddedExperiment):
         return self._traces
 
     @property
+    def raw_traces(self):
+        if self._raw_traces is None:
+            self._raw_traces = fl.load(
+                self.root / "data_from_suite2p_unfiltered.h5", "/traces"
+            ).T
+        return self._raw_traces
+
+    @property
     def coords(self):
         if self._coords is None:
             self._coords = fl.load(
@@ -66,7 +81,7 @@ class LotrExperiment(EmbeddedExperiment):
     @property
     def hdn_indexes(self):
         if self._hdn_indexes is None:
-            self._hdn_indexes = fl.load(self.root / "selected.h5")
+            self._hdn_indexes = np.array(fl.load(self.root / "selected.h5"))
         return self._hdn_indexes
 
     @property
