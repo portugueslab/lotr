@@ -60,16 +60,21 @@ def phase_from_fit(x, y):
     return popt[0], pcov
 
 
-def fit_phase_neurons(traces, phase):
+def fit_phase_neurons(traces, phase, disable_bar=False):
     """Fit a phase to neurons's activity."""
     n_cells = traces.shape[1]
     cell_phases = np.full(n_cells, np.nan)
     covs = np.full(n_cells, np.nan)
 
-    for i in tqdm(range(traces.shape[1])):
+    for i in tqdm(range(traces.shape[1]), disable=disable_bar):
         if not (traces[:, i] == 0).all():
             try:
                 ph, c = phase_from_fit(phase, traces[:, i])
+                if ph > np.pi:
+                    ph = ph - 2 * np.pi
+                if ph < -np.pi:
+                    ph = ph + 2 * np.pi
+
                 cell_phases[i] = ph
                 covs[i] = c[0][0]
             except RuntimeError:

@@ -11,6 +11,7 @@ def add_cbar(
     ticks=None,
     ticklabels=None,
     tick_visible=False,
+    labelsize=None,
     **kwargs,
 ):
     """Add properly edited colorbar to plot."""
@@ -25,6 +26,9 @@ def add_cbar(
         cbar.outline.set_visible(False)
     if ticklabels is not None:
         cbar.set_ticklabels(ticklabels)
+
+    if labelsize is not None:
+        cbar.ax.tick_params(labelsize=labelsize)
 
     return cbar
 
