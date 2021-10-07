@@ -28,6 +28,8 @@ class LotrExperiment(EmbeddedExperiment):
         self._motor_regressors = None
         self._coords = None
         self._raw_traces = None
+        self._anatomy_stack = None
+        self._rois_stack = None
 
     @property
     def fn(self):
@@ -70,6 +72,22 @@ class LotrExperiment(EmbeddedExperiment):
                 self.root / "data_from_suite2p_unfiltered.h5", "/traces"
             ).T
         return self._raw_traces
+
+    @property
+    def rois_stack(self):
+        if self._rois_stack is None:
+            self._rois_stack = fl.load(
+                self.root / "data_from_suite2p_unfiltered.h5", "/rois_stack"
+            ).T
+        return self._rois_stack
+
+    @property
+    def anatomy_stack(self):
+        if self._anatomy_stack is None:
+            self._anatomy_stack = fl.load(
+                self.root / "data_from_suite2p_unfiltered.h5", "/anatomy_stack"
+            ).T
+        return self._anatomy_stack
 
     @property
     def coords(self):

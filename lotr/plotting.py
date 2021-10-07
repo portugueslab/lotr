@@ -1,6 +1,12 @@
+"""Coloring code adapted from Vilim's notebook_utilities.stack_coloring
+and motions.color.
+"""
+import colorspacious
+import matplotlib
 import numpy as np
 from matplotlib import cm, collections, colors
 from matplotlib import pyplot as plt
+from numba import njit
 from svgpath2mpl import parse_path
 
 
@@ -201,8 +207,7 @@ def add_fish(ax, offset=(0, 0), scale=1):
 
 
 def get_circle_xy(circle_params):
-    """Compute array of x's and y's for plotting a circle, from circle fit parameters.
-    """
+    """Compute array of x's and y's for plotting a circle, from circle fit parameters."""
     if len(circle_params) == 4:
         xpos, ypos, radius, _ = circle_params
     else:
@@ -211,3 +216,268 @@ def get_circle_xy(circle_params):
     th = np.arange(0, 2 * np.pi + SPACING, SPACING)
 
     return np.cos(th) * radius + xpos, np.sin(th) * radius + ypos
+
+
+def _jch_to_rgb255(x):
+    output = np.clip(colorspacious.cspace_convert(x, "JCh", "sRGB1"), 0, 1)
+    return (output * 255).astype(np.uint8)
+
+
+@njit
+def _fill_roi_stack(
+    rois,
+    roi_colors,
+    background=np.array(
+        [
+            0,
+        ]
+        * 4
+    ),
+):
+    coloured = np.zeros(rois.shape + (roi_colors.shape[1],), dtype=roi_colors.dtype)
+    for i in range(rois.shape[0]):
+        for j in range(rois.shape[1]):
+            for k in range(rois.shape[2]):
+                if rois[i, j, k] > -1:
+                    coloured[i, j, k] = roi_colors[rois[i, j, k], :]
+                else:
+                    coloured[i, j, k] = background[: roi_colors.shape[1]]
+    return coloured
+
+
+def _get_n_colors(n_cols, lum=60, sat=60, hshift=0):
+    return _jch_to_rgb255(
+        np.stack(
+            [
+                np.full(n_cols, lum),
+                np.full(n_cols, sat),
+                (-np.arange(0, 360, 360 / n_cols) + hshift),
+            ],
+            1,
+        )
+    )
+
+
+def _color_anatomy_rgb(rois, roi_colors, anatomy, alpha=0.9, invert_anatomy=True):
+    """Colours a new stack of zeros with ROI colors
+
+    :param rois: the ROI stack
+    :param roi_colors: colors for each ROI
+    :param anatomy: anatomy stack
+    :param alpha: alpha of the ROI coloring
+    :return:
+    """
+    colored_rois = _fill_roi_stack(
+        rois,
+        roi_colors,
+        background=np.array(
+            [
+                0,
+            ]
+            * 4
+        ),
+    )
+    overimposed = np.concatenate(
+        [
+            anatomy[:, :, :, np.newaxis],
+        ]
+        * 3,
+        3,
+    )
+
+    if invert_anatomy:
+        overimposed = 255 - overimposed
+
+    overimposed[rois > -1] = overimposed[rois > -1] * (1 - alpha)
+    overimposed = overimposed + colored_rois * alpha
+
+    return overimposed.astype(np.uint8)
+
+
+def _get_categorical_colors(variable, color_scheme=None, lum=60, sat=60, hshift=0):
+    if color_scheme is None:
+        unique_vals = np.unique(variable[variable >= 0])
+        colors = _get_n_colors(len(unique_vals), lum=lum, sat=sat, hshift=hshift)
+        color_scheme = {v: colors[i] for i, v in enumerate(unique_vals)}
+
+    color_scheme[-1] = np.array([0, 0, 0])
+
+    roi_colors = np.array([color_scheme[v] for v in variable])
+
+    return np.concatenate([roi_colors, np.full((len(variable), 1), 255)], 1)
+
+
+def _get_continuous_colors(variable, color_scheme=None, vlims=None):
+    if color_scheme is None:
+        color_scheme = "viridis"
+
+    if vlims is None:
+        vlims = np.nanmin(variable), np.nanmax(variable)
+
+    # cmap function:
+    cmap_fun = (
+        color_scheme if callable(color_scheme) else matplotlib.cm.get_cmap(color_scheme)
+    )
+
+    # normalization function:
+    norm = matplotlib.colors.Normalize(vmin=vlims[0], vmax=vlims[1])
+
+    return (np.array([cmap_fun(norm(v)) for v in variable]) * 255).astype(np.uint8)
+
+
+def _normalize_to_255(stack, hist_percentiles=(5, 99)):
+    hist_boundaries = [np.percentile(stack, p) for p in hist_percentiles]
+    stack = stack - hist_boundaries[0]
+    stack = (stack / hist_boundaries[1]) * 255
+    stack[stack < 0] = 0
+    stack[stack > 255] = 255
+
+    return stack
+
+
+def color_stack(
+    rois,
+    variable,
+    color_scheme=None,
+    anatomy=None,
+    categorical=None,
+    background="transparent",
+    vlims=None,
+    lum=60,
+    sat=60,
+    hshift=0,
+    alpha=0.9,
+    invert_anatomy=True,
+    hist_percentiles=None,
+):
+    """
+    Parameters
+    ----------
+    rois : 3D np.array
+        stack of ROIs (fimpy convention: -1 in empty voxels)
+
+    variable : 1D np.array
+        An array of length==n_rois based on which colors stack will be colored.
+        If it contains integers, we'll assume the variable is categorical
+        unless specified otherwise with the `categorical` parameter.
+        ROIs can be excluded from the coloring by setting their value to -1
+        (for categorical variables) or to np.nan (for non categorical variables).
+
+    categorical : bool (optional)
+        If true, variable will be treated as categorical (normally inferred
+        from `variable`).
+
+    color_scheme : str or dict (optional)
+        Depending on the variable:
+            - categorical: dictionary with the mapping [i] = np.array([r, g, b]).
+                By default, a set of constant luminance and saturation colors will be
+                generated.
+            - non categorical: string specifying a matplotlib color palette.
+                By default, viridis will be used.
+
+    anatomy : 3D numpy array (optional)
+        If specified, ROIs will be overimposed on it, with tht specified the `alpha`
+
+    background : str or np.array (optional)
+        Filling for the empty voxels. Default options are "w", "k" and "transparent".
+
+    vlims : tuple or list (optional)
+        Limits for the colormap (used only for non-categorical variable).
+
+    lum : int (optional)
+        Luminance for the generation of the categories colors, from 0 to 100
+        (used only for categorical variable).
+
+    sat : int (optional)
+        Saturation for the generation of the categories colors, from 0 to 100
+        (used only for categorical variable).
+
+    hshift : int (optional)
+        Hue shift for the generation of the categories colors, from 0 to 360
+        (used only for categorical variable).
+
+    alpha : float (optional)
+        Alpha value for the overlapping of anatomy and ROIs, from 0 to 1. Default 0.9.
+
+    invert_anatomy : bool (optional)
+        If True, anatomy will be inverted (black signal on white background).
+        Default True.
+
+    hist_percentiles : tuple (optional)
+        Range used for the normalization of the anatomy histogram, if anatomy is not
+        already scaled. Default (5, 99)
+
+    Returns
+    -------
+
+    """
+
+    BACKGROUNDS = dict(
+        k=np.array([0, 0, 0, 255]),
+        transparent=np.array(
+            [
+                0,
+            ]
+            * 4
+        ),
+        w=np.array(
+            [
+                255,
+            ]
+            * 4
+        ),
+    )
+
+    # We infer if the variable is categorical or not:
+    if categorical is None:
+        categorical = np.issubdtype(np.array(variable).dtype, np.integer)
+
+    if categorical:
+        # Esclude from the stack rois with nan variable, using the filling function
+        # TODO refactor together this and the non categorical condition
+        if (variable < 0).any():
+            print("excluding")
+            nan_filling = np.arange(rois.max() + 1)[:, np.newaxis]
+            nan_filling[np.argwhere(variable < 0)[:, 0], :] = -1
+            rois = _fill_roi_stack(rois, nan_filling, background=np.array([[-1]]))[
+                :, :, :, 0
+            ]
+
+        # get roi colors:
+        roi_colors = _get_categorical_colors(
+            variable, color_scheme=color_scheme, lum=lum, sat=sat, hshift=hshift
+        )
+
+    else:
+        # Esclude from the stack rois with nan variable, using the filling function:
+        if np.isnan(variable).any():
+            nan_filling = np.arange(rois.max() + 1)[:, np.newaxis]
+            nan_filling[np.argwhere(np.isnan(variable))[:, 0], :] = -1
+            rois = _fill_roi_stack(rois, nan_filling, background=np.array([[-1]]))[
+                :, :, :, 0
+            ]
+        # get roi colors:
+        roi_colors = _get_continuous_colors(
+            variable, color_scheme=color_scheme, vlims=vlims
+        )
+
+    if isinstance(background, str):
+        background = BACKGROUNDS[background]
+
+    if anatomy is None:
+        return _fill_roi_stack(rois, roi_colors, background=background)
+    else:
+        # If required, normalize the anatomy stack:
+        if hist_percentiles is not None or anatomy.max() > 255 or anatomy.min() < 0:
+            if hist_percentiles is None:
+                hist_percentiles = (5, 99)
+
+            anatomy = _normalize_to_255(anatomy, hist_percentiles=hist_percentiles)
+
+        return _color_anatomy_rgb(
+            rois,
+            roi_colors[:, :3],
+            anatomy.astype(np.uint8),
+            alpha=alpha,
+            invert_anatomy=invert_anatomy,
+        )
