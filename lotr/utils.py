@@ -39,3 +39,12 @@ def linear_regression(X, Y):
     """Get slope and intercept of linear regression between two vectors."""
     X_mat = np.vstack((np.ones(len(X)), X)).T
     return np.linalg.inv(X_mat.T.dot(X_mat)).dot(X_mat.T).dot(Y)
+
+
+def reduce_to_pi(angle):
+    """Puts an angle or array of angles inside the (-pi, pi) range"""
+    return np.mod(angle + np.pi, 2 * np.pi) - np.pi
+
+
+def get_rot_matrix(th):
+    return np.array([[np.cos(th), -np.sin(th)], [np.sin(th), np.cos(th)]])

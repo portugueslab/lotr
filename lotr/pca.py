@@ -38,7 +38,7 @@ def pca_and_phase(traces_fit, traces_transform=None, comp0=0, comp1=1):
     # Compute phase, after subtracting center of the circle
     phase = np.angle((pcaed[:, comp0] - hf_c[0]) + 1j * (pcaed[:, comp1] - hf_c[1]))
 
-    return pcaed, phase, pca
+    return pcaed, phase, pca, hf_c
 
 
 def phase_from_fit(x, y):
