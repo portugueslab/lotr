@@ -77,7 +77,7 @@ def despine(ax, sides=["right", "top"], rmticks=True):
 
 
 def add_scalebar(
-    ax,
+    ax=None,
     xlen=None,
     ylen=None,
     xpos=None,
@@ -98,7 +98,7 @@ def add_scalebar(
     Parameters
     ----------
     ax : plt.Axis obj
-        The target axis for the scalebar.
+        The target axis for the scalebar. If none, get current (default=None).
     xlen : Int or Float
         Extension of the bar in x.
     ylen : int or float
@@ -129,6 +129,10 @@ def add_scalebar(
 
 
     """
+
+    if ax is None:
+        ax = plt.gca()
+
     line_params_def = dict(lw=1, c=(0.3,) * 3)
     text_params_def = dict(fontsize=10)
 
@@ -194,3 +198,16 @@ def add_fish(ax, offset=(0, 0), scale=1):
         [path], linewidths=0, facecolors=["#909090"]
     )
     ax.add_artist(collection)
+
+
+def get_circle_xy(circle_params):
+    """Compute array of x's and y's for plotting a circle, from circle fit parameters.
+    """
+    if len(circle_params) == 4:
+        xpos, ypos, radius, _ = circle_params
+    else:
+        xpos, ypos, radius = circle_params
+    SPACING = 0.05
+    th = np.arange(0, 2 * np.pi + SPACING, SPACING)
+
+    return np.cos(th) * radius + xpos, np.sin(th) * radius + ypos

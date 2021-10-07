@@ -48,3 +48,7 @@ def reduce_to_pi(angle):
 
 def get_rot_matrix(th):
     return np.array([[np.cos(th), -np.sin(th)], [np.sin(th), np.cos(th)]])
+
+
+def get_vect_angle(vect):
+    return np.angle(vect[0] + 1j * vect[1])
