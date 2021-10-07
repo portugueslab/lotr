@@ -76,11 +76,23 @@ def despine(ax, sides=["right", "top"], rmticks=True):
     [ax.axes.spines[s].set_visible(False) for s in sides]
 
 
-def add_scalebar(ax, xlen=None, ylen=None, xpos=None, ypos=None,
-                 xunits=None, yunits=None, xlabel=None, ylabel=None,
-                 line_params=dict(), text_params=dict(), disable_axis=True,
-                 line_spacing_coef=0.1, text_spacing_coef=0.06):
-    """ Function to add a scale bar to an existing plot. Currently implemented only
+def add_scalebar(
+    ax,
+    xlen=None,
+    ylen=None,
+    xpos=None,
+    ypos=None,
+    xunits=None,
+    yunits=None,
+    xlabel=None,
+    ylabel=None,
+    line_params=None,
+    text_params=None,
+    disable_axis=True,
+    line_spacing_coef=0.1,
+    text_spacing_coef=0.06,
+):
+    """Function to add a scale bar to an existing plot. Currently implemented only
     for both axes.
 
     Parameters
@@ -104,9 +116,9 @@ def add_scalebar(ax, xlen=None, ylen=None, xpos=None, ypos=None,
     ylabel : str
         Label over the y axis. Overrides the standard '{number} {units}' (default=None).
     line_params : dict
-        Dictionary of parameters for the plt.plot function for the line (default={}).
+        Dictionary of parameters for the plt.plot function for the line (default=None).
     text_params : dict
-        Dictionary of parameters for the plt.txt adding the labels (default={}).
+        Dictionary of parameters for the plt.txt adding the labels (default=None).
     disable_axis : bool
         Flag to hide the orgiginal axis after the colorbar is added (default=True).
     line_spacing_coef : float
@@ -117,19 +129,23 @@ def add_scalebar(ax, xlen=None, ylen=None, xpos=None, ypos=None,
 
 
     """
-    LINE_PARAMS = dict(lw=1, c=(0.3,) * 3)
-    TEXT_PARAMS = dict(fontsize=10)
+    line_params_def = dict(lw=1, c=(0.3,) * 3)
+    text_params_def = dict(fontsize=10)
 
-    for default_params, params_in in zip([LINE_PARAMS, TEXT_PARAMS],
-                                         [line_params, text_params]):
-        default_params.update(params_in)
+    for default_params, params_in in zip(
+        [line_params_def, text_params_def], [line_params, text_params]
+    ):
+        if params_in is not None:
+            default_params.update(params_in)
 
     if xlen is None:
         xlen = ax.xaxis.get_ticklocs()[1] - ax.xaxis.get_ticklocs()[0]
     if ylen is None:
         ylen = ax.yaxis.get_ticklocs()[1] - ax.yaxis.get_ticklocs()[0]
 
-    plot_data_lims = ax.dataLim.min - (ax.dataLim.max - ax.dataLim.min) * line_spacing_coef
+    plot_data_lims = (
+        ax.dataLim.min - (ax.dataLim.max - ax.dataLim.min) * line_spacing_coef
+    )
     if xpos is None:
         xpos = plot_data_lims[0]
     if ypos is None:
@@ -140,13 +156,24 @@ def add_scalebar(ax, xlen=None, ylen=None, xpos=None, ypos=None,
     if ylabel is None:
         ylabel = f"{ylen}" if yunits is None else f"{ylen} {yunits}"
 
-    ax.plot([xpos, xpos, xpos + xlen],
-            [ypos + ylen, ypos, ypos], **LINE_PARAMS)
-    ax.text(xpos - xlen * text_spacing_coef,
-            ypos + ylen / 2, ylabel, ha="right", va="center",
-            rotation='vertical', **TEXT_PARAMS)
-    ax.text(xpos + xlen / 2, ypos - ylen * text_spacing_coef,
-            xlabel, ha="center", va="top", **TEXT_PARAMS)
+    ax.plot([xpos, xpos, xpos + xlen], [ypos + ylen, ypos, ypos], **line_params_def)
+    ax.text(
+        xpos - xlen * text_spacing_coef,
+        ypos + ylen / 2,
+        ylabel,
+        ha="right",
+        va="center",
+        rotation="vertical",
+        **text_params_def,
+    )
+    ax.text(
+        xpos + xlen / 2,
+        ypos - ylen * text_spacing_coef,
+        xlabel,
+        ha="center",
+        va="top",
+        **text_params_def,
+    )
 
     if disable_axis:
         ax.axis("off")

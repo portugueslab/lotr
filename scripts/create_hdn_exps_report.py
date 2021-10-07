@@ -1,7 +1,8 @@
 from pathlib import Path
-from tqdm import tqdm
-import pandas as pd
+
 import numpy as np
+import pandas as pd
+from tqdm import tqdm
 
 from lotr.experiment_class import LotrExperiment
 

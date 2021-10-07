@@ -1,7 +1,7 @@
 from pathlib import Path
-import numpy as np
 
 import flammkuchen as fl
+import numpy as np
 from bouter import EmbeddedExperiment
 
 
@@ -11,6 +11,7 @@ class LotrExperiment(EmbeddedExperiment):
     how semi-processed files are generated,
     look into lotr/scripts/00_folder_preprocessing.py.
     """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
