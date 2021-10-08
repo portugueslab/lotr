@@ -11,7 +11,7 @@ from svgpath2mpl import parse_path
 
 
 def dark_col(col, val=0.2):
-    return [max(0, c-val) for c in col]
+    return [max(0, c - val) for c in col]
 
 
 def add_cbar(
