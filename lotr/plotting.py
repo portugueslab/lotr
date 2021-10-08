@@ -10,6 +10,10 @@ from numba import njit
 from svgpath2mpl import parse_path
 
 
+def dark_col(col, val=0.2):
+    return [max(0, c-val) for c in col]
+
+
 def add_cbar(
     col_ax,
     ref_plot,
@@ -18,13 +22,14 @@ def add_cbar(
     ticklabels=None,
     tick_visible=False,
     labelsize=None,
+    titlesize=10,
     **kwargs,
 ):
     """Add properly edited colorbar to plot."""
     if isinstance(col_ax, tuple) or isinstance(col_ax, list):
         col_ax = plt.gcf().add_axes(col_ax)
     cbar = plt.colorbar(ref_plot, cax=col_ax, **kwargs)
-    cbar.ax.set_title(label)
+    cbar.ax.set_title(label, fontsize=titlesize)
     cbar.set_ticks(ticks)
 
     if not tick_visible:
