@@ -78,7 +78,7 @@ class LotrExperiment(EmbeddedExperiment):
         if self._rois_stack is None:
             self._rois_stack = fl.load(
                 self.root / "data_from_suite2p_unfiltered.h5", "/rois_stack"
-            ).T
+            )
         return self._rois_stack
 
     @property
@@ -86,7 +86,7 @@ class LotrExperiment(EmbeddedExperiment):
         if self._anatomy_stack is None:
             self._anatomy_stack = fl.load(
                 self.root / "data_from_suite2p_unfiltered.h5", "/anatomy_stack"
-            ).T
+            )
         return self._anatomy_stack
 
     @property
