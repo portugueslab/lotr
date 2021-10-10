@@ -14,6 +14,25 @@ def dark_col(col, val=0.2):
     return [max(0, c - val) for c in col]
 
 
+def plot_arrow(seg, ax=None, col="b", alpha=1, s=10, lw=1):
+    ax.plot(seg[:, 0], seg[:, 1], lw=lw, c=col, alpha=alpha)
+    ax.scatter(seg[0, 0], seg[0, 1], zorder=100, s=s, color=col, alpha=alpha, lw=0)
+
+    ax.arrow(
+        seg[-2, 0],
+        seg[-2, 1],
+        (seg[-1, 0] - seg[-2, 0]),
+        (seg[-1, 1] - seg[-2, 1]),
+        head_width=1,
+        head_length=1.2,
+        lw=lw,
+        ec=col,
+        fc=col,
+        zorder=100,
+        alpha=alpha,
+    )
+
+
 def add_cbar(
     col_ax,
     ref_plot,

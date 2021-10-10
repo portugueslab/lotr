@@ -1,5 +1,6 @@
-import numpy as np
 from itertools import product
+
+import numpy as np
 
 from lotr.utils import get_rot_matrix, get_vect_angle, reduce_to_pi
 
