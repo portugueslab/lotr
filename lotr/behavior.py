@@ -60,7 +60,7 @@ def get_bouts_props_array(
     return bout_props_array
 
 
-def get_fictive_trajectory(n_pts, bouts_df, min_bias=0.05):
+def get_fictive_heading(n_pts, bouts_df, min_bias=0.05):
     """
     Parameters
     ----------

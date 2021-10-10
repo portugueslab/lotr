@@ -1,11 +1,12 @@
 import numpy as np
+from itertools import product
 
 from lotr.utils import get_rot_matrix, get_vect_angle, reduce_to_pi
 
 
 # TODO This will change with registered coordinates
 def get_normalized_coords(coords):
-    """ Normalize coords to be used as weights for fit
+    """Normalize coords to be used as weights for fit
 
     Parameters
     ----------
@@ -35,13 +36,13 @@ def get_normalized_coords(coords):
     return w_coords
 
 
-def reorient_pcs(cpc_loads, w_coords):
-    """ Reorient centered principal components (over time) so that the position of
+def reorient_pcs(cpc_scores, w_coords):
+    """Reorient centered PC scores (over time) so that the position of
     cells in the PC space matches their anatomical location.
 
     Parameters
     ----------
-    cpc_loads : np.array
+    cpc_scores : np.array
         (n_rois, 2) matrix with projection of cells over centered
         principal components.
     w_coords : np.array
@@ -60,7 +61,7 @@ def reorient_pcs(cpc_loads, w_coords):
     # each anatomical axis as weights.
     # The result is a 3 x 2 matrix containing the average vector for each of the
     # 3 anatomical axes used as weights
-    avg_vects = np.einsum("ij,ik->jk", cpc_loads, w_coords)
+    avg_vects = np.einsum("ij,ik->jk", cpc_scores, w_coords)
 
     # We then compute average angle for all axes:
     avg_angles = get_vect_angle(avg_vects)
@@ -77,11 +78,35 @@ def reorient_pcs(cpc_loads, w_coords):
 
     # Finally, we combine all transformation. The last rotation is an arbitrary
     # one so that the most rostral ROIs are in the upper part of the plot:
-    rpc_loads = (
-            get_rot_matrix(FINAL_TH_SHIFT)
-            @ invert_mat
-            @ get_rot_matrix(-mean_angle)
-            @ cpc_loads.T
+    rpc_scores = (
+        get_rot_matrix(FINAL_TH_SHIFT)
+        @ invert_mat
+        @ get_rot_matrix(-mean_angle)
+        @ cpc_scores.T
     ).T
 
-    return rpc_loads
+    return rpc_scores
+
+
+def match_rpc_and_neuron_phases(rpc_phases, neuron_phases):
+    """Function to match phase fit from neuron's best activation
+    over network trajectory to neuron phase in rPC.
+
+    Parameters
+    ----------
+    rpc_phases
+    neuron_phases
+
+    Returns
+    -------
+
+    """
+    shifts = np.arange(-np.pi * 2, np.pi * 2, 0.05)
+    coefs = [1, -1]
+    params_list = list(product(coefs, shifts))
+    residuals = np.zeros(len(params_list))
+    for i, (coef, shift) in enumerate(params_list):
+        new_phases = reduce_to_pi(neuron_phases * coef + shift)
+        residuals[i] = np.sum(np.abs(new_phases - rpc_phases))
+
+    return params_list[np.argmin(residuals)]
