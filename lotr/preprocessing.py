@@ -2,7 +2,7 @@ import flammkuchen as fl
 import numpy as np
 import pandas as pd
 from bouter.utilities import predictive_tail_fill
-from fimpylab import LightsheetExperiment
+from lotr.experiment_class import LotrExperiment
 
 from lotr.behavior import create_motor_regressors
 from lotr.data_loading import preprocess_traces
@@ -17,8 +17,9 @@ def preprocess_folder(
     recompute_regressors=False,
 ):
     try:
-        exp = LightsheetExperiment(path)
-        fn = int(exp.fs_imaging)
+        # Make sure we don't use feature of LotrExperiment requiring preprocessing
+        exp = LotrExperiment(path)
+        fn = int(exp.fn)
 
         # Extract bout dataframe:
         if not (path / "bouts_df.h5").exists() or recompute_bout_df:
