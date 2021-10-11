@@ -4,15 +4,15 @@ from scipy.optimize import curve_fit, quadratic_assignment
 from sklearn.decomposition import PCA
 from tqdm import tqdm
 
-from lotr.behavior import get_fictive_trajectory
+from lotr.behavior import get_fictive_heading
 from lotr.utils import linear_regression
 
 
-def fictive_trajectory_and_fit(phase_unwrapped, bouts_df, fn=5, min_bias=0.05):
+def fictive_heading_and_fit(phase_unwrapped, bouts_df, fn=5, min_bias=0.05):
     if "idx_imaging" not in bouts_df.columns:
         bouts_df["idx_imaging"] = np.round(bouts_df["t_start"]).astype(np.int) * fn
 
-    fictive_trajectory = get_fictive_trajectory(
+    fictive_trajectory = get_fictive_heading(
         len(phase_unwrapped), bouts_df, min_bias=min_bias
     )
 
