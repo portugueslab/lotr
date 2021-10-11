@@ -12,3 +12,4 @@ bg_space
 tqdm
 circle_fit
 scikit-learn
+colorspacious
