@@ -77,5 +77,7 @@ def retrieve_dataset_location():
     unpack = pooch.Unzip(members=None)
     fnames = data_pooch.fetch("sample_dataset.zip", processor=unpack)
 
-    # Ugly finding of parent folder, as the unzipping has to happen on files
-    return ([Path(f) for f in fnames if Path(f).name == "selected.h5"])[0].parent
+    # Ugly finding of super parent folder, as the unzipping has to happen on files
+    return ([Path(f) for f in fnames if Path(f).name == "selected.h5"])[
+        0
+    ].parent.parent.parent
