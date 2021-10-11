@@ -1,4 +1,5 @@
 numpy
+pandas
 matplotlib
 flammkuchen
 bouter
@@ -6,3 +7,4 @@ seaborn
 scipy
 svgpath2mpl
 pooch
+ipympl
