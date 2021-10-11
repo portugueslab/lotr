@@ -5,3 +5,4 @@ bouter
 seaborn
 scipy
 svgpath2mpl
+pooch

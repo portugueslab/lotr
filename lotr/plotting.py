@@ -10,6 +10,12 @@ from numba import njit
 from svgpath2mpl import parse_path
 
 
+COLS = dict(sides=dict(lf=(0.        , 0.62352941, 0.88627451),
+                       rt=(0.83529412, 0.36470588, 0.28235294)),
+            dff_img="Greens",
+            beh=(0.4,)*3)
+
+
 def dark_col(col, val=0.2):
     return [max(0, c - val) for c in col]
 

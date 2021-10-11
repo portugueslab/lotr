@@ -4,6 +4,8 @@ import flammkuchen as fl
 import numpy as np
 from bouter import EmbeddedExperiment
 
+from lotr.anatomy import reshape_stack
+
 
 class LotrExperiment(EmbeddedExperiment):
     """Main class for data loading. Look here to follow how any experimental
@@ -76,17 +78,17 @@ class LotrExperiment(EmbeddedExperiment):
     @property
     def rois_stack(self):
         if self._rois_stack is None:
-            self._rois_stack = fl.load(
+            self._rois_stack = reshape_stack(fl.load(
                 self.root / "data_from_suite2p_unfiltered.h5", "/rois_stack"
-            )
+            ))
         return self._rois_stack
 
     @property
     def anatomy_stack(self):
         if self._anatomy_stack is None:
-            self._anatomy_stack = fl.load(
+            self._anatomy_stack = reshape_stack(fl.load(
                 self.root / "data_from_suite2p_unfiltered.h5", "/anatomy_stack"
-            )
+            ))
         return self._anatomy_stack
 
     @property

@@ -7,3 +7,5 @@ black
 flake8
 isort
 nb-clean
+nbmake
+pytest-xdist
