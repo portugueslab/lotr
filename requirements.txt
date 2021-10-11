@@ -9,3 +9,4 @@ svgpath2mpl
 pooch
 ipympl
 bg_space
+tqdm
