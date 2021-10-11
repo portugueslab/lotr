@@ -39,6 +39,47 @@ def plot_arrow(seg, ax=None, col="b", alpha=1, s=10, lw=1):
     )
 
 
+def boxplot(data, cols=None, ax=None, widths=0.6, ec=(0.3,) * 3):
+    """Plot a cleaned-up boxplot for data list.
+
+    Parameters
+    ----------
+    data : list of arrays
+        List of data arrays to boxplot.
+    cols : list of len 3 tuples:
+        List of colors for each data.
+    ax : plt.Axes
+        Axes on which to plot.
+    widths :
+        Widths of the boxes.
+    ec :
+        Color of the lines.
+
+    Returns
+    -------
+    plt.BoxPlot
+        Boxplot object.
+
+    """
+    if ax is None:
+        ax = plt.gca()
+
+    if cols is None:
+        cols = [None, ] * len(data)
+
+    bplot = ax.boxplot(data, notch=False, showfliers=False, vert=False,
+                       patch_artist=True, showcaps=False, widths=widths)
+
+    for patch, med, col in zip(bplot["boxes"], bplot["medians"], cols):
+        patch.set(fc=col, lw=1, ec=col)
+        med.set(color=ec)
+
+    for whisk in bplot["whiskers"]:
+        whisk.set(lw=1, color=ec)
+
+    return bplot
+
+
 def add_cbar(
     col_ax,
     ref_plot,

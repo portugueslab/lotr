@@ -16,3 +16,8 @@ T_START = 100  # exclude the very first part of the exp, after lightsheet laser 
 # Specify where the dataset is stored.
 DATASET_DEFAULT_LOCATION = r"\\Funes\Shared\experiments\E0040_motions_cardinal\v21\2p\211006_f2"
 
+# Anatomical orientation of source data
+ANATOMICAL_ORIENT_SOURCE = "ilp"
+
+# Anatomical orientation of figures:
+ANATOMICAL_ORIENT_FIGURES = "ial"
