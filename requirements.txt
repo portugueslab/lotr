@@ -10,3 +10,4 @@ pooch
 ipympl
 bg_space
 tqdm
+circle_fit
