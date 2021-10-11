@@ -9,11 +9,13 @@ from matplotlib import pyplot as plt
 from numba import njit
 from svgpath2mpl import parse_path
 
-
-COLS = dict(sides=dict(lf=(0.        , 0.62352941, 0.88627451),
-                       rt=(0.83529412, 0.36470588, 0.28235294)),
-            dff_img="Greens",
-            beh=(0.4,)*3)
+COLS = dict(
+    sides=dict(
+        lf=(0.0, 0.62352941, 0.88627451), rt=(0.83529412, 0.36470588, 0.28235294)
+    ),
+    dff_img="Greens",
+    beh=(0.4,) * 3,
+)
 
 
 def dark_col(col, val=0.2):
@@ -65,10 +67,19 @@ def boxplot(data, cols=None, ax=None, widths=0.6, ec=(0.3,) * 3):
         ax = plt.gca()
 
     if cols is None:
-        cols = [None, ] * len(data)
+        cols = [
+            None,
+        ] * len(data)
 
-    bplot = ax.boxplot(data, notch=False, showfliers=False, vert=False,
-                       patch_artist=True, showcaps=False, widths=widths)
+    bplot = ax.boxplot(
+        data,
+        notch=False,
+        showfliers=False,
+        vert=False,
+        patch_artist=True,
+        showcaps=False,
+        widths=widths,
+    )
 
     for patch, med, col in zip(bplot["boxes"], bplot["medians"], cols):
         patch.set(fc=col, lw=1, ec=col)

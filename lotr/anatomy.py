@@ -1,7 +1,9 @@
-import numpy as np
 from bg_space import AnatomicalSpace
 
-from lotr.default_vals import ANATOMICAL_ORIENT_SOURCE, ANATOMICAL_ORIENT_FIGURES
+from lotr.default_vals import (
+    ANATOMICAL_ORIENT_FIGURES,
+    ANATOMICAL_ORIENT_SOURCE,
+)
 
 source_space = AnatomicalSpace(ANATOMICAL_ORIENT_SOURCE)
 

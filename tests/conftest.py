@@ -1,4 +1,5 @@
 import pytest
+
 from lotr import DATASET_LOCATION
 
 

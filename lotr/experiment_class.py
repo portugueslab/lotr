@@ -78,17 +78,17 @@ class LotrExperiment(EmbeddedExperiment):
     @property
     def rois_stack(self):
         if self._rois_stack is None:
-            self._rois_stack = reshape_stack(fl.load(
-                self.root / "data_from_suite2p_unfiltered.h5", "/rois_stack"
-            ))
+            self._rois_stack = reshape_stack(
+                fl.load(self.root / "data_from_suite2p_unfiltered.h5", "/rois_stack")
+            )
         return self._rois_stack
 
     @property
     def anatomy_stack(self):
         if self._anatomy_stack is None:
-            self._anatomy_stack = reshape_stack(fl.load(
-                self.root / "data_from_suite2p_unfiltered.h5", "/anatomy_stack"
-            ))
+            self._anatomy_stack = reshape_stack(
+                fl.load(self.root / "data_from_suite2p_unfiltered.h5", "/anatomy_stack")
+            )
         return self._anatomy_stack
 
     @property

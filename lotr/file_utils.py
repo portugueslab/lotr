@@ -1,10 +1,11 @@
 import re
-from shutil import copy
-import pooch
 from pathlib import Path
-from lotr.default_vals import DATASET_DEFAULT_LOCATION
+from shutil import copy
 
+import pooch
 from tqdm import tqdm
+
+from lotr.default_vals import DATASET_DEFAULT_LOCATION
 
 
 def folder_2_fid(folder):
@@ -48,7 +49,7 @@ def mirror_fish_folder(source_path, dest_path, file_patterns=None, overwrite=Fal
 
 
 def retrieve_dataset_location():
-    """ Handles finding the source data of the analysis.
+    """Handles finding the source data of the analysis.
     By default, tries to find the repo dataset_location.txt file. If not available,
     use lab standard location. If also not available, download test dataset from web
     (for CI).
@@ -70,16 +71,11 @@ def retrieve_dataset_location():
     data_pooch = pooch.create(
         path=pooch.os_cache("lotr"),
         base_url="https://zenodo.org/record/5560855/files/",
-        registry={"sample_dataset.zip": "md5:c316e09dc74cd4f25e9b5077b584e343"})
+        registry={"sample_dataset.zip": "md5:c316e09dc74cd4f25e9b5077b584e343"},
+    )
 
     unpack = pooch.Unzip(members=None)
     fnames = data_pooch.fetch("sample_dataset.zip", processor=unpack)
 
     # Ugly finding of parent folder, as the unzipping has to happen on files
     return ([Path(f) for f in fnames if Path(f).name == "selected.h5"])[0].parent
-
-
-
-
-
-
