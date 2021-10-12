@@ -12,11 +12,24 @@ def interpolate(source_x, source_y, target_x):
 
 
 def pearson_regressors(traces, regressors):
-    """Gives the pearson correlation coefficient
+    """Gives the pearson correlation coefficient. Adapted from Vilim's functions.
 
     :param traces: the traces, with time in rows
     :param regressors: the regressors, with time in rows
     :return: the pearson correlation coefficient
+
+    Parameters
+    ----------
+    traces : np.array
+        (t, n_rois) array with the traces.
+    regressors : np.array
+        (t, n_regressors) array with the regressors.
+
+    Returns
+    -------
+    np.array
+        (n_regressors, n_rois) matrix of regressors.
+
     """
     # two versions, depending whether there is one or multiple regressors
     X = traces

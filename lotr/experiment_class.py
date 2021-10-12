@@ -36,9 +36,12 @@ class LotrExperiment(EmbeddedExperiment):
     @property
     def fn(self):
         if self._fn is None:
-            self._fn = int(
-                self.scope_config["lightsheet"]["scanning"]["z"]["frequency"]
-            )
+            try:
+                self._fn = int(
+                    self.scope_config["lightsheet"]["scanning"]["z"]["frequency"]
+                )
+            except KeyError:
+                self._fn = int(self.scope_config["scanning"]["framerate"])
         return self._fn
 
     @property
