@@ -5,6 +5,7 @@ import colorspacious
 import matplotlib
 import numpy as np
 from matplotlib import cm, collections, colors
+from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib import pyplot as plt
 from numba import njit
 from svgpath2mpl import parse_path
@@ -16,6 +17,10 @@ COLS = dict(
     dff_img="Greens",
     beh=(0.4,) * 3,
 )
+
+
+def loop_and_save_pdf(plot_fun, args_list):
+
 
 
 def dark_col(col, val=0.2):

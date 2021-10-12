@@ -1,11 +1,11 @@
-pytest-cov
+pytest - cov
 pytest
 gitpython
 coverage
-pre-commit
+pre - commit
 black
 flake8
 isort
-nb-clean
+nb - clean
 nbmake
-pytest-xdist
+pytest - xdist

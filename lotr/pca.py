@@ -23,7 +23,25 @@ def fictive_heading_and_fit(phase_unwrapped, bouts_df, fn=5, min_bias=0.05):
 
 def pca_and_phase(traces_fit, traces_transform=None, comp0=0, comp1=1):
     """Compute PCA and fit circle and phase to first
-    two components.
+    two components (or two otherwise specified components).
+
+    Parameters
+    ----------
+    traces_fit : np.array
+        Data used to compute the principal components (time_pts, n_rois) for PCA over
+        population; (n_rois, time_pts) for PCA over time.
+    traces_transform : np.array
+        Data that will be projected over the principal components. (time_pts, n_rois)
+        for PCA over population; (n_rois, time_pts) for PCA over time.
+
+    comp0 : int (optional)
+        First component over which to fit the circle (default=0).
+    comp1 : int (optional)
+        Second component over which to fit the circle (default=1).
+
+    Returns
+    -------
+
     """
     if traces_transform is None:
         traces_transform = traces_fit
@@ -42,7 +60,7 @@ def pca_and_phase(traces_fit, traces_transform=None, comp0=0, comp1=1):
 
 
 def phase_from_fit(x, y):
-    """Fit a phase to a sinusoidal cosyne oscillation.
+    """Fit a phase to a sinusoidal cosine oscillation.
     Phase will be the only parameter we'll optimize on,
     so before, normalize y to loosely fit the range (-1, 1).
     """
@@ -84,6 +102,7 @@ def fit_phase_neurons(traces, phase, disable_bar=False):
 
 
 def qap_sorting_and_phase(traces, t_lims=None):
+    """Use quadr"""
     n_pts, n = traces.shape
 
     if t_lims is None:

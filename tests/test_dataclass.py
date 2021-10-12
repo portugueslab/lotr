@@ -13,10 +13,13 @@ def test_dataclass_attribs(attrib, res, sample_path):
 
 
 @pytest.mark.parametrize(
-    "attrib, res", [("traces", 4.2231445),
-                    ("raw_traces", 104504930.0),
-                    ("rois_stack", 29304664),
-                    ("anatomy_stack", 6460928.294495098)]
+    "attrib, res",
+    [
+        ("traces", 4.2231445),
+        ("raw_traces", 104504930.0),
+        ("rois_stack", 29304664),
+        ("anatomy_stack", 6460928.294495098),
+    ],
 )
 def test_dataclass_array_sums(attrib, res, sample_path):
     exp = LotrExperiment(sample_path)
