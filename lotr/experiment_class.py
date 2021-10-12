@@ -37,6 +37,8 @@ class LotrExperiment(EmbeddedExperiment):
         self._raw_traces = None
         self._anatomy_stack = None
         self._rois_stack = None
+        self._nonhdn_indexes = None
+        self._rndcnt_indexes = None
 
     @property
     def fn(self):
@@ -112,6 +114,20 @@ class LotrExperiment(EmbeddedExperiment):
         if self._hdn_indexes is None:
             self._hdn_indexes = np.array(fl.load(self.root / "selected.h5"))
         return self._hdn_indexes
+
+    @property
+    def nonhdn_indexes(self):
+        if self._nonhdn_indexes is None:
+            non_hdns = np.ones(self.n_rois, dtype=bool)
+            non_hdns[self.hdn_indexes] = False
+            self._nonhdn_indexes = non_hdns
+        return self._nonhdn_indexes
+
+    @property
+    def rndcnt_indexes(self):
+        all_possible = np.argwhere(self.nonhdn_indexes).flatten()
+        np.random.shuffle(all_possible)
+        return all_possible[: len(self.hdn_indexes)]
 
     @property
     def n_pts(self):

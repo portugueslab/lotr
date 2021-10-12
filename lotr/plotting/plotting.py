@@ -120,6 +120,12 @@ def color_plot(x, y, ax=None, c=None, vlims=None, cmap="twilight", **kwargs):
         [None], [None], vmin=vlims[0], vmax=vlims[1], c=[None], cmap=cmap
     )
     for i in range(1, len(x)):
-        ax.plot(x[i - 1 : i + 1], y[i - 1 : i + 1], c=cmap_fun(norm(c[i])), **kwargs)
+        ax.plot(
+            x[i - 1 : i + 1],
+            y[i - 1 : i + 1],
+            c=cmap_fun(norm(c[i])),
+            solid_capstyle="round",
+            **kwargs,
+        )
 
     return dummy_scatter

@@ -51,12 +51,11 @@ def pca_and_phase(traces_fit, traces_transform=None, comp0=0, comp1=1):
     pcaed = pca.transform(traces_transform)
 
     # Fit circle:
-    hf_c = hyper_fit(pcaed[:, [comp0, comp1]])
+    circle_params = hyper_fit(pcaed[:, [comp0, comp1]])
 
     # Compute phase, after subtracting center of the circle
-    phase = np.angle((pcaed[:, comp0] - hf_c[0]) + 1j * (pcaed[:, comp1] - hf_c[1]))
-
-    return pcaed, phase, pca, hf_c
+    angles = np.arctan2(pcaed[:, 1] - circle_params[1], pcaed[:, 0] - circle_params[0])
+    return pcaed, angles, pca, circle_params
 
 
 def phase_from_fit(x, y):

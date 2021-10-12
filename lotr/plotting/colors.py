@@ -5,6 +5,17 @@ and motions.color.
 import colorspacious
 import numpy as np
 
+COLS = dict(
+    sides=dict(
+        lf=(0.0, 0.623, 0.886), rt=(0.835, 0.364, 0.282)
+    ),
+    dff_img="Greens",
+    dff_plots="gray",
+    time="viridis",
+    beh=(0.4,) * 3,
+    ring=(0.847, 0.102, 0.376),
+)
+
 
 def dark_col(col, val=0.2):
     return [max(0, c - val) for c in col]

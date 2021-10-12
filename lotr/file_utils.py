@@ -1,11 +1,13 @@
 import re
 from pathlib import Path
 from shutil import copy
+import tempfile
 
 import pooch
 from tqdm import tqdm
 
 from lotr.default_vals import DATASET_DEFAULT_LOCATION
+
 
 def retrieve_dataset_location():
     """Handles finding the source data of the analysis.
@@ -48,10 +50,7 @@ def retrieve_figures_location():
         with open(specification_txt, "r") as f:
             return Path(f.read())
 
-    default_path = Path(DATASET_DEFAULT_LOCATION)
-    if default_path.exists():
-        return default_path
-
+    return Path(tempfile.mkdtemp())
 
 
 def folder_2_fid(folder):
