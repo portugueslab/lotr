@@ -9,9 +9,14 @@ from lotr.anatomy import reshape_stack
 
 class LotrExperiment(EmbeddedExperiment):
     """Main class for data loading. Look here to follow how any experimental
-    quantity loaded in a notebook is taken from the raw files. To follow
+    quantity loaded in a notebook is taken from the raw files. To check
     how semi-processed files are generated,
     look into lotr/scripts/00_folder_preprocessing.py.
+
+    NOTES:
+        Anatomical stacks are returned to follow the following convention when
+        imshow'ed with matplotlib:
+            rostral up, caudal down, real left of the fish on the left of the plot.
     """
 
     def __init__(self, *args, **kwargs):

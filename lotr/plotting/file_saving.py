@@ -1,7 +1,8 @@
 from matplotlib.backends.backend_pdf import PdfPages
+from matplotlib import pyplot as plt
 
 
-def save_multiplot_to_pdf(plot_func, args_list, filename):
+def save_multiplot_to_pdf(plot_func, args_list, filename, **kwargs):
     """Function to save a list of pdfs from a plotting function and a list of arguments.
 
     Parameters
@@ -17,8 +18,8 @@ def save_multiplot_to_pdf(plot_func, args_list, filename):
     -------
 
     """
-    with PdfPages('multipage_pdf.pdf') as pdf:
+    with PdfPages(filename) as pdf:
         for args in args_list:
-            fig = plot_func(args)
-            pdf.savefig(fig)
-            fig.cl
+            fig = plot_func(*args)
+            pdf.savefig(fig, **kwargs)
+            plt.close(fig)

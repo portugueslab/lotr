@@ -4,6 +4,8 @@ and motions.color.
 
 import numpy as np
 from numba import njit
+import matplotlib
+from lotr.plotting.colors import _get_n_colors
 
 
 def _get_categorical_colors(variable, color_scheme=None, lum=60, sat=60, hshift=0):
