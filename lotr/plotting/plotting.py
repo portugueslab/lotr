@@ -1,5 +1,6 @@
 import numpy as np
-from matplotlib import pyplot as plt, cm, colors
+from matplotlib import cm, colors
+from matplotlib import pyplot as plt
 
 
 def plot_arrow(seg, ax=None, col="b", alpha=1, s=10, lw=1):

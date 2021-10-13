@@ -1,7 +1,8 @@
 import numpy as np
-from matplotlib import pyplot as plt, collections
-from svgpath2mpl import parse_path
+from matplotlib import collections
+from matplotlib import pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+from svgpath2mpl import parse_path
 
 
 def add_cbar(
@@ -74,7 +75,7 @@ def add_cbar(
     return cbar
 
 
-def despine(ax, sides=["right", "top"], rmticks=True):
+def despine(ax, sides=("right", "top"), rmticks=True):
     if sides == "all":
         sides = ["right", "top", "left", "bottom"]
     if rmticks:
@@ -136,7 +137,8 @@ def add_scalebar(
         Spacing between minimum point on the plot and the bar, as a fraction of the
         data extension over that axis (default: 0.1).
     text_spacing_coef : float
-        Spacing between the bar and the labels, as a fraction of the bar length (default: 0.06).
+        Spacing between the bar and the labels, as a fraction of the bar length
+        (default: 0.06).
 
 
     """
@@ -212,7 +214,8 @@ def add_fish(ax, offset=(0, 0), scale=1):
 
 
 def get_circle_xy(circle_params):
-    """Compute array of x's and y's for plotting a circle, from circle fit parameters."""
+    """Compute array of x's and y's for plotting a circle, from circle fit parameters.
+    """
     if len(circle_params) == 4:
         xpos, ypos, radius, _ = circle_params
     else:

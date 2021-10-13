@@ -5,6 +5,11 @@ and motions.color.
 import numpy as np
 from numba import njit
 
+from lotr.plotting.color_utils import (
+    _get_categorical_colors,
+    _get_continuous_colors,
+)
+
 
 @njit
 def _fill_roi_stack(

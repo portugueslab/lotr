@@ -3,8 +3,8 @@ and motions.color.
 """
 
 import colorspacious
-import numpy as np
 import matplotlib
+import numpy as np
 
 
 def dark_col(col, val=0.2):

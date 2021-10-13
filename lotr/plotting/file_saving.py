@@ -1,5 +1,5 @@
-from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib import pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
 
 
 def save_multiplot_to_pdf(plot_func, args_list, filename, **kwargs):

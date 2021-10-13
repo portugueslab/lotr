@@ -1,5 +1,5 @@
-import pytest
 import numpy as np
+import pytest
 
 from lotr import LotrExperiment
 from lotr.pca import pca_and_phase
