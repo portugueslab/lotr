@@ -4,39 +4,6 @@ and motions.color.
 
 import numpy as np
 from numba import njit
-import matplotlib
-from lotr.plotting.colors import _get_n_colors
-
-
-def _get_categorical_colors(variable, color_scheme=None, lum=60, sat=60, hshift=0):
-    if color_scheme is None:
-        unique_vals = np.unique(variable[variable >= 0])
-        colors = _get_n_colors(len(unique_vals), lum=lum, sat=sat, hshift=hshift)
-        color_scheme = {v: colors[i] for i, v in enumerate(unique_vals)}
-
-    color_scheme[-1] = np.array([0, 0, 0])
-
-    roi_colors = np.array([color_scheme[v] for v in variable])
-
-    return np.concatenate([roi_colors, np.full((len(variable), 1), 255)], 1)
-
-
-def _get_continuous_colors(variable, color_scheme=None, vlims=None):
-    if color_scheme is None:
-        color_scheme = "viridis"
-
-    if vlims is None:
-        vlims = np.nanmin(variable), np.nanmax(variable)
-
-    # cmap function:
-    cmap_fun = (
-        color_scheme if callable(color_scheme) else matplotlib.cm.get_cmap(color_scheme)
-    )
-
-    # normalization function:
-    norm = matplotlib.colors.Normalize(vmin=vlims[0], vmax=vlims[1])
-
-    return (np.array([cmap_fun(norm(v)) for v in variable]) * 255).astype(np.uint8)
 
 
 @njit

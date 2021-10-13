@@ -1,24 +1,65 @@
 import numpy as np
 from matplotlib import pyplot as plt, collections
 from svgpath2mpl import parse_path
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 
 def add_cbar(
-    col_ax,
     ref_plot,
-    label="",
+    ax,
+    inset_loc=None,
+    title="",
     ticks=None,
     ticklabels=None,
     tick_visible=False,
-    labelsize=None,
+    labelsize=8,
     titlesize=10,
     **kwargs,
 ):
-    """Add properly edited colorbar to plot."""
-    if isinstance(col_ax, tuple) or isinstance(col_ax, list):
-        col_ax = plt.gcf().add_axes(col_ax)
+    """Add properly edited colorbar to a plot.
+
+    Parameters
+    ----------
+    ref_plot : matplotlib object accepting a colormap.
+        The imshow/scatterplot to add the cmap to.
+    ax : Axis
+        Either the axes to be used for plotting (if no inset_loc passed), or the axes
+        relative to which to compute the position of the inset plot.
+    inset_loc : tuple (optional)
+        Position of the colormap inset, relative to ref_axis (default=None).
+    title : str (optional)
+        Title (label) of the colormap (default=None).
+    ticks : list (optional)
+         List of ticks positions (default=matplotlib default).
+    ticklabels : list (optional)
+        List of ticks labels (default=matplotlib default).
+    tick_visible : bool (optional)
+        Specify if ticks are visible. If not, remove box as well (default=False).
+    labelsize : int (optional)
+        Specify fontsize of tick labels (default=8).
+    titlesize : int (optional)
+        Specify fontsize of title (default=10).
+    kwargs
+
+    Returns
+    -------
+        matplotlib Colorbar obj
+
+    """
+    if inset_loc is not None:
+        col_ax = inset_axes(
+            ax,
+            width="100%",
+            height="100%",
+            bbox_to_anchor=inset_loc,
+            bbox_transform=ax.transAxes,
+        )
+        # col_ax = plt.gcf().add_axes(col_ax)
+    else:
+        col_ax = ax
+
     cbar = plt.colorbar(ref_plot, cax=col_ax, **kwargs)
-    cbar.ax.set_title(label, fontsize=titlesize)
+    cbar.ax.set_title(title, fontsize=titlesize)
     cbar.set_ticks(ticks)
 
     if not tick_visible:
