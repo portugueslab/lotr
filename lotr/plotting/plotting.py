@@ -48,9 +48,7 @@ def boxplot(data, cols=None, ax=None, widths=0.6, ec=(0.3,) * 3):
         ax = plt.gca()
 
     if cols is None:
-        cols = [
-            None,
-        ] * len(data)
+        cols = [None,] * len(data)
 
     bplot = ax.boxplot(
         data,

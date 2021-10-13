@@ -5,7 +5,7 @@ from matplotlib.animation import FuncAnimation
 from lotr import A_FISH, FIGURES_LOCATION, LotrExperiment
 from lotr.pca import pca_and_phase
 from lotr.plotting import COLS, add_cbar, add_scalebar, get_default_phase_col
-from lotr.rpca_calculation import get_normalized_coords
+from lotr.rpca_calculation import get_zero_mean_weights
 from lotr.utils import get_vect_angle
 
 
@@ -19,7 +19,7 @@ def network_phase_animation():
     )
     pca_scores_t[:, :2] = pca_scores_t[:, :2] - circle_params[:2]
 
-    norm_activity = get_normalized_coords(exp.traces[:, exp.hdn_indexes].T).T
+    norm_activity = get_zero_mean_weights(exp.traces[:, exp.hdn_indexes].T).T
     avg_vects = np.einsum("ij,ik->jk", norm_activity.T, pca_scores_t[:, :2])
 
     network_phase = get_vect_angle(avg_vects.T)
@@ -54,12 +54,7 @@ def network_phase_animation():
 
     # Network average:
     (network_phase_plot,) = ax.plot(
-        [],
-        [],
-        c=w_c,
-        lw=netw_lw,
-        label="netw. phase",
-        solid_capstyle="round",
+        [], [], c=w_c, lw=netw_lw, label="netw. phase", solid_capstyle="round",
     )
 
     # Legend:

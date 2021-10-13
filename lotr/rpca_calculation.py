@@ -5,8 +5,7 @@ import numpy as np
 from lotr.utils import get_rot_matrix, get_vect_angle, reduce_to_pi
 
 
-# TODO This will change with registered coordinates
-def get_normalized_coords(coords):
+def get_zero_mean_weights(coords):
     """Normalize coords to be used as weights for fit
 
     Parameters
