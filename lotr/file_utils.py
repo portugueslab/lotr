@@ -31,8 +31,8 @@ def retrieve_dataset_location():
 
     data_pooch = pooch.create(
         path=pooch.os_cache("lotr"),
-        base_url="https://zenodo.org/record/5560855/files/",
-        registry={"sample_dataset.zip": "md5:c316e09dc74cd4f25e9b5077b584e343"},
+        base_url="https://zenodo.org/record/5565865/files/",
+        registry={"sample_dataset.zip": "md5:07ee1a35b585b5da0f626cadd2857152"},
     )
 
     unpack = pooch.Unzip(members=None)
