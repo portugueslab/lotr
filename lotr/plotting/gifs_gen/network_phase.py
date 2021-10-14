@@ -9,7 +9,7 @@ from lotr.rpca_calculation import get_zero_mean_weights
 from lotr.utils import get_vect_angle
 
 
-def network_phase_animation():
+def network_phase_animation(dest):
     # Data preparation
     # ----------------
     # Compute quantities to plot:
@@ -114,10 +114,11 @@ def network_phase_animation():
         init_func=init,
         blit=True,
     )
-    ani.save(FIGURES_LOCATION / "network_phase_explained.mp4", dpi=300)
+    ani.save(dest, dpi=300)
 
     return fig
 
 
-if __name__ == "__main__":
-    network_phase_animation()
+# if __name__ == "__main__":
+#     network_phase_animation()
+

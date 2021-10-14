@@ -1,3 +1,6 @@
+"""For a discussion over the anatomical space convention, look in the LotrExperiment
+class docstring"""
+
 from bg_space import AnatomicalSpace
 
 from lotr.default_vals import (

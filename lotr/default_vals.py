@@ -20,4 +20,7 @@ DATASET_DEFAULT_LOCATION = (
 ANATOMICAL_ORIENT_SOURCE = "ilp"
 
 # Anatomical orientation of figures:
-ANATOMICAL_ORIENT_FIGURES = "ial"
+ANATOMICAL_ORIENT_FIGURES = "ipl"
+
+# lightsheet microscope pixel size in um, from calibration:
+LIGHTSHEET_CAMERA_RES_XY = (0.6, 0.6)

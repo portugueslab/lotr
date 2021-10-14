@@ -5,6 +5,8 @@ import numpy as np
 from bouter import EmbeddedExperiment
 
 from lotr.anatomy import reshape_stack
+from lotr.default_vals import LIGHTSHEET_CAMERA_RES_XY
+from lotr.plotting import color_stack
 
 
 class LotrExperiment(EmbeddedExperiment):
@@ -13,22 +15,41 @@ class LotrExperiment(EmbeddedExperiment):
     how semi-processed files are generated,
     look into lotr/scripts/00_folder_preprocessing.py.
 
-    NOTES:
-        Anatomical stacks are returned to follow the following convention when
-        imshow'ed with matplotlib:
-            rostral up, caudal down, real left of the fish on the left of the plot.
+    NOTES: Anatomical space
+        Anatomical stacks are returned to follow the following convention:
+            (inferior-superior, posterior-anterior, left-right)
+        This means that the voxel 0 is located at the ventral-caudal-left corner.
+
+        **Figures are all coded to be top view (left=left of the fish, top=rostral).**
+
+        Therefore:
+        plt.imshow for the stacks should be used specifying the origin="lower" argument
+        for left to be left of the fish in top view!
+
+        The coordinates follow the same convention: the origin is set to be
+        at the ventral-caudal-left corner. Therefore, when scattering the second two
+        coords, left is left and right is right.
+
+        The following code will produce correctly oriented fish:
+
+        # Pixel coordinates:
+        plt.imshow(exp.rois_stack.max(0), aspect="auto", origin="lower")
+        plt.scatter(exp.coords[:, 1], exp.coords[:, 2])
+
+        # Microns coordinates:
+        plt.imshow(exp.rois_stack.max(0), origin="lower", extent=exp.plane_ext_um)
+        plt.scatter(exp.coords_um[:, 1], exp.coords_um[:, 2])
     """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.scope_config = self["imaging"]["microscope_config"]
+        self.microscope_config = self["imaging"]["microscope_config"]
 
         self._dt_imaging = None
         self._resolution = None
         self._n_planes = None
         self._data_shape = None
-        self._fn = None
         self._bouts_df = None
         self._traces = None
         self._hdn_indexes = None
@@ -42,18 +63,48 @@ class LotrExperiment(EmbeddedExperiment):
 
     @property
     def fn(self):
-        if self._fn is None:
-            try:
-                self._fn = int(
-                    self.scope_config["lightsheet"]["scanning"]["z"]["frequency"]
-                )
-            except KeyError:
-                self._fn = int(self.scope_config["scanning"]["framerate"])
-        return self._fn
+        try:
+            return int(
+                self.microscope_config["lightsheet"]["scanning"]["z"]["frequency"]
+            )
+        except KeyError:
+            return int(self.microscope_config["scanning"]["framerate"])
+
+    @property
+    def n_planes(self):
+        try:
+            return self.microscope_config["lightsheet"]["scanning"]["triggering"]["n_planes"]
+        except KeyError:
+            print("Fix definition for 2p data!")
+
+    @property
+    def voxel_size_um(self):
+        try:
+            z_conf = self.microscope_config["lightsheet"]["scanning"]["z"]
+            z_um = (z_conf["piezo_max"] - z_conf["piezo_min"]) / self.n_planes
+
+            return (z_um, ) + LIGHTSHEET_CAMERA_RES_XY
+            return
+
+        except KeyError:
+            print("Fix definition for 2p data!")
+
+    @property
+    def lr_extent_um(self):
+        return 0, self.rois_stack.shape[2] * self.voxel_size_um[2]
+
+    @property
+    def pa_extent_um(self):
+        return 0, self.rois_stack.shape[1] * self.voxel_size_um[1]
+
+    @property
+    def plane_ext_um(self):
+        return self.lr_extent_um + self.pa_extent_um
+
 
     @property
     def dt_imaging(self):
-        return 1 / self.fn_imaging
+        return 1 / self.fn
 
     @property
     def dir_name(self):
@@ -108,6 +159,10 @@ class LotrExperiment(EmbeddedExperiment):
                 self.root / "data_from_suite2p_unfiltered.h5", "/coords"
             )
         return self._coords
+
+    @property
+    def coords_um(self):
+        return self.coords * self.voxel_size_um
 
     @property
     def hdn_indexes(self):
@@ -172,3 +227,34 @@ class LotrExperiment(EmbeddedExperiment):
         if len(matches) > 1:
             raise OSError("Multiple folders found for this experiment")
         return matches[0]
+
+    def color_rois_by(self, values, indexes=None, **kwargs):
+        """Color ROI stack by some convention (phase, activity, etc.). If no indexes
+        are passed, we assume we are coloring either all ROIs or HDNs.
+
+        Parameters
+        ----------
+        values : np.array
+            Array over which to color the stack
+        indexes : np.array (optional)
+            Index of ROIs to color (if different from either all or HDNs only)
+        kwargs : dict
+            Additional kwargs for the color_stack function. Most importantly,
+            color_scheme and vlims might be handy to set.
+
+        Returns
+        -------
+
+        """
+        if indexes is None:
+            if len(values) == self.n_rois:
+                indexes = np.arange(self.n_rois)
+            elif len(values) == len(self.hdn_indexes):
+                indexes = self.hdn_indexes
+            else:
+                raise ValueError(f"Can't infer index for variable of len {len(values)}")
+
+        full_val_arr = np.full(self.n_rois, np.nan)
+        full_val_arr[indexes] = values
+        return color_stack(self.rois_stack, variable=full_val_arr, **kwargs)
+
