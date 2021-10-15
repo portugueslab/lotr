@@ -206,7 +206,11 @@ class LotrExperiment(EmbeddedExperiment):
 
     @property
     def has_hdn(self):
-        return (self.root / "selected.h5").exists()  # self.traces.shape[1]
+        return (self.root / "selected.h5").exists()
+
+    @property
+    def time_arr(self):
+        return np.arange(1, self.n_pts + 1) / self.fn
 
     @property
     def pca_t_lims(self):
@@ -273,7 +277,9 @@ class LotrExperiment(EmbeddedExperiment):
             norm_activity = get_zero_mean_weights(self.traces[:, self.hdn_indexes].T).T
             avg_vects = np.einsum("ij,ik->jk", norm_activity.T, self.rpc_scores)
 
-            self._network_phase = np.arctan2(-avg_vects[:, 1], avg_vects[:, 0])
+            # This choice of signs ensures that network phase correspond to angle of
+            # max activation or ROIs over rPC space:
+            self._network_phase = np.arctan2(avg_vects[:, 1], -avg_vects[:, 0])
 
         return self._network_phase
 

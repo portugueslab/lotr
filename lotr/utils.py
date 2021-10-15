@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.interpolate import interp1d
+from numba import njit
 
 
 def zscore(array):
@@ -65,3 +66,26 @@ def get_rot_matrix(th):
 
 def get_vect_angle(vect):
     return np.angle(vect[0] + 1j * vect[1])
+
+
+@njit
+def roll_columns_jit(matrix, shifts):
+    """Shift every column of the matrix by a specified amount.
+
+    Parameters
+    ----------
+    matrix : np.array
+        (to_roll, n) matrix to roll over the first dimension.
+    shifts : np.array
+        (to_roll,) array of integer indexes specifying the shift.
+
+    Returns
+    -------
+    np.array
+        matrix shifted over first dimension.
+
+    """
+    rolled = np.empty_like(matrix)
+    for i in range(matrix.shape[0]):
+        rolled[i, :] = np.roll(matrix[i, :], int(shifts[i]))
+    return rolled

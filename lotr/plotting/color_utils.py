@@ -42,7 +42,7 @@ def _get_categorical_colors(variable, color_scheme=None, lum=60, sat=60, hshift=
     return np.concatenate([roi_colors, np.full((len(variable), 1), 255)], 1)
 
 
-def _get_continuous_colors(variable, color_scheme=None, vlims=None):
+def get_continuous_colors(variable, color_scheme=None, vlims=None):
     if color_scheme is None:
         color_scheme = "viridis"
 

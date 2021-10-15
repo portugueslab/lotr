@@ -7,7 +7,7 @@ from numba import njit
 
 from lotr.plotting.color_utils import (
     _get_categorical_colors,
-    _get_continuous_colors,
+    get_continuous_colors,
 )
 
 
@@ -169,7 +169,7 @@ def color_stack(
                 :, :, :, 0
             ]
         # get roi colors:
-        roi_colors = _get_continuous_colors(
+        roi_colors = get_continuous_colors(
             variable, color_scheme=color_scheme, vlims=vlims
         )
 
