@@ -67,6 +67,7 @@ class LotrExperiment(EmbeddedExperiment):
         self._rndcnt_indexes = None
         self._rpc_scores = None
         self._rpc_angles = None
+        self._network_phase = None
 
     @property
     def fn(self):
@@ -230,6 +231,9 @@ class LotrExperiment(EmbeddedExperiment):
 
     @property
     def rpc_scores(self):
+        """For a tutorial on this calculation, have a look at
+        'Anatomical organization of the network.ipynb'
+        """
         if self._rpc_scores is None:
             # 1. compute PCs:
             pca_scores, angles, _, circle_params = pca_and_phase(
@@ -248,27 +252,26 @@ class LotrExperiment(EmbeddedExperiment):
 
     @property
     def rpc_angles(self):
-        """For a tutorial on how this is performed, have a look at
+        """For a tutorial on this calculation, have a look at
         'Anatomical organization of the network.ipynb'
         """
         if self._rpc_angles is None:
-            # # 1. compute PCs:
-            # pca_scores, angles, _, circle_params = pca_and_phase(
-            #     self.traces[self.pca_t_slice, self.hdn_indexes].T
-            # )
-            # # 2. center on 0:
-            # centered_pca_scores = pca_scores[:, :2] - circle_params[:2]
-            #
-            # # 3. Find transformation to match anatomy
-            # # Normalize coords (we don't care about z here)
-            # w_coords = get_zero_mean_weights(self.coords[self.hdn_indexes, 1:])
-            #
-            # # Find transformation to have at 0 angle rostral ROIs:
-            # rotated_pca_scores = reorient_pcs(centered_pca_scores, w_coords)
-            # assert np.allclose(rotated_pca_scores, self.rpc_scores)
             self._rpc_angles = np.arctan2(-self.rpc_scores[:, 1], self.rpc_scores[:, 0])
 
         return self._rpc_angles
+
+    @property
+    def network_phase(self):
+        """For a tutorial on this calculation, have a look at
+        'Anatomical organization of the network.ipynb'
+        """
+        if self._network_phase is None:
+            norm_activity = get_zero_mean_weights(exp.traces[:, self.hdn_indexes].T).T
+            avg_vects = np.einsum("ij,ik->jk", norm_activity.T, self.rpc_scores)
+
+            self._network_phase = np.arctan2(-avg_vects[:, 1], avg_vects[:, 0])
+
+        return self._network_phase
 
     def find_mirror_dir(self, parent_folder):
         """Find homonym directory in a new parent folder, for file mirroring."""
