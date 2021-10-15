@@ -6,7 +6,7 @@ from lotr.plotting.color_utils import _get_continuous_colors, get_n_colors
 COLS = dict(
     sides=dict(lf=(0.0, 0.623, 0.886), rt=(0.835, 0.364, 0.282)),
     dff_img="Greens",
-    dff_plots="gray",
+    dff_plot="gray",
     time="viridis",
     beh=(0.4,) * 3,
     ring=(0.847, 0.102, 0.376),

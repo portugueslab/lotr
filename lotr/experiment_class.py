@@ -201,6 +201,10 @@ class LotrExperiment(EmbeddedExperiment):
         return self.traces.shape[1]
 
     @property
+    def n_hdns(self):
+        return len(self.hdn_indexes)
+
+    @property
     def has_hdn(self):
         return (self.root / "selected.h5").exists()  # self.traces.shape[1]
 
@@ -256,7 +260,7 @@ class LotrExperiment(EmbeddedExperiment):
         'Anatomical organization of the network.ipynb'
         """
         if self._rpc_angles is None:
-            self._rpc_angles = np.arctan2(-self.rpc_scores[:, 1], self.rpc_scores[:, 0])
+            self._rpc_angles = np.arctan2(self.rpc_scores[:, 1], -self.rpc_scores[:, 0])
 
         return self._rpc_angles
 
@@ -266,7 +270,7 @@ class LotrExperiment(EmbeddedExperiment):
         'Anatomical organization of the network.ipynb'
         """
         if self._network_phase is None:
-            norm_activity = get_zero_mean_weights(exp.traces[:, self.hdn_indexes].T).T
+            norm_activity = get_zero_mean_weights(self.traces[:, self.hdn_indexes].T).T
             avg_vects = np.einsum("ij,ik->jk", norm_activity.T, self.rpc_scores)
 
             self._network_phase = np.arctan2(-avg_vects[:, 1], avg_vects[:, 0])
