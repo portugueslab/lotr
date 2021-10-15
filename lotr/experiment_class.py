@@ -8,6 +8,9 @@ from lotr.anatomy import reshape_stack
 from lotr.default_vals import LIGHTSHEET_CAMERA_RES_XY
 from lotr.plotting import color_stack
 
+from lotr.pca import pca_and_phase
+from lotr.rpca_calculation import get_zero_mean_weights, reorient_pcs
+
 
 class LotrExperiment(EmbeddedExperiment):
     """Main class for data loading. Look here to follow how any experimental
@@ -60,6 +63,7 @@ class LotrExperiment(EmbeddedExperiment):
         self._rois_stack = None
         self._nonhdn_indexes = None
         self._rndcnt_indexes = None
+        self._rpc_angles = None
 
     @property
     def fn(self):
@@ -219,6 +223,28 @@ class LotrExperiment(EmbeddedExperiment):
     def pca_t_slice(self):
         t_lims = self.pca_t_lims
         return slice(*[t * self.fn for t in t_lims])
+
+    @property
+    def rpc_angles(self):
+        """For a tutorial on how this is performed, have a look at
+        'Anatomical organization of the network.ipynb'
+        """
+        if self._rpc_angles is None:
+            # 1. compute PCs:
+            pca_scores, angles, _, circle_params = pca_and_phase(
+                self.traces[self.pca_t_slice, self.hdn_indexes].T
+            )
+            # 2. center on 0:
+            centered_pca_scores = pca_scores[:, :2] - circle_params[:2]
+
+            # 3. Find transformation to match anatomy
+            # Normalize coords (we don't care about z here)
+            w_coords = get_zero_mean_weights(self.coords[self.hdn_indexes, 1:])
+
+            # Find transformation to have at 0 angle rostral ROIs:
+            rotated_pca_scores = reorient_pcs(centered_pca_scores, w_coords)
+            self._rpc_angles = np.arctan2(-rotated_pca_scores[:, 1], rotated_pca_scores[:, 0])
+        return self._rpc_angles
 
     def find_mirror_dir(self, parent_folder):
         """Find homonym directory in a new parent folder, for file mirroring."""
