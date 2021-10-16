@@ -15,11 +15,13 @@ plt.rcParams['axes.labelsize'] = 8
 plt.rcParams["legend.fontsize"] = 8
 plt.rcParams["legend.frameon"] = False
 plt.rcParams["axes.titlesize"] = 8
-plt.rcParams['svg.fonttype'] = 'none'
-plt.rcParams['pdf.use14corefonts'] = True
+plt.rcParams["svg.fonttype"] = "none"
+plt.rcParams["font.sans-serif"] = "Arial"
+plt.rcParams["mathtext.default"] = "regular"
+# plt.rcParams['pdf.use14corefonts'] = True
 
 for t in ["x", "y"]:
-    plt.rcParams[t + 'tick.labelsize'] = 8
+    plt.rcParams[t + "tick.labelsize"] = 8
     # plt.rcParams[t + 'tick.major.size'] = 3
     # plt.rcParams[t + 'tick.major.width'] = 0.5
 

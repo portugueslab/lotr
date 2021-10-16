@@ -100,6 +100,7 @@ def add_scalebar(
     yunits=None,
     xlabel=None,
     ylabel=None,
+    fontsize=8,
     line_params=None,
     text_params=None,
     disable_axis=True,
@@ -149,7 +150,7 @@ def add_scalebar(
         ax = plt.gca()
 
     line_params_def = dict(lw=1, c=(0.3,) * 3)
-    text_params_def = dict(fontsize=10)
+    text_params_def = dict(fontsize=fontsize)
 
     for default_params, params_in in zip(
         [line_params_def, text_params_def], [line_params, text_params]
