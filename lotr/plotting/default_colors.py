@@ -10,6 +10,7 @@ COLS = dict(
     time="viridis",
     beh=(0.4,) * 3,
     ring=(0.847, 0.102, 0.376),
+    shuf=(),
     phase=ListedColormap(get_n_colors(1000, lum=45, sat=70, hshift=90) / 255),
     phase_light=ListedColormap(get_n_colors(1000, lum=60, sat=45, hshift=90) / 255),
     dff_opp="PiYG",
