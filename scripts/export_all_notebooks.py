@@ -1,8 +1,8 @@
-import os
-from lotr import FIGURES_LOCATION
-from pathlib import Path
 import datetime
+import os
+from pathlib import Path
 
+from lotr import FIGURES_LOCATION
 
 # Create timestamped destination folder:
 date = datetime.datetime.now()
@@ -15,5 +15,6 @@ dest.mkdir(exist_ok=True, parents=True)
 ipynb_files = (Path(__file__).parent.parent / "notebooks" / "testable").glob("*.ipynb")
 
 # Convert
+
 for nb in ipynb_files:
     os.system(f'jupyter nbconvert --output-dir "{dest}" --to PDF --execute "{nb}"')

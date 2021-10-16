@@ -8,6 +8,8 @@ import numpy as np
 
 
 def dark_col(col, val=0.2):
+    if type(col) == str:
+        col = [float(col) for _ in range(3)]
     return [max(0, c - val) for c in col]
 
 

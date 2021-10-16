@@ -6,9 +6,8 @@ from bouter import EmbeddedExperiment
 
 from lotr.anatomy import reshape_stack
 from lotr.default_vals import LIGHTSHEET_CAMERA_RES_XY
-from lotr.plotting import color_stack
-
 from lotr.pca import pca_and_phase
+from lotr.plotting import color_stack
 from lotr.rpca_calculation import get_zero_mean_weights, reorient_pcs
 
 
@@ -81,7 +80,9 @@ class LotrExperiment(EmbeddedExperiment):
     @property
     def n_planes(self):
         try:
-            return self.microscope_config["lightsheet"]["scanning"]["triggering"]["n_planes"]
+            return self.microscope_config["lightsheet"]["scanning"]["triggering"][
+                "n_planes"
+            ]
         except KeyError:
             print("Fix definition for 2p data!")
 
@@ -91,7 +92,7 @@ class LotrExperiment(EmbeddedExperiment):
             z_conf = self.microscope_config["lightsheet"]["scanning"]["z"]
             z_um = (z_conf["piezo_max"] - z_conf["piezo_min"]) / self.n_planes
 
-            return (z_um, ) + LIGHTSHEET_CAMERA_RES_XY
+            return (z_um,) + LIGHTSHEET_CAMERA_RES_XY
             return
 
         except KeyError:
@@ -108,7 +109,6 @@ class LotrExperiment(EmbeddedExperiment):
     @property
     def plane_ext_um(self):
         return self.lr_extent_um + self.pa_extent_um
-
 
     @property
     def dt_imaging(self):
@@ -236,7 +236,6 @@ class LotrExperiment(EmbeddedExperiment):
         t_lims = self.pca_t_lims
         return slice(*[t * self.fn for t in t_lims])
 
-
     @property
     def rpc_scores(self):
         """For a tutorial on this calculation, have a look at
@@ -320,4 +319,3 @@ class LotrExperiment(EmbeddedExperiment):
         full_val_arr = np.full(self.n_rois, np.nan)
         full_val_arr[indexes] = values
         return color_stack(self.rois_stack, variable=full_val_arr, **kwargs)
-

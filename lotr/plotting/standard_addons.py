@@ -1,5 +1,6 @@
-from matplotlib import pyplot as plt
 import numpy as np
+from matplotlib import pyplot as plt
+
 from lotr.plotting.general import add_cbar
 
 
@@ -72,11 +73,12 @@ def add_anatomy_scalebar(
 
 
 def add_phase_cbar(*args, **kwargs):
-    return add_cbar(*args,
+    return add_cbar(
+        *args,
         ticks=(-np.pi + 0.1, np.pi - 0.1),
         ticklabels=(["-π", "π"]),
         title="phase",
-        **kwargs
+        **kwargs,
     )
 
 
@@ -85,11 +87,12 @@ def add_dff_cbar(*args, flims=1, **kwargs):
         _ = iter(flims)
     except TypeError:
         flims = (-flims, flims)
-    return add_cbar(*args,
+    return add_cbar(
+        *args,
         ticks=flims,
         ticklabels=["$-$", "$+$"],
         title="ΔF",
         titlesize=8,
         labelsize=6,
-                    **kwargs
-)
+        **kwargs,
+    )

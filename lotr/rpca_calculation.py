@@ -79,11 +79,12 @@ def reorient_pcs(cpc_scores, w_coords):
     # at (1/4)*pi (angle NE):
     FINAL_TH_SHIFT = -(1 / 4) * np.pi
 
-    rpc_scores = (get_rot_matrix(FINAL_TH_SHIFT)
-                  @
-                  get_rot_matrix(
-                      -mean_angle * s) @ invert_mat @ cpc_scores.T
-                  ).T
+    rpc_scores = (
+        get_rot_matrix(FINAL_TH_SHIFT)
+        @ get_rot_matrix(-mean_angle * s)
+        @ invert_mat
+        @ cpc_scores.T
+    ).T
 
     return rpc_scores
 

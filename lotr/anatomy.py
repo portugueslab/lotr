@@ -22,6 +22,7 @@ def anatomical_angle_remapping(angle):
     out[np.abs(out) > np.pi] = np.sign(out[np.abs(out) > np.pi]) * np.pi
     return out
 
+
 def reshape_stack(suite2p_stack):
     """Ensure that a suite2p stack is oriented according to the convention
     (ventr-dors, rostr-caud, left-right)

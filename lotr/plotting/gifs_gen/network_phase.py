@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-from lotr import A_FISH, FIGURES_LOCATION, LotrExperiment
+from lotr import A_FISH, LotrExperiment
 from lotr.pca import pca_and_phase
 from lotr.plotting import COLS, add_cbar, add_scalebar, get_default_phase_col
 from lotr.rpca_calculation import get_zero_mean_weights
@@ -41,7 +41,7 @@ def network_phase_animation(dest):
     activity_sc = ax.scatter(pca_scores_t[:, 0], pca_scores_t[:, 1], lw=0)
 
     # Timestamp:
-    tx = ax.text(-100, 100, f"t = 0 s", fontsize=8)
+    tx = ax.text(-100, 100, "t = 0 s", fontsize=8)
 
     # Individual weights:
     weight_actors = []
@@ -121,4 +121,3 @@ def network_phase_animation(dest):
 
 # if __name__ == "__main__":
 #     network_phase_animation()
-

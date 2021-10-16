@@ -223,6 +223,7 @@ def add_fish(ax, head_offset=(0, 0), scale=1, angle=0, zorder=100, c=".7"):
     )
     ax.add_artist(collection)
 
+
 def get_circle_xy(circle_params):
     """Compute array of x's and y's for plotting a circle, from circle fit parameters.
     """
