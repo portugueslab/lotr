@@ -2,7 +2,7 @@ import numpy as np
 
 
 def get_pi_labels(
-    d=1, coefs=None, tickname="xticks", labname="xticklabels", style="notex"
+    d=1, coefs=None, ax="x", style="notex"
 ):
     """Handy way to generate labels for plots with radiants.
     Ugly numerical keys in dictionary, but should not give troubles.
@@ -50,5 +50,6 @@ def get_pi_labels(
     for i in coefs:
         ticks.append(i * np.pi)
         tick_labels.append(labels_mappings[style][i])
-
+    tickname = ax + "ticks"
+    labname = ax +"ticklabels"
     return {tickname: ticks, labname: tick_labels}
