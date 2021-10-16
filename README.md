@@ -21,3 +21,8 @@ To regenerate all figures in the figures folder, run:
 ```
 pytest --cov --nbmake "./notebooks/testable/"  -n=auto
 ```
+
+To export all testable notebooks to PDFs, you can run the following script:
+```
+python ...lotr/scripts/export_all_notebooks.py
+```
