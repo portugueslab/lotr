@@ -14,3 +14,4 @@ colorspacious
 svgpath2mpl
 pooch
 bg_space
+ipynbname

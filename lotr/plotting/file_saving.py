@@ -1,6 +1,18 @@
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from lotr.file_utils import get_figures_location
+import ipynbname
+
+
+def get_nb_figures_location():
+    """Using the ipynbname library here could be a bit brittle - but let's give this
+    a try.
+    """
+    nb_fname = ipynbname.name()
+    fig_location = get_figures_location() / nb_fname
+    fig_location.mkdir(exist_ok=True)
+
+    return fig_location
 
 
 def savefig(name, fig=None, format="pdf"):
@@ -10,11 +22,12 @@ def savefig(name, fig=None, format="pdf"):
         fig = plt.gcf()
 
     if type(name) == str:
-        name = get_figures_location()
+        folder = get_nb_figures_location()
+    else:  # assuming Path object here
+        folder = name.parent
+        name = name.stem  # remove format if specified
 
-    # remove format if specified
-    name = name.parent / f"{name.stem}.{format}"
-    fig.savefig(name, dpi=300)
+    fig.savefig(folder / f"{name}.{format}", dpi=300)
 
 
 def save_multiplot_to_pdf(plot_func, args_list, filename, **kwargs):
