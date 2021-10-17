@@ -8,8 +8,12 @@ def get_nb_figures_location():
     """Using the ipynbname library here could be a bit brittle - but let's give this
     a try.
     """
-    nb_fname = ipynbname.name()
-    fig_location = get_figures_location() / nb_fname
+    try :
+        notebook_name = ipynbname.name()
+    except IndexError:
+        return get_figures_location()
+
+    fig_location = get_figures_location() / notebook_name
     fig_location.mkdir(exist_ok=True)
 
     return fig_location

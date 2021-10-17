@@ -9,3 +9,4 @@ isort
 nb-clean
 nbmake
 pytest-xdist
+nbconvert
