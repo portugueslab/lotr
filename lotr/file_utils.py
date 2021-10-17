@@ -9,7 +9,7 @@ from tqdm import tqdm
 from lotr.default_vals import DATASET_DEFAULT_LOCATION
 
 
-def retrieve_dataset_location():
+def get_dataset_location():
     """Handles finding the source data of the analysis.
     By default, tries to find the repo dataset_location.txt file. If not available,
     use lab standard location. If also not available, download test dataset from web
@@ -44,7 +44,7 @@ def retrieve_dataset_location():
     ].parent.parent.parent
 
 
-def retrieve_figures_location():
+def get_figures_location():
     specification_txt = Path(__file__).parent.parent / "figures_location.txt"
     if specification_txt.exists():
         with open(specification_txt, "r") as f:

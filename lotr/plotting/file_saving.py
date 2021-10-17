@@ -1,5 +1,20 @@
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
+from lotr.file_utils import get_figures_location
+
+
+def savefig(name, fig=None, format="pdf"):
+    """Function to centralize figure saving.
+    """
+    if fig is None:
+        fig = plt.gcf()
+
+    if type(name) == str:
+        name = get_figures_location()
+
+    # remove format if specified
+    name = name.parent / f"{name.stem}.{format}"
+    fig.savefig(name, dpi=300)
 
 
 def save_multiplot_to_pdf(plot_func, args_list, filename, **kwargs):

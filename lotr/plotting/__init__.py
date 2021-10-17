@@ -7,6 +7,7 @@ from lotr.plotting.labels import *
 from lotr.plotting.plotting import *
 from lotr.plotting.stack_coloring import *
 from lotr.plotting.standard_addons import *
+from lotr.plotting.file_saving import *
 
 # Here we configure matplotlib to some useful defaults:
 plt.rcParams["image.origin"] = "lower"
