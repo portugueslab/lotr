@@ -283,7 +283,8 @@ class LotrExperiment(EmbeddedExperiment):
         return self._network_phase
 
     def find_mirror_dir(self, parent_folder):
-        """Find homonym directory in a new parent folder, for file mirroring."""
+        """Find homonym directory in a new parent folder, for file mirroring.
+        """
         parent_folder = Path(parent_folder)
         matches = list(parent_folder.rglob(self.dir_name))
         if len(matches) > 1:
