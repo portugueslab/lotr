@@ -221,7 +221,7 @@ def add_fish(ax, head_offset=(0, 0), scale=1, angle=0, zorder=100, c=".7"):
     collection = collections.PathCollection(
         [path], linewidths=0, facecolors=c, zorder=zorder
     )
-    ax.add_artist(collection)
+    return ax.add_artist(collection)
 
 
 def get_circle_xy(circle_params):

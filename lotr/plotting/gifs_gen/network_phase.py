@@ -7,6 +7,7 @@ from lotr.pca import pca_and_phase
 from lotr.plotting import COLS, add_cbar, add_scalebar, get_default_phase_col
 from lotr.rpca_calculation import get_zero_mean_weights
 from lotr.utils import get_vect_angle
+from lotr.file_utils import get_figures_location
 
 
 def network_phase_animation(dest):
@@ -52,6 +53,8 @@ def network_phase_animation(dest):
         )
         weight_actors.append(weights_plot)
 
+    add_scalebar(ax, xlabel="rPC1", ylabel="-rPC2", xlen=30, ylen=30)
+
     # Network average:
     (network_phase_plot,) = ax.plot(
         [], [], c=w_c, lw=netw_lw, label="netw. phase", solid_capstyle="round",
@@ -64,6 +67,7 @@ def network_phase_animation(dest):
     # put together all actors:
     actors = (activity_sc, tx, network_phase_plot, *weight_actors, leg_line)
 
+
     def init():
         # For some mysterious reasons, some of those specifications need to happen
         # in the init. Therefore, we put here a whole bunch of them:
@@ -71,7 +75,6 @@ def network_phase_animation(dest):
         activity_sc.set_clim(-f_lim, f_lim)
         activity_sc.set_cmap(COLS["dff_opp"])
 
-        add_scalebar(ax, xlabel="PC1", ylabel="PC2", xlen=30, ylen=30)
         add_cbar(
             activity_sc,
             ax,
@@ -109,7 +112,7 @@ def network_phase_animation(dest):
     ani = FuncAnimation(
         fig,
         update,
-        frames=list(range(0, 1000, 5)),
+        frames=list(range(0, 4000, 5)),
         interval=50,
         init_func=init,
         blit=True,
@@ -119,5 +122,6 @@ def network_phase_animation(dest):
     return fig
 
 
-# if __name__ == "__main__":
-#     network_phase_animation()
+if __name__ == "__main__":
+    network_phase_animation(get_figures_location() / "network_phase_long.mp4")
+
