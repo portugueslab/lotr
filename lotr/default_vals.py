@@ -8,6 +8,9 @@ REGRESSOR_TAU = 5
 # Window in seconds for smoothing traces when calculating the PCA/phase
 TRACES_SMOOTH_S = 5
 
+# Pad time at beginning and end of experiment in seconds when calculating PCA:
+PCA_TIME_PAD_S = 150
+
 # Time intervals over which to compute PCA in different experimental conditions
 T_START = 100  # exclude the very first part of the exp, after lightsheet laser on
 

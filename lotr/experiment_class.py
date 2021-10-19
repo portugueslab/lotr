@@ -4,8 +4,9 @@ import flammkuchen as fl
 import numpy as np
 from bouter import EmbeddedExperiment
 
-from lotr.anatomy import reshape_stack
-from lotr.default_vals import LIGHTSHEET_CAMERA_RES_XY
+from lotr.data_preprocessing.anatomy import reshape_stack
+from lotr.data_preprocessing.stimulus import get_all_trials_df
+from lotr.default_vals import LIGHTSHEET_CAMERA_RES_XY, PCA_TIME_PAD_S
 from lotr.pca import pca_and_phase
 from lotr.plotting import color_stack
 from lotr.rpca_calculation import get_zero_mean_weights, reorient_pcs
@@ -67,6 +68,7 @@ class LotrExperiment(EmbeddedExperiment):
         self._rpc_scores = None
         self._rpc_angles = None
         self._network_phase = None
+        self._stim_trials_df = None
 
     @property
     def fn(self):
@@ -213,23 +215,26 @@ class LotrExperiment(EmbeddedExperiment):
         return np.arange(1, self.n_pts + 1) / self.fn
 
     @property
+    def exp_type(self):
+        # TODO use experiment versions here
+
+        return self.root.name.split("_")[2]
+
+
+    @property
     def pca_t_lims(self):
         """Time slicing for the calculation of PCA, excluding the initial part of the
         trace (where drifts/things related to the beginning of the experiment might be
         happening) and the parts with strong stimuli in protocols with dir motion.
         """
-        T_PAD_S = 150  # Beginning/end pad time in seconds
+
         exp_end = int(self["stimulus"]["log"][-1]["t_stop"])
-
-        # TODO use experiment versions here
-        stim_type = self.root.name.split("_")[2]
-
-        if stim_type == "cwccw":
-            return T_PAD_S, int(self["stimulus"]["log"][1]["t_start"])
-        elif stim_type == "2dvr":
-            return T_PAD_S, int(self["stimulus"]["log"][2]["t_start"])
+        if self.exp_type == "cwccw":
+            return PCA_TIME_PAD_S, int(self["stimulus"]["log"][1]["t_start"])
+        elif self.exp_type == "2dvr":
+            return PCA_TIME_PAD_S, int(self["stimulus"]["log"][2]["t_start"])
         else:
-            return T_PAD_S, exp_end - T_PAD_S
+            return PCA_TIME_PAD_S, exp_end - PCA_TIME_PAD_S
 
     @property
     def pca_t_slice(self):
@@ -256,6 +261,13 @@ class LotrExperiment(EmbeddedExperiment):
             # Find transformation to have at 0 angle rostral ROIs:
             self._rpc_scores = reorient_pcs(centered_pca_scores, w_coords)
         return self._rpc_scores
+
+    @property
+    def stim_trials_df(self):
+        if self._stim_trials_df is None:
+            self._stim_trials_df = get_all_trials_df(self)
+
+        return self._stim_trials_df
 
     @property
     def rpc_angles(self):
@@ -320,3 +332,5 @@ class LotrExperiment(EmbeddedExperiment):
         full_val_arr = np.full(self.n_rois, np.nan)
         full_val_arr[indexes] = values
         return color_stack(self.rois_stack, variable=full_val_arr, **kwargs)
+
+
