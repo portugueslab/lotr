@@ -1,3 +1,5 @@
+import numpy as np
+
 # Specify where the dataset is stored.
 DATASET_DEFAULT_LOCATION = r"\\FUNES\Shared\experiments\E0071_lotr\full_ring"
 
@@ -17,6 +19,9 @@ DEFAULT_FN = 5
 
 # window before and after bouts for cropping:
 PRE_BOUT_WND_S, POST_BOUT_WND_S = 10, 25
+
+# window in which we will calculate the bout-triggered phase change
+WND_DELTA_PHASE_S = np.array([15, 20])
 
 # Pad time at beginning and end of experiment in seconds when calculating PCA:
 PCA_TIME_PAD_S = 150

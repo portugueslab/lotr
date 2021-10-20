@@ -75,7 +75,7 @@ def get_pval_stars(test_result):
         string describing the result.
 
     """
-    if type(test_result) is not float:
+    if type(test_result) not in [float, np.float64]:
         test_result = test_result.pvalue
 
     if test_result <= 0.0001:
@@ -84,7 +84,7 @@ def get_pval_stars(test_result):
         return "***"
     elif test_result <= 0.01:
         return "**"
-    elif test_result <= 0.5:
+    elif test_result <= 0.05:
         return "*"
     else:
         return "n.s."

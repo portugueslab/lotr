@@ -15,6 +15,7 @@ plt.rcParams["image.origin"] = "lower"
 # plt.rcParams['axes.linewidth'] = 0.5
 plt.rcParams["axes.labelsize"] = 8
 plt.rcParams["legend.fontsize"] = 8
+plt.rcParams["font.size"] = 8
 plt.rcParams["legend.frameon"] = False
 plt.rcParams["axes.titlesize"] = 8
 plt.rcParams["svg.fonttype"] = "none"
