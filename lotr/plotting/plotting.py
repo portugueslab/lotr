@@ -48,7 +48,9 @@ def boxplot(data, cols=None, ax=None, widths=0.6, ec=(0.3,) * 3):
         ax = plt.gca()
 
     if cols is None:
-        cols = [None,] * len(data)
+        cols = [
+            None,
+        ] * len(data)
 
     bplot = ax.boxplot(
         data,
@@ -128,3 +130,87 @@ def color_plot(x, y, ax=None, c=None, vlims=None, cmap="twilight", **kwargs):
         )
 
     return dummy_scatter
+
+
+def tick_with_bars(df, ax=None, cols=None, moment="quantiles", s=0.04, lw=1):
+    if ax is None:
+        ax = plt.gca()
+
+    res_df = df.quantile([0.75, 0.5, 0.25])
+
+    for i in range(len(res_df.columns)):
+        ax.plot(
+            [i - s, i + s],
+            [
+                res_df.iloc[1, i],
+            ]
+            * 2,
+            lw=lw,
+            c=cols[i],
+            solid_capstyle="round",
+            zorder=100,
+        )
+        ax.plot(
+            [i, i],
+            res_df.iloc[[0, 2], i],
+            lw=lw,
+            c=cols[i],
+            solid_capstyle="round",
+            zorder=100,
+        )
+
+
+def bar_with_bars(
+    df, ax=None, cols=None, moment="quantiles", s=0.1, empty=False, lw=1, ec=".1"
+):
+    if ax is None:
+        ax = plt.gca()
+    res_df = df.quantile([0.75, 0.5, 0.25])
+
+    if empty:
+        ec_list = cols
+        cols_list = ["none" for _ in cols]
+    else:
+        ec_list = [ec for _ in cols]
+        cols_list = cols
+
+    for i in range(len(res_df.columns)):
+        ax.fill_between(
+            [i - s, i + s],
+            [
+                0,
+            ]
+            * 2,
+            [
+                res_df.iloc[1, i],
+            ]
+            * 2,
+            lw=lw,
+            ec=cols_list[i],
+            fc=cols_list[i],
+            zorder=100,
+        )
+        ax.plot(
+            [i - s, i - s, i + s, i + s],
+            [
+                0,
+            ]
+            + [
+                res_df.iloc[1, i],
+            ]
+            * 2
+            + [
+                0,
+            ],
+            lw=lw,
+            c=ec_list[i],
+            zorder=100,
+        )
+        ax.plot(
+            [i, i],
+            res_df.iloc[[0, 2], i],
+            lw=lw,
+            c=ec,
+            solid_capstyle="round",
+            zorder=100,
+        )

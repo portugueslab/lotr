@@ -15,6 +15,29 @@ COLS = dict(
     phase_light=ListedColormap(get_n_colors(1000, lum=60, sat=45, hshift=90) / 255),
     dff_opp="PiYG",
     ph_plot=[0.702, 0.129, 0.0470],
+    stim_conditions=dict(
+        darkness=".5",
+        natural_motion=[0.71, 0.54, 0.15],
+        directional_motion=[0.62, 0.29, 0.63],
+        closed_loop={
+            0.5: [0.57, 0.85, 0.47],
+            1: [0.33, 0.6, 0.25],
+            2: [0.13, 0.43, 0.07],
+            -1: [0.84, 0.35, 0.3],
+        },
+    ),
+    fish_cols=[
+        "#bf3f76",
+        "#577b34",
+        "#9d6620",
+        "#c54238",
+        "#925b84",
+        "#546dae",
+        "#976a61",
+        "#397b74",
+        "#5981a3",
+    ]
+    * 5,
 )
 
 

@@ -1,7 +1,7 @@
 import pytest
 
 from lotr import DATASET_LOCATION
-from lotr.preprocessing import preprocess_folder
+from lotr.data_preprocessing.preprocessing import preprocess_folder
 
 
 # Code for making the data preprocessing optional

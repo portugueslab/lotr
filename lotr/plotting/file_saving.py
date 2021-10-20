@@ -1,14 +1,15 @@
+import ipynbname
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
+
 from lotr.file_utils import get_figures_location
-import ipynbname
 
 
 def get_nb_figures_location():
     """Using the ipynbname library here could be a bit brittle - but let's give this
     a try.
     """
-    try :
+    try:
         notebook_name = ipynbname.name()
     except IndexError:
         return get_figures_location()
@@ -20,8 +21,7 @@ def get_nb_figures_location():
 
 
 def savefig(name, fig=None, format="pdf"):
-    """Function to centralize figure saving.
-    """
+    """Function to centralize figure saving."""
     if fig is None:
         fig = plt.gcf()
 

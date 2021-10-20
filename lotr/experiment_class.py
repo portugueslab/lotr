@@ -4,6 +4,7 @@ import flammkuchen as fl
 import numpy as np
 from bouter import EmbeddedExperiment
 
+from lotr.behavior import get_fictive_heading
 from lotr.data_preprocessing.anatomy import reshape_stack
 from lotr.data_preprocessing.stimulus import get_all_trials_df
 from lotr.default_vals import LIGHTSHEET_CAMERA_RES_XY, PCA_TIME_PAD_S
@@ -123,7 +124,9 @@ class LotrExperiment(EmbeddedExperiment):
     @property
     def bouts_df(self):
         if self._bouts_df is None:
-            self._bouts_df = fl.load(self.root / "bouts_df.h5")
+            # TODO move this to preprocessing
+            df = fl.load(self.root / "bouts_df.h5")
+            self._bouts_df = df[df["t_start"] > 0]
         return self._bouts_df
 
     @property
@@ -218,8 +221,7 @@ class LotrExperiment(EmbeddedExperiment):
     def exp_type(self):
         # TODO use experiment versions here
 
-        return self.root.name.split("_")[2]
-
+        return self.root.name.split("_")[2].strip("_")
 
     @property
     def pca_t_lims(self):
@@ -270,6 +272,10 @@ class LotrExperiment(EmbeddedExperiment):
         return self._stim_trials_df
 
     @property
+    def fictive_heading(self):
+        return get_fictive_heading(self.n_pts, self.bouts_df)
+
+    @property
     def rpc_angles(self):
         """For a tutorial on this calculation, have a look at
         'Anatomical organization of the network.ipynb'
@@ -295,8 +301,7 @@ class LotrExperiment(EmbeddedExperiment):
         return self._network_phase
 
     def find_mirror_dir(self, parent_folder):
-        """Find homonym directory in a new parent folder, for file mirroring.
-        """
+        """Find homonym directory in a new parent folder, for file mirroring."""
         parent_folder = Path(parent_folder)
         matches = list(parent_folder.rglob(self.dir_name))
         if len(matches) > 1:
@@ -332,5 +337,3 @@ class LotrExperiment(EmbeddedExperiment):
         full_val_arr = np.full(self.n_rois, np.nan)
         full_val_arr[indexes] = values
         return color_stack(self.rois_stack, variable=full_val_arr, **kwargs)
-
-

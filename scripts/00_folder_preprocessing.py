@@ -1,6 +1,6 @@
 from tqdm import tqdm
 
-from lotr.preprocessing import preprocess_folder
+from lotr.data_preprocessing.preprocessing import preprocess_folder
 
 if __name__ == "__main__":
     from pathlib import Path

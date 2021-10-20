@@ -3,12 +3,18 @@ from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
 
 from lotr import A_FISH, LotrExperiment
-from lotr.pca import pca_and_phase
-from lotr.plotting import COLS, add_cbar, add_scalebar, get_default_phase_col, add_fish
-from lotr.rpca_calculation import get_zero_mean_weights
-from lotr.utils import get_rot_matrix, convolve_with_tau, linear_regression
-from lotr.file_utils import get_figures_location
 from lotr.behavior import get_fictive_heading
+from lotr.file_utils import get_figures_location
+from lotr.pca import pca_and_phase
+from lotr.plotting import (
+    COLS,
+    add_cbar,
+    add_fish,
+    add_scalebar,
+    get_default_phase_col,
+)
+from lotr.rpca_calculation import get_zero_mean_weights
+from lotr.utils import convolve_with_tau, get_rot_matrix, linear_regression
 
 
 def network_phase_animation(dest):
@@ -60,11 +66,21 @@ def network_phase_animation(dest):
 
     # Network average:
     (network_phase_plot,) = ax.plot(
-        [], [], c=w_c, lw=netw_lw, label="netw. phase", solid_capstyle="round",
+        [],
+        [],
+        c=w_c,
+        lw=netw_lw,
+        label="netw. phase",
+        solid_capstyle="round",
     )
 
     (fish_heading_plot,) = ax.plot(
-        [], [], c=".6", lw=netw_lw, label="fish front", solid_capstyle="round",
+        [],
+        [],
+        c=".6",
+        lw=netw_lw,
+        label="fish front",
+        solid_capstyle="round",
     )
 
     add_scalebar(ax, xlabel="PC1", ylabel="PC2", xlen=30, ylen=30)
@@ -84,7 +100,7 @@ def network_phase_animation(dest):
     leg_line, _ = leg.get_lines()
 
     # put together all actors:
-    actors = (activity_sc, tx, network_phase_plot, leg_line)  #*weight_actors)
+    actors = (activity_sc, tx, network_phase_plot, leg_line)  # *weight_actors)
 
     def init():
         # For some mysterious reasons, some of those specifications need to happen
@@ -109,24 +125,28 @@ def network_phase_animation(dest):
     def update(frame):
         rot_mat = get_rot_matrix(-convolved_head[frame] + np.pi)
         # activity_sc.set_offsets
-        network_phase_coords = np.array([[0, -np.sin(network_phase[frame])],
-            [0, -np.cos(network_phase[frame])]]) * scale_mn
+        network_phase_coords = (
+            np.array(
+                [[0, -np.sin(network_phase[frame])], [0, -np.cos(network_phase[frame])]]
+            )
+            * scale_mn
+        )
 
         fish_head_coords = np.array([[0, 1], [0, 0]]) * scale_mn
 
         network_phase_coords = rot_mat @ network_phase_coords
         fish_head_coords = rot_mat @ fish_head_coords
 
-        network_phase_plot.set_data(network_phase_coords[0, :],
-                                    network_phase_coords[1, :]
-
+        network_phase_plot.set_data(
+            network_phase_coords[0, :], network_phase_coords[1, :]
         )
         fish_heading_plot.set_data(fish_head_coords[0, :], fish_head_coords[1, :])
 
         rot_rpc_coords = (rot_mat @ rpca_scores.T).T
 
-        activity_sc.set_offsets(np.array([-rot_rpc_coords[:, 1], rot_rpc_coords[:, 0]]).T)
-
+        activity_sc.set_offsets(
+            np.array([-rot_rpc_coords[:, 1], rot_rpc_coords[:, 0]]).T
+        )
 
         activity_sc.set_array(norm_activity[frame])
 
@@ -158,4 +178,3 @@ def network_phase_animation(dest):
 
 if __name__ == "__main__":
     network_phase_animation(get_figures_location() / "rotating_network_gif.mp4")
-

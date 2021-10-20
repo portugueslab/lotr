@@ -3,7 +3,7 @@ from itertools import product
 import numpy as np
 import pandas as pd
 
-from lotr.default_vals import REGRESSOR_TAU, TURN_BIAS
+from lotr.default_vals import REGRESSOR_TAU_S, TURN_BIAS
 
 
 def get_bouts_props_array(
@@ -107,7 +107,7 @@ def create_motor_regressors(n_pts, df, fn, min_bias=0.05):
 
         regressors_dict.update({f"{d}_{v}": arr})
 
-    tau_fs = REGRESSOR_TAU * fn
+    tau_fs = REGRESSOR_TAU_S * fn
     kernel = np.exp(-np.arange(N_KERNEL_PTS) / tau_fs)
 
     for k, val in regressors_dict.items():

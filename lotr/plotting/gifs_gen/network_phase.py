@@ -3,11 +3,11 @@ from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
 
 from lotr import A_FISH, LotrExperiment
+from lotr.file_utils import get_figures_location
 from lotr.pca import pca_and_phase
 from lotr.plotting import COLS, add_cbar, add_scalebar, get_default_phase_col
 from lotr.rpca_calculation import get_zero_mean_weights
 from lotr.utils import get_vect_angle
-from lotr.file_utils import get_figures_location
 
 
 def network_phase_animation(dest):
@@ -57,7 +57,12 @@ def network_phase_animation(dest):
 
     # Network average:
     (network_phase_plot,) = ax.plot(
-        [], [], c=w_c, lw=netw_lw, label="netw. phase", solid_capstyle="round",
+        [],
+        [],
+        c=w_c,
+        lw=netw_lw,
+        label="netw. phase",
+        solid_capstyle="round",
     )
 
     # Legend:
@@ -66,7 +71,6 @@ def network_phase_animation(dest):
 
     # put together all actors:
     actors = (activity_sc, tx, network_phase_plot, *weight_actors, leg_line)
-
 
     def init():
         # For some mysterious reasons, some of those specifications need to happen
@@ -124,4 +128,3 @@ def network_phase_animation(dest):
 
 if __name__ == "__main__":
     network_phase_animation(get_figures_location() / "network_phase_long.mp4")
-

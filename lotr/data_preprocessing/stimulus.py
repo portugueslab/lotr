@@ -31,10 +31,18 @@ def get_all_trials_df(exp):
     #  - cl2d: closed loop 2D
 
     STIM_MAPPING_DICT = dict(
-        darkness=[(k, "pause") for k in ["clol", "2dvr", "cwccw", "natmov", "gainmod", "spont"]],
-        closed_loop=[("clol", "closed_loop"), ("2dvr", "seamless_image")],
-        natural_mot=[("clol", "open_loop"), ("natmov", "bg")],
-        directional_mot=[("cwccw", "bg"), ("2dvr", "bg"), ("spont", "bg")])
+        darkness=[
+            (k, "pause")
+            for k in ["clol", "2dvr", "cwccw", "natmov", "gainmod", "spont"]
+        ],
+        closed_loop=[
+            ("clol", "closed_loop"),
+            ("2dvr", "seamless_image"),
+            ("gainmod", "cl2d"),
+        ],
+        natural_motion=[("clol", "open_loop"), ("natmov", "bg")],
+        directional_motion=[("cwccw", "bg"), ("2dvr", "bg"), ("spont", "bg")],
+    )
 
     stim_log = exp["stimulus"]["log"]
 
@@ -62,7 +70,7 @@ def get_all_trials_df(exp):
                     name="cl2d",  # overwrite inconsistent naming
                     gain_theta=gain,
                     fid=exp.dir_name,
-                    exp_type=exp.exp_type
+                    exp_type=exp.exp_type,
                 )
             )
 
@@ -82,14 +90,10 @@ def get_all_trials_df(exp):
             # Add gain 1 for closed-loop stimuli in experiments other than the gain
             # modulation one:
             if stim_condition == "closed_loop" and not exp.exp_type == "gainmod":
-                #print("- set theta", stim_condition, exp_type)
+                # print("- set theta", stim_condition, exp_type)
                 annotated_df["gain_theta"] = 1
 
     # Gain -1 condition gets compared to external motion:
-    annotated_df.loc[
-        (annotated_df["name"] == "cl2d") & (annotated_df["gain_theta"] <= 0.0),
-        "condition",
-    ] = "natural_mot"
     annotated_df.loc[
         (annotated_df["name"] == "cl2d") & (annotated_df["gain_theta"] > 0.0),
         "condition",

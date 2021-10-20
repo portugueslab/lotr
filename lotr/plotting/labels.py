@@ -9,6 +9,7 @@ def get_pi_labels(d=1, coefs=None, ax="x", style="notex"):
 
     labels_mappings = {
         "tex": {
+            -4: "$-4π$",
             -2: "$-2π$",
             -1: "$-π$",
             -0.75: r"$\dfrac{-3π}{4}$",
@@ -22,8 +23,10 @@ def get_pi_labels(d=1, coefs=None, ax="x", style="notex"):
             0.75: r"$\dfrac{3π}{4}$",
             1: "$π$",
             2: "$2π$",
+            4: "$4π$",
         },
         "notex": {
+            -4: "-4π",
             -2: "-2π",
             -1: "-π",
             -0.75: "-3/4π",
@@ -37,6 +40,7 @@ def get_pi_labels(d=1, coefs=None, ax="x", style="notex"):
             0.75: "3π/4",
             1: "π",
             2: "2π",
+            4: "4π",
         },
     }
 

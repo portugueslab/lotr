@@ -4,10 +4,7 @@ __author__ = "Luigi Petrucco @ portugueslab"
 from pathlib import Path
 
 from lotr.experiment_class import LotrExperiment
-from lotr.file_utils import (
-    get_dataset_location,
-    get_figures_location,
-)
+from lotr.file_utils import get_dataset_location, get_figures_location
 
 DATASET_LOCATION = get_dataset_location()
 FIGURES_LOCATION = get_figures_location()

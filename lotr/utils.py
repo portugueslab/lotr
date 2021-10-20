@@ -47,9 +47,21 @@ def pearson_regressors(traces, regressors):
 
 
 def linear_regression(x, y):
-    """Get slope and intercept of linear regression between two vectors."""
+    """Get slope and intercept of linear regression between two vectors.
+
+    Parameters
+    ----------
+    x : np.array
+    y : np.array
+
+    Returns
+    -------
+    (off, coef)
+        Offset and coefficient of regression
+    """
     x_mat = np.vstack((np.ones(len(x)), x)).T
-    return np.linalg.inv(x_mat.T.dot(x_mat)).dot(x_mat.T).dot(y)
+    off, coef = np.linalg.inv(x_mat.T.dot(x_mat)).dot(x_mat.T).dot(y)
+    return off, coef
 
 
 def reduce_to_pi(angle):
@@ -129,8 +141,7 @@ def crop(traces, events, pre_int=20, post_int=30, dwn=1):
 
 @njit
 def _crop_trace(trace, events, pre_int=20, post_int=30, dwn=1):
-    """Crop the trace around specified events in a window given by parameters.
-    """
+    """Crop the trace around specified events in a window given by parameters."""
 
     # Avoid problems with spikes at the borders:
     valid_events = (events > pre_int) & (events < len(trace) - post_int)
@@ -147,8 +158,7 @@ def _crop_trace(trace, events, pre_int=20, post_int=30, dwn=1):
 
 @njit
 def _crop_block(traces_block, events, pre_int=20, post_int=30, dwn=1):
-    """Crop a block of traces.
-    """
+    """Crop a block of traces."""
 
     n_timepts = traces_block.shape[0]
     n_cells = traces_block.shape[1]

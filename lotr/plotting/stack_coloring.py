@@ -13,7 +13,14 @@ from lotr.plotting.color_utils import (
 
 @njit
 def _fill_roi_stack(
-    rois, roi_colors, background=np.array([0,] * 4),
+    rois,
+    roi_colors,
+    background=np.array(
+        [
+            0,
+        ]
+        * 4
+    ),
 ):
     coloured = np.zeros(rois.shape + (roi_colors.shape[1],), dtype=roi_colors.dtype)
     for i in range(rois.shape[0]):
@@ -35,8 +42,23 @@ def _color_anatomy_rgb(rois, roi_colors, anatomy, alpha=0.9, invert_anatomy=True
     :param alpha: alpha of the ROI coloring
     :return:
     """
-    colored_rois = _fill_roi_stack(rois, roi_colors, background=np.array([0,] * 4),)
-    overimposed = np.concatenate([anatomy[:, :, :, np.newaxis],] * 3, 3,)
+    colored_rois = _fill_roi_stack(
+        rois,
+        roi_colors,
+        background=np.array(
+            [
+                0,
+            ]
+            * 4
+        ),
+    )
+    overimposed = np.concatenate(
+        [
+            anatomy[:, :, :, np.newaxis],
+        ]
+        * 3,
+        3,
+    )
 
     if invert_anatomy:
         overimposed = 255 - overimposed
@@ -136,8 +158,18 @@ def color_stack(
 
     BACKGROUNDS = dict(
         k=np.array([0, 0, 0, 255]),
-        transparent=np.array([0,] * 4),
-        w=np.array([255,] * 4),
+        transparent=np.array(
+            [
+                0,
+            ]
+            * 4
+        ),
+        w=np.array(
+            [
+                255,
+            ]
+            * 4
+        ),
     )
 
     # We infer if the variable is categorical or not:

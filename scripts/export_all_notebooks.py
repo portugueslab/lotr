@@ -14,7 +14,9 @@ def export_all_notebooks():
     dest.mkdir(exist_ok=True, parents=True)
 
     # Find all source notebooks:
-    ipynb_files = (Path(__file__).parent.parent / "notebooks" / "testable").glob("*.ipynb")
+    ipynb_files = (Path(__file__).parent.parent / "notebooks" / "testable").glob(
+        "*.ipynb"
+    )
 
     # Convert
 

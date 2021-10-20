@@ -2,12 +2,13 @@ from matplotlib import pyplot as plt
 
 from lotr.plotting.color_utils import *
 from lotr.plotting.default_colors import *
+from lotr.plotting.file_saving import *
 from lotr.plotting.general import *
 from lotr.plotting.labels import *
 from lotr.plotting.plotting import *
 from lotr.plotting.stack_coloring import *
 from lotr.plotting.standard_addons import *
-from lotr.plotting.file_saving import *
+from lotr.plotting.stimulus import *
 
 # Here we configure matplotlib to some useful defaults:
 plt.rcParams["image.origin"] = "lower"
@@ -18,7 +19,7 @@ plt.rcParams["legend.frameon"] = False
 plt.rcParams["axes.titlesize"] = 8
 plt.rcParams["svg.fonttype"] = "none"
 plt.rcParams["font.sans-serif"] = "Arial"
-plt.rcParams["mathtext.default"] = "regular"
+# plt.rcParams["mathtext.default"] = "regular"
 # plt.rcParams['pdf.use14corefonts'] = True
 
 for t in ["x", "y"]:
