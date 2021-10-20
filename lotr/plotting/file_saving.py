@@ -27,6 +27,7 @@ def savefig(name, fig=None, format="pdf"):
 
     if type(name) == str:
         folder = get_nb_figures_location()
+        name = name.split(".")[0]
     else:  # assuming Path object here
         folder = name.parent
         name = name.stem  # remove format if specified
