@@ -1,4 +1,6 @@
 import numpy as np
+import pandas as pd
+from numba import njit
 from scipy.interpolate import interp1d
 
 
@@ -12,11 +14,20 @@ def interpolate(source_x, source_y, target_x):
 
 
 def pearson_regressors(traces, regressors):
-    """Gives the pearson correlation coefficient
+    """Gives the pearson correlation coefficient. Adapted from Vilim's functions.
 
-    :param traces: the traces, with time in rows
-    :param regressors: the regressors, with time in rows
-    :return: the pearson correlation coefficient
+    Parameters
+    ----------
+    traces : np.array
+        (t, n_rois) array with the traces.
+    regressors : np.array
+        (t, n_regressors) array with the regressors.
+
+    Returns
+    -------
+    np.array
+        (n_regressors, n_rois) matrix of regressors.
+
     """
     # two versions, depending whether there is one or multiple regressors
     X = traces
@@ -35,10 +46,22 @@ def pearson_regressors(traces, regressors):
     return result
 
 
-def linear_regression(X, Y):
-    """Get slope and intercept of linear regression between two vectors."""
-    X_mat = np.vstack((np.ones(len(X)), X)).T
-    return np.linalg.inv(X_mat.T.dot(X_mat)).dot(X_mat.T).dot(Y)
+def linear_regression(x, y):
+    """Get slope and intercept of linear regression between two vectors.
+
+    Parameters
+    ----------
+    x : np.array
+    y : np.array
+
+    Returns
+    -------
+    (off, coef)
+        Offset and coefficient of regression
+    """
+    x_mat = np.vstack((np.ones(len(x)), x)).T
+    off, coef = np.linalg.inv(x_mat.T.dot(x_mat)).dot(x_mat.T).dot(y)
+    return off, coef
 
 
 def reduce_to_pi(angle):
@@ -52,3 +75,136 @@ def get_rot_matrix(th):
 
 def get_vect_angle(vect):
     return np.angle(vect[0] + 1j * vect[1])
+
+
+@njit
+def roll_columns_jit(matrix, shifts):
+    """Shift every column of the matrix by a specified amount.
+
+    Parameters
+    ----------
+    matrix : np.array
+        (to_roll, n) matrix to roll over the first dimension.
+    shifts : np.array
+        (to_roll,) array of integer indexes specifying the shift.
+
+    Returns
+    -------
+    np.array
+        matrix shifted over first dimension.
+
+    """
+    rolled = np.empty_like(matrix)
+    for i in range(matrix.shape[0]):
+        rolled[i, :] = np.roll(matrix[i, :], int(shifts[i]))
+    return rolled
+
+
+def crop(traces, events, pre_int=20, post_int=30, dwn=1):
+    """Apply cropping functions defined below depending on the dimensionality
+    of the input (one cell or multiple cells). If input is pandas Series
+    or DataFrame, it strips out the values first.
+
+    Parameters
+    ----------
+    traces : np.array or pd.Series
+        1D (n_timepoints,) or 2D (n_timepoints, n_cells) array, pd.Series or
+        pd.DataFrame with time over index.
+    events : np.array
+        Events around which to crop.
+    pre_int : int or float
+        Interval to crop before the event, in points.
+    post_int : int or float
+        Interval to crop after the event, in points.
+    dwn : int
+        Downsampling factor, if required.
+
+    Returns
+    -------
+    np.array
+        (n_events, n_pts) np.array if traces is 1D or (x,y,z check) if traces is 2D.
+
+    """
+    pre_int, post_int = int(pre_int), int(post_int)
+    kwargs = dict(pre_int=pre_int, post_int=post_int, dwn=dwn)
+    if isinstance(traces, pd.DataFrame) or isinstance(traces, pd.Series):
+        traces = traces.values
+    if isinstance(events, pd.DataFrame) or isinstance(events, pd.Series):
+        events = events.values.flatten().astype(np.int)
+    if len(traces.shape) == 1:
+        return _crop_trace(traces, events, **kwargs)
+    elif len(traces.shape) == 2:
+        return _crop_block(traces, events, **kwargs)
+    else:
+        raise TypeError("traces matrix must be at most 2D!")
+
+
+@njit
+def _crop_trace(trace, events, pre_int=20, post_int=30, dwn=1):
+    """Crop the trace around specified events in a window given by parameters."""
+
+    # Avoid problems with spikes at the borders:
+    valid_events = (events > pre_int) & (events < len(trace) - post_int)
+
+    mat = np.zeros((int((pre_int + post_int) / dwn), events.shape[0]))
+
+    for i, s in enumerate(events):
+        if valid_events[i]:
+            cropped = trace[s - pre_int : s + post_int : dwn].copy()
+            mat[: len(cropped), i] = cropped
+
+    return mat
+
+
+@njit
+def _crop_block(traces_block, events, pre_int=20, post_int=30, dwn=1):
+    """Crop a block of traces."""
+
+    n_timepts = traces_block.shape[0]
+    n_cells = traces_block.shape[1]
+    # Avoid problems with spikes at the borders:
+    valid_events = events[(events > pre_int) & (events < n_timepts - post_int)]
+
+    mat = np.full((int((pre_int + post_int) / dwn), events.shape[0], n_cells), np.nan)
+
+    for i, s in enumerate(events):
+        if valid_events[i]:
+            cropped = traces_block[s - pre_int : s + post_int : dwn, :].copy()
+            mat[: len(cropped), i, :] = cropped
+
+    return mat
+
+
+@njit
+def resample_matrix(x, fx, matrix):
+    """Resample all row of a matrix using the np.interp function.
+
+    Parameters
+    ----------
+    x : np.array
+        (n_newpts) coords array over which to resample.
+    fx : np.array
+        (n_pts) coords array of source data
+    matrix : np.array
+        (n_pts, n) matrix of data to resample along first dimension.
+
+    Returns
+    -------
+    np.array
+        (n_newpts, n) resampled matrix.
+
+    """
+    resampled = np.full((len(x), matrix.shape[1]), np.nan)
+
+    for i in range(matrix.shape[1]):
+        resampled[:, i] = np.interp(x, fx, matrix[:, i])
+
+    return resampled
+
+
+def convolve_with_tau(array, tau_fs, n_kernel_pts=1000):
+
+    kernel = np.exp(-np.arange(n_kernel_pts) / tau_fs)
+    kernel = kernel / np.sum(kernel)
+
+    return np.convolve(array, kernel)[: len(array)]

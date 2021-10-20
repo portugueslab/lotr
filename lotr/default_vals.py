@@ -1,22 +1,31 @@
-from matplotlib import Path
+# Specify where the dataset is stored.
+DATASET_DEFAULT_LOCATION = r"\\FUNES\Shared\experiments\E0071_lotr\full_ring"
 
 # Minimum bias value that defines a turn:
 TURN_BIAS = 0.2
 
 # Tau for the computation of the regressor. Longer than expected GCaMP tau
 # as from trace observation motor-associated transients seem to decay slower
-REGRESSOR_TAU = 5
+REGRESSOR_TAU_S = 5
 
 # Window in seconds for smoothing traces when calculating the PCA/phase
 TRACES_SMOOTH_S = 5
 
-# Time intervals over which to compute PCA in different experimental conditions
-T_START = 100  # exclude the very first part of the exp, after lightsheet laser on
+# Standard sampling frequency to which experiments will be resampled if needed
+# (most experiments have this FN already):
+DEFAULT_FN = 5
 
-# Specify where the dataset is stored. Might be better to handle this in other ways?
-DATASET_LOCATION = r"\\Funes\Shared\experiments\E0040_motions_cardinal\v21\2p\211006_f2"
+# window before and after bouts for cropping:
+PRE_BOUT_WND_S, POST_BOUT_WND_S = 10, 25
 
-specification_txt = Path(__file__).parent.parent / "dataset_location.txt"
-if specification_txt.exists():
-    with open(specification_txt, "r") as f:
-        DATASET_LOCATION = f.read()
+# Pad time at beginning and end of experiment in seconds when calculating PCA:
+PCA_TIME_PAD_S = 150
+
+# Anatomical orientation of source data
+ANATOMICAL_ORIENT_SOURCE = "ilp"
+
+# Anatomical orientation of figures:
+ANATOMICAL_ORIENT_FIGURES = "ipl"
+
+# lightsheet microscope pixel size in um, from calibration:
+LIGHTSHEET_CAMERA_RES_XY = (0.6, 0.6)
