@@ -51,7 +51,13 @@ def get_pi_labels(d=1, coefs=None, ax="x", style="notex"):
     tick_labels = []
     for i in coefs:
         ticks.append(i * np.pi)
-        tick_labels.append(labels_mappings[style][i])
+        try:
+            tick_labels.append(labels_mappings[style][i])
+        except KeyError:
+            if style == "tex":
+                tick_labels.append("$" + str(i) + "π$")
+            else:
+                tick_labels.append(str(i) + "π")
     tickname = ax + "ticks"
     labname = ax + "ticklabels"
     return {tickname: ticks, labname: tick_labels}
