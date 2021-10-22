@@ -1,3 +1,8 @@
+"""Here we define some standard values that will be used in multiple parts
+of the analysis. Some additional defaults that are used only in one place might
+be defined in the analysis notebooks.
+"""
+
 import numpy as np
 
 # Specify where the dataset is stored.
