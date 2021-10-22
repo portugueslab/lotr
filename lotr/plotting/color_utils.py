@@ -5,6 +5,16 @@ and motions.color.
 import colorspacious
 import matplotlib
 import numpy as np
+from matplotlib.colors import to_rgb
+
+
+def shift_lum(c, s=0.2):
+    c = to_rgb(c)
+    if s <= 1:
+        s = s * 100
+    jch_c = colorspacious.cspace_convert(c, "sRGB1", "JCh")
+    jch_c[0] += s
+    return np.clip(colorspacious.cspace_convert(jch_c, "JCh", "sRGB1"), 0, 1)
 
 
 def dark_col(col, val=0.2):

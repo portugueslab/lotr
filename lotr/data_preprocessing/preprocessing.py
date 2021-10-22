@@ -4,7 +4,7 @@ import pandas as pd
 from bouter.utilities import predictive_tail_fill
 
 from lotr.behavior import create_motor_regressors
-from lotr.data_preprocessing.data_loading import preprocess_traces
+from lotr.data_preprocessing.traces import preprocess_traces
 from lotr.default_vals import TRACES_SMOOTH_S, TURN_BIAS
 from lotr.experiment_class import LotrExperiment
 from lotr.utils import pearson_regressors

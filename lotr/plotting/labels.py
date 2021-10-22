@@ -51,7 +51,13 @@ def get_pi_labels(d=1, coefs=None, ax="x", style="notex"):
     tick_labels = []
     for i in coefs:
         ticks.append(i * np.pi)
-        tick_labels.append(labels_mappings[style][i])
+        try:
+            tick_labels.append(labels_mappings[style][i])
+        except KeyError:
+            if style == "tex":
+                tick_labels.append("$" + str(i) + "π$")
+            else:
+                tick_labels.append(str(i) + "π")
     tickname = ax + "ticks"
     labname = ax + "ticklabels"
     return {tickname: ticks, labname: tick_labels}
@@ -75,7 +81,7 @@ def get_pval_stars(test_result):
         string describing the result.
 
     """
-    if type(test_result) is not float:
+    if type(test_result) not in [float, np.float64]:
         test_result = test_result.pvalue
 
     if test_result <= 0.0001:
@@ -84,7 +90,7 @@ def get_pval_stars(test_result):
         return "***"
     elif test_result <= 0.01:
         return "**"
-    elif test_result <= 0.5:
+    elif test_result <= 0.05:
         return "*"
     else:
         return "n.s."
