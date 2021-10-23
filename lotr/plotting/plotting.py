@@ -132,7 +132,8 @@ def color_plot(x, y, ax=None, c=None, vlims=None, cmap="twilight", **kwargs):
     return dummy_scatter
 
 
-def tick_with_bars(df, ax=None, cols=None, moment="quantiles", s=0.04, lw=1):
+def tick_with_bars(df, ax=None, cols=None, moment="quantiles", label="_nolegend_",
+                   s=0.04, lw=1):
     if ax is None:
         ax = plt.gca()
 
@@ -149,6 +150,7 @@ def tick_with_bars(df, ax=None, cols=None, moment="quantiles", s=0.04, lw=1):
             c=cols[i],
             solid_capstyle="round",
             zorder=100,
+            label="_nolegend_"
         )
         ax.plot(
             [i, i],
@@ -157,6 +159,7 @@ def tick_with_bars(df, ax=None, cols=None, moment="quantiles", s=0.04, lw=1):
             c=cols[i],
             solid_capstyle="round",
             zorder=100,
+            label=label
         )
 
 

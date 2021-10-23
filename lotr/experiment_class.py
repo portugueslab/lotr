@@ -67,8 +67,11 @@ class LotrExperiment(EmbeddedExperiment):
         self._nonhdn_indexes = None
         self._rndcnt_indexes = None
         self._rpc_scores = None
+        self._rpc_scores_shuf = None
         self._rpc_angles = None
+        self._rpc_angles_shuf = None
         self._network_phase = None
+        self._network_phase_shuf = None
         self._stim_trials_df = None
 
     @property
@@ -238,31 +241,41 @@ class LotrExperiment(EmbeddedExperiment):
         else:
             return PCA_TIME_PAD_S, exp_end - PCA_TIME_PAD_S
 
+    # TODO all this part on rPC calculation should be refactored somewhere else
     @property
     def pca_t_slice(self):
         t_lims = self.pca_t_lims
         return slice(*[t * self.fn for t in t_lims])
 
-    @property
-    def rpc_scores(self):
+    def _compute_rpc_scores(self, idxs):
         """For a tutorial on this calculation, have a look at
         'Anatomical organization of the network.ipynb'
         """
+        # 1. compute PCs:
+        pca_scores, angles, _, circle_params = pca_and_phase(
+            self.traces[self.pca_t_slice, idxs].T
+        )
+        # 2. center on 0:
+        centered_pca_scores = pca_scores[:, :2] - circle_params[:2]
+
+        # 3. Find transformation to match anatomy
+        # Normalize coords (we don't care about z here)
+        w_coords = get_zero_mean_weights(self.coords[self.hdn_indexes, 1:])
+
+        # Find transformation to have at 0 angle rostral ROIs:
+        return reorient_pcs(centered_pca_scores, w_coords)
+
+    @property
+    def rpc_scores(self):
         if self._rpc_scores is None:
-            # 1. compute PCs:
-            pca_scores, angles, _, circle_params = pca_and_phase(
-                self.traces[self.pca_t_slice, self.hdn_indexes].T
-            )
-            # 2. center on 0:
-            centered_pca_scores = pca_scores[:, :2] - circle_params[:2]
-
-            # 3. Find transformation to match anatomy
-            # Normalize coords (we don't care about z here)
-            w_coords = get_zero_mean_weights(self.coords[self.hdn_indexes, 1:])
-
-            # Find transformation to have at 0 angle rostral ROIs:
-            self._rpc_scores = reorient_pcs(centered_pca_scores, w_coords)
+            self._rpc_scores = self._compute_rpc_scores(self.hdn_indexes)
         return self._rpc_scores
+
+    @property
+    def rpc_scores_shuf(self):
+        if self._rpc_scores_shuf is None:
+            self._rpc_scores_shuf = self._compute_rpc_scores(self.rndcnt_indexes)
+        return self._rpc_scores_shuf
 
     @property
     def stim_trials_df(self):
@@ -275,30 +288,53 @@ class LotrExperiment(EmbeddedExperiment):
     def fictive_heading(self):
         return get_fictive_heading(self.n_pts, self.bouts_df)
 
-    @property
-    def rpc_angles(self):
+    @staticmethod
+    def _get_pc_scores_angles(pc_scores):
         """For a tutorial on this calculation, have a look at
         'Anatomical organization of the network.ipynb'
         """
+        return np.arctan2(pc_scores[:, 1], -pc_scores[:, 0])
+
+    @property
+    def rpc_angles(self):
         if self._rpc_angles is None:
-            self._rpc_angles = np.arctan2(self.rpc_scores[:, 1], -self.rpc_scores[:, 0])
+            self._rpc_angles = self._get_pc_scores_angles(self.rpc_scores)
 
         return self._rpc_angles
 
     @property
-    def network_phase(self):
+    def rpc_angles_shuf(self):
+        if self._rpc_angles_shuf is None:
+            self._rpc_angles_shuf = self._get_pc_scores_angles(self.rpc_scores_shuf)
+
+        return self._rpc_angles_shuf
+
+    def get_network_phase(self, indexes, rpc_scores):
         """For a tutorial on this calculation, have a look at
         'Anatomical organization of the network.ipynb'
         """
-        if self._network_phase is None:
-            norm_activity = get_zero_mean_weights(self.traces[:, self.hdn_indexes].T).T
-            avg_vects = np.einsum("ij,ik->jk", norm_activity.T, self.rpc_scores)
+        # TODO write as matrix multiplication
+        norm_activity = get_zero_mean_weights(self.traces[:, indexes].T).T
+        avg_vects = np.einsum("ij,ik->jk", norm_activity.T, rpc_scores)
 
-            # This choice of signs ensures that network phase correspond to angle of
-            # max activation or ROIs over rPC space:
-            self._network_phase = np.arctan2(avg_vects[:, 1], -avg_vects[:, 0])
+        # This choice of signs ensures that network phase correspond to angle of
+        # max activation or ROIs over rPC space:
+        return np.arctan2(avg_vects[:, 1], -avg_vects[:, 0])
+
+    @property
+    def network_phase(self):
+        if self._network_phase is None:
+            self._network_phase = self.get_network_phase(self.hdn_indexes, self.rpc_scores)
 
         return self._network_phase
+
+    @property
+    def network_phase_shuf(self):
+        if self._network_phase_shuf is None:
+            self._network_phase_shuf = self.get_network_phase(self.rndcnt_indexes,
+                                                         self.rpc_scores_shuf)
+
+        return self._network_phase_shuf
 
     def find_mirror_dir(self, parent_folder):
         """Find homonym directory in a new parent folder, for file mirroring."""
@@ -308,6 +344,7 @@ class LotrExperiment(EmbeddedExperiment):
             raise OSError("Multiple folders found for this experiment")
         return matches[0]
 
+    # TODO might have to go somewhere else, not too coherent with class
     def color_rois_by(self, values, indexes=None, **kwargs):
         """Color ROI stack by some convention (phase, activity, etc.). If no indexes
         are passed, we assume we are coloring either all ROIs or HDNs.
