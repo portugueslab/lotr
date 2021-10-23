@@ -208,3 +208,19 @@ def convolve_with_tau(array, tau_fs, n_kernel_pts=1000):
     kernel = kernel / np.sum(kernel)
 
     return np.convolve(array, kernel)[: len(array)]
+
+def map_to_range(arr, newrange, from_range=None):
+    if from_range is None:
+        from_range = np.nanmin(arr), np.nanmax(arr)
+    arr = arr - from_range[0]
+    arr = arr / (from_range[1] - from_range[0])
+    return arr * [newrange[1] - newrange[0]] + newrange[0]
+
+
+def nan_phase_jumps(phase_arr):
+    nanned_phase = phase_arr.copy()
+
+    # set to nan jumps in the derivative:
+    nanned_phase[1:][np.abs(np.diff(nanned_phase)) > np.pi] = np.nan
+
+    return nanned_phase
