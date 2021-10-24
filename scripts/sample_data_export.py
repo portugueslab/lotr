@@ -30,7 +30,7 @@ for path in tqdm(PATH_LIST):
     bouts_df = fl.load(path / "bouts_df.h5")
     if "idx_imaging" not in bouts_df.columns:
         bouts_df["idx_imaging"] = np.round(bouts_df["t_start"]).astype(np.int) * int(
-            exp.fn
+            exp.fs
         )
 
     theta_turned = get_bouts_props_array(

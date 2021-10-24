@@ -19,7 +19,7 @@ def preprocess_folder(
     try:
         # Make sure we don't use feature of LotrExperiment requiring preprocessing
         exp = LotrExperiment(path)
-        fn = exp.fn
+        fn = exp.fs
 
         # Extract bout dataframe:
         if not (path / "bouts_df.h5").exists() or recompute_bout_df:

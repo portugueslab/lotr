@@ -160,7 +160,7 @@ def network_phase_animation(dest):
         #        [0, np.sin(roi_pc_angles[r]) * norm_activity[frame, r] * scale_arr],
         #    )
 
-        tx.set_text(f"{(frame - t_slice.start) / exp.fn:3.0f} s")
+        tx.set_text(f"{(frame - t_slice.start) / exp.fs:3.0f} s")
         return actors
 
     ani = FuncAnimation(

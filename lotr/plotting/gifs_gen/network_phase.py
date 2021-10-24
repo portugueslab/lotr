@@ -95,7 +95,7 @@ def network_phase_animation(dest=None, frames=list(range(0, 4000, 5))):
         return actors
 
     def update(frame):
-        tx.set_text(f"{frame / exp.fn:3.0f} s")
+        tx.set_text(f"{frame / exp.fs:3.0f} s")
 
         activity_sc.set_array(norm_activity[frame])
         network_phase_plot.set_data(

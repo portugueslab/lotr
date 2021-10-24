@@ -209,6 +209,7 @@ def convolve_with_tau(array, tau_fs, n_kernel_pts=1000):
 
     return np.convolve(array, kernel)[: len(array)]
 
+
 def map_to_range(arr, newrange, from_range=None):
     if from_range is None:
         from_range = np.nanmin(arr), np.nanmax(arr)

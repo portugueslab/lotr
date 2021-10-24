@@ -16,7 +16,7 @@ for f in tqdm(file_list):
     exp = LotrExperiment(f)
     bouts_df = exp.bouts_df
     ring_in_acquisition = (f / "selected.h5").exists()
-    if exp.fn == 3:
+    if exp.fs == 3:
         imaging_area = "aHB+IPN"
     else:
         imaging_area = "IPN" if "ipn" in f.name else "aHB"

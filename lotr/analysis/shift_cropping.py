@@ -47,17 +47,17 @@ def crop_shifts_all_dataset():
             cropped = crop(
                 to_crop,
                 exp.bouts_df["idx_imaging"],
-                pre_int=PRE_BOUT_WND_S * exp.fn,
-                post_int=POST_BOUT_WND_S * exp.fn,
+                pre_int=PRE_BOUT_WND_S * exp.fs,
+                post_int=POST_BOUT_WND_S * exp.fs,
             )
 
             # Subtract baseline:
-            cropped = cropped - np.mean(cropped[: PRE_BOUT_WND_S * exp.fn, :], 0)
+            cropped = cropped - np.mean(cropped[: PRE_BOUT_WND_S * exp.fs, :], 0)
 
             # Interpolate if necessary:
-            if exp.fn != fn:
+            if exp.fs != fn:
                 fish_time_arr = (
-                    np.arange(1, cropped.shape[0] + 1) / exp.fn - PRE_BOUT_WND_S
+                        np.arange(1, cropped.shape[0] + 1) / exp.fs - PRE_BOUT_WND_S
                 )
                 cropped = resample_matrix(time_arr, fish_time_arr, cropped)
 

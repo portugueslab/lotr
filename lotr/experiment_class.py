@@ -76,6 +76,11 @@ class LotrExperiment(EmbeddedExperiment):
 
     @property
     def fn(self):
+        # TODO remove after complete refactoring
+        return self.fs
+
+    @property
+    def fs(self):
         try:
             return int(
                 self.microscope_config["lightsheet"]["scanning"]["z"]["frequency"]
@@ -118,7 +123,7 @@ class LotrExperiment(EmbeddedExperiment):
 
     @property
     def dt_imaging(self):
-        return 1 / self.fn
+        return 1 / self.fs
 
     @property
     def dir_name(self):
@@ -218,7 +223,7 @@ class LotrExperiment(EmbeddedExperiment):
 
     @property
     def time_arr(self):
-        return np.arange(1, self.n_pts + 1) / self.fn
+        return np.arange(1, self.n_pts + 1) / self.fs
 
     @property
     def exp_type(self):
@@ -245,7 +250,7 @@ class LotrExperiment(EmbeddedExperiment):
     @property
     def pca_t_slice(self):
         t_lims = self.pca_t_lims
-        return slice(*[t * self.fn for t in t_lims])
+        return slice(*[t * self.fs for t in t_lims])
 
     def _compute_rpc_scores(self, idxs):
         """For a tutorial on this calculation, have a look at
