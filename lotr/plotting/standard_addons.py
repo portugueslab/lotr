@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-from lotr.plotting.general import add_cbar
+from lotr.plotting.general import add_cbar, despine
 
 
 def add_anatomy_scalebar(
@@ -11,7 +11,7 @@ def add_anatomy_scalebar(
     units="μm",
     plane="horizontal",
     lw=0.5,
-    c=(0.0,) * 3,
+    c=(0.2,) * 3,
     fontsize=8,
     line_params=None,
     text_params=None,
@@ -66,7 +66,7 @@ def add_anatomy_scalebar(
     )
 
     if disable_axis:
-        ax.axis("off")
+        despine(ax, "all")
 
     if equalize_axis:
         ax.axis("equal")

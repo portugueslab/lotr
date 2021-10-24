@@ -129,4 +129,6 @@ def network_phase_animation(dest=None, frames=list(range(0, 4000, 5))):
 
 
 if __name__ == "__main__":
-    network_phase_animation()
+    dest = get_figures_location() / "gifs"
+    dest.mkdir(exist_ok=True)
+    network_phase_animation(dest /  "network_phase_long.mp4", frames=list(range(0, 4000, 5)))

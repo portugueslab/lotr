@@ -32,7 +32,7 @@ def savefig(name, fig=None, format="pdf"):
         folder = name.parent
         name = name.stem  # remove format if specified
 
-    fig.savefig(folder / f"{name}.{format}", dpi=300)
+    fig.savefig(folder / f"{name}.{format}", dpi=300, rasterize=True)
 
 
 def save_multiplot_to_pdf(plot_func, args_list, filename, **kwargs):

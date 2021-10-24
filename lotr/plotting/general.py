@@ -106,6 +106,8 @@ def add_scalebar(
     disable_axis=True,
     line_spacing_coef=0.1,
     text_spacing_coef=0.06,
+    lw=1,
+    c=(0.2,)*3
 ):
     """Function to add a scale bar to an existing plot. Currently implemented only
     for both axes.
@@ -149,8 +151,8 @@ def add_scalebar(
     if ax is None:
         ax = plt.gca()
 
-    line_params_def = dict(lw=1, c=(0.3,) * 3)
-    text_params_def = dict(fontsize=fontsize)
+    line_params_def = dict(lw=lw, c=c)
+    text_params_def = dict(fontsize=fontsize, c=c)
 
     for default_params, params_in in zip(
         [line_params_def, text_params_def], [line_params, text_params]
@@ -178,7 +180,7 @@ def add_scalebar(
 
     ax.plot([xpos, xpos, xpos + xlen], [ypos + ylen, ypos, ypos], **line_params_def)
     ax.text(
-        xpos - xlen * text_spacing_coef,
+        xpos - np.abs(xlen) * text_spacing_coef,
         ypos + ylen / 2,
         ylabel,
         ha="right",
