@@ -188,11 +188,9 @@ class LotrExperiment(EmbeddedExperiment):
 
     @property
     def morphed_coords(self):
-        if self._morphed_coords is None:
-            self._morphed_coords = fl.load(
-                self.root / "transformaed_coords.h5", "/transformed_coords"
-            )
-        return self._morphed_coords
+        with open(self.root / "centroid.txt", "r") as f:
+            centroids = f.readlines()
+        return self.coords - np.array([float(f) for f in centroids])
 
     @property
     def morphed_coords_um(self):

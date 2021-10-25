@@ -38,7 +38,9 @@ def add_anatomy_scalebar(
 
     ax.plot([xpos, xpos, xpos + xlen], [ypos + ylen, ypos, ypos], **line_params_def)
 
-    labels_dict = dict(horizontal=("ant.", "rt."))
+    labels_dict = dict(horizontal=("ant.", "rt."),
+                       sagittal=("ant.", "dors."),
+                       frontal=("dors.", "rt."))
 
     ax.text(
         xpos - xlen * spacing_coef,
@@ -50,7 +52,7 @@ def add_anatomy_scalebar(
     )
     ax.text(
         xpos + xlen,
-        ypos + ypos * spacing_coef,
+        ypos + ylen * spacing_coef,
         labels_dict[plane][1],
         ha="right",
         va="bottom",
