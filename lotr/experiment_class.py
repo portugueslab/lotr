@@ -73,6 +73,7 @@ class LotrExperiment(EmbeddedExperiment):
         self._network_phase = None
         self._network_phase_shuf = None
         self._stim_trials_df = None
+        self._morphed_coords = None
 
     @property
     def fn(self):
@@ -184,6 +185,18 @@ class LotrExperiment(EmbeddedExperiment):
     @property
     def coords_um(self):
         return self.coords * self.voxel_size_um
+
+    @property
+    def morphed_coords(self):
+        if self._morphed_coords is None:
+            self._morphed_coords = fl.load(
+                self.root / "transformaed_coords.h5", "/transformed_coords"
+            )
+        return self._morphed_coords
+
+    @property
+    def morphed_coords_um(self):
+        return self.morphed_coords * self.voxel_size_um
 
     @property
     def hdn_indexes(self):
