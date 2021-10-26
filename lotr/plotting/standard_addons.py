@@ -84,7 +84,9 @@ def add_phase_cbar(*args, **kwargs):
     )
 
 
-def add_dff_cbar(*args, flims=1, **kwargs):
+def add_dff_cbar(*args, flims=1, labelsize=6, titlesize=8,
+                 ticklabels=["$-$", "$+$"],
+                 title="ΔF", **kwargs):
     try:
         _ = iter(flims)
     except TypeError:
@@ -92,9 +94,9 @@ def add_dff_cbar(*args, flims=1, **kwargs):
     return add_cbar(
         *args,
         ticks=flims,
-        ticklabels=["$-$", "$+$"],
-        title="ΔF",
-        titlesize=8,
-        labelsize=6,
+        ticklabels=ticklabels,
+        title=title,
+        titlesize=titlesize,
+        labelsize=labelsize,
         **kwargs,
     )

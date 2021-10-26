@@ -132,16 +132,21 @@ def color_plot(x, y, ax=None, c=None, vlims=None, cmap="twilight", **kwargs):
     return dummy_scatter
 
 
-def tick_with_bars(df, ax=None, cols=None, moment="quantiles", label="_nolegend_",
+def tick_with_bars(df, ax=None, cols=None, moment="quantiles",
+                   label="_nolegend_", xdisperse=0,
                    s=0.04, lw=1):
     if ax is None:
         ax = plt.gca()
 
+    if type(xdisperse) is bool:  # if we just passed true, infer from s
+        xdisperse = s*2
+
     res_df = df.quantile([0.75, 0.5, 0.25])
 
     for i in range(len(res_df.columns)):
+        off = i + (np.random.rand()-0.5) * xdisperse
         ax.plot(
-            [i - s, i + s],
+            [off - s, off + s],
             [
                 res_df.iloc[1, i],
             ]
@@ -153,7 +158,7 @@ def tick_with_bars(df, ax=None, cols=None, moment="quantiles", label="_nolegend_
             label="_nolegend_"
         )
         ax.plot(
-            [i, i],
+            [off, off],
             res_df.iloc[[0, 2], i],
             lw=lw,
             c=cols[i],
