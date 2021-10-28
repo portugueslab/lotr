@@ -6,7 +6,7 @@ from shutil import copy
 import pooch
 from tqdm import tqdm
 
-from lotr.default_vals import DATASET_DEFAULT_LOCATION
+from lotr.default_vals import DATASET_DEFAULT_LOCATION, DATASET_HASH, DATASET_URL
 
 
 def get_dataset_location():
@@ -31,8 +31,8 @@ def get_dataset_location():
 
     data_pooch = pooch.create(
         path=pooch.os_cache("lotr"),
-        base_url="https://zenodo.org/record/5565865/files/",
-        registry={"sample_dataset.zip": "md5:07ee1a35b585b5da0f626cadd2857152"},
+        base_url=DATASET_URL,
+        registry={"sample_dataset.zip": DATASET_HASH},
     )
 
     unpack = pooch.Unzip(members=None)
