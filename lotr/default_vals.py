@@ -9,8 +9,8 @@ import numpy as np
 DATASET_DEFAULT_LOCATION = r"\\FUNES\Shared\experiments\E0071_lotr\full_ring"
 
 # Specify remote location for the dataset;
-DATASET_URL = "https://zenodo.org/record/5609713/files/"
-DATASET_HASH = "md5:2d99646c15f32dcc38cc9bc279ed6473"
+DATASET_URL = "https://zenodo.org/record/5610033/files/"
+DATASET_HASH = "md5:0b25154e89c761a817d21bc4f438d6d9"
 
 # Minimum bias value that defines a turn:
 TURN_BIAS = 0.2
