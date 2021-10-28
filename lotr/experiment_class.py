@@ -5,7 +5,7 @@ import numpy as np
 from bouter import EmbeddedExperiment
 
 from lotr.behavior import get_fictive_heading
-from lotr.data_preprocessing.anatomy import reshape_stack
+from lotr.data_preprocessing.anatomy import reshape_stack, transform_points
 from lotr.data_preprocessing.stimulus import get_all_trials_df
 from lotr.default_vals import LIGHTSHEET_CAMERA_RES_XY, PCA_TIME_PAD_S
 from lotr.pca import pca_and_phase
@@ -188,9 +188,9 @@ class LotrExperiment(EmbeddedExperiment):
 
     @property
     def morphed_coords(self):
-        with open(self.root / "centroid.txt", "r") as f:
-            centroids = f.readlines()
-        return self.coords - np.array([float(f) for f in centroids])
+        transform_mat = np.load(self.root / "centering_mtx.npy")
+
+        return transform_points(self.coords, transform_mat)
 
     @property
     def morphed_coords_um(self):

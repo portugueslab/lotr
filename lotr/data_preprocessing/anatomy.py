@@ -44,3 +44,17 @@ def reshape_stack(suite2p_stack):
     target_space = AnatomicalSpace(ANATOMICAL_ORIENT_FIGURES)
 
     return source_space.map_stack_to(target_space, suite2p_stack)
+
+
+
+
+def transform_points(pts, mat):
+    """Transform array of points using a 4x4 transformation matrix,
+    adding 1 column for the offset.
+    """
+
+    pts = np.array(pts)
+    if len(pts.shape) == 1:
+        pts = pts[np.newaxis, :]
+    pts = np.insert(pts, pts.shape[1], np.ones(pts.shape[0]), axis=1)
+    return (mat @ pts.T).T[:, :3]
