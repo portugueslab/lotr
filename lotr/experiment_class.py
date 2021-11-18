@@ -268,7 +268,9 @@ class LotrExperiment(EmbeddedExperiment):
         'Anatomical organization of the network.ipynb'
         """
         # 1. compute PCs:
-
+        pca_scores, angles, _, circle_params = pca_and_phase(
+            self.traces[self.pca_t_slice, idxs].T
+        )
         # 2. center on 0:
         centered_pca_scores = pca_scores[:, :2] - circle_params[:2]
 

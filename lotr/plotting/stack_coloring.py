@@ -225,3 +225,22 @@ def color_stack(
             alpha=alpha,
             invert_anatomy=invert_anatomy,
         )
+
+
+def color_zproject(stack, mode="overlay"):
+    if mode == "overlay":
+        projected = np.zeros(stack.shape[1:], dtype=np.uint8)
+        for plane in range(stack.shape[0]):
+            selection = stack[plane, ...] > 0
+            projected[selection] = stack[plane, ...][selection]
+
+    elif mode == "transparency":
+        projected = np.zeros(stack.shape[1:])
+        for plane in range(stack.shape[0]):
+            selection = stack[plane, ...] > 0
+            projected[selection] += stack[plane, ...][selection]
+        scale = projected[..., -1].max() / 255
+        projected /= scale  # projected[..., -1] /= scale
+        projected = projected.astype(np.uint8)
+
+    return projected
