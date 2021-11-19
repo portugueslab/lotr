@@ -242,5 +242,7 @@ def color_zproject(stack, mode="overlay"):
         scale = projected[..., -1].max() / 255
         projected /= scale  # projected[..., -1] /= scale
         projected = projected.astype(np.uint8)
+    else:
+        raise ValueError("'mode' should be either overlay or transparency!")
 
     return projected
