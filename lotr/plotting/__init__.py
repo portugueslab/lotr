@@ -18,8 +18,10 @@ plt.rcParams["legend.fontsize"] = 8
 plt.rcParams["font.size"] = 8
 plt.rcParams["legend.frameon"] = False
 plt.rcParams["axes.titlesize"] = 8
-plt.rcParams["svg.fonttype"] = "none"
 plt.rcParams["font.sans-serif"] = "Arial"
+plt.rcParams['pdf.fonttype'] = 42
+plt.rcParams['ps.fonttype'] = 42
+# plt.rcParams["svg.fonttype"] = "none"
 # plt.rcParams["mathtext.default"] = "regular"
 # plt.rcParams['pdf.use14corefonts'] = True
 
