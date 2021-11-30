@@ -5,10 +5,10 @@ from tqdm import tqdm
 from lotr import dataset_folders
 from lotr.default_vals import DEFAULT_FN, POST_BOUT_WND_S, PRE_BOUT_WND_S
 from lotr.experiment_class import LotrExperiment
-from lotr.utils import crop, resample_matrix
+from lotr.utils import crop, resample_matrix, interpolate
 
 
-def crop_shifts_all_dataset():
+def crop_shifts_all_dataset(crop_stimulus=False):
     """Crop fictive heading and network phase around bouts from all fish.
     in the dataset. For a demo of what is happening, "4. Phase dynamics.ipynb" notebook.
 
@@ -23,7 +23,7 @@ def crop_shifts_all_dataset():
 
     all_phase_cropped = []
     all_head_cropped = []
-
+    all_stim_cropped = []
     # We will create a dataframe to keep track of events from all fish.
     # Mostly a way of keeping together the crop and the bouts:
     events_df = []
@@ -35,12 +35,16 @@ def crop_shifts_all_dataset():
     )
     for path in tqdm(dataset_folders):
         exp = LotrExperiment(path)
-
+        stim_df = exp.stimulus_log
+        if "cl2D_theta" in stim_df.columns and crop_stimulus:
+            stim_interp = interpolate(stim_df["t"], stim_df["cl2D_theta"], exp.time_arr)
+        else:
+            stim_interp = np.full(exp.n_pts, np.nan)
         # Crop both the fictive heading (cumulative tail theta sum) and network phase
         # in the same way:
         for dest_list, to_crop in zip(
-            [all_phase_cropped, all_head_cropped],
-            [np.unwrap(exp.network_phase), exp.fictive_heading],
+            [all_phase_cropped, all_head_cropped, all_stim_cropped],
+            [np.unwrap(exp.network_phase), exp.fictive_heading, stim_interp],
         ):
 
             # Crop around events:
@@ -67,6 +71,10 @@ def crop_shifts_all_dataset():
     # Concatenate all the results:
     all_phase_cropped = np.concatenate(all_phase_cropped, axis=1)
     all_head_cropped = np.concatenate(all_head_cropped, axis=1)
+    all_stim_cropped = np.concatenate(all_stim_cropped, axis=1)
     events_df = pd.concat(events_df, ignore_index=True)
 
-    return all_phase_cropped, all_head_cropped, events_df, time_arr
+    if crop_stimulus:
+        return all_phase_cropped, all_head_cropped, all_stim_cropped, events_df, time_arr
+    else:
+        return all_phase_cropped, all_head_cropped, events_df, time_arr
