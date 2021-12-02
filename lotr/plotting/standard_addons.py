@@ -18,6 +18,7 @@ def add_anatomy_scalebar(
     disable_axis=True,
     equalize_axis=True,
     spacing_coef=0.06,
+    cartesian=False
 ):
     """"""
 
@@ -34,6 +35,8 @@ def add_anatomy_scalebar(
             default_params.update(params_in)
 
     xlen, ylen = length, length
+    if cartesian:
+        ylen = -ylen
     xpos, ypos = pos
 
     ax.plot([xpos, xpos, xpos + xlen], [ypos + ylen, ypos, ypos], **line_params_def)
