@@ -340,15 +340,18 @@ class LotrExperiment(EmbeddedExperiment):
     @property
     def network_phase(self):
         if self._network_phase is None:
-            self._network_phase = self.get_network_phase(self.hdn_indexes, self.rpc_scores)
+            self._network_phase = self.get_network_phase(
+                self.hdn_indexes, self.rpc_scores
+            )
 
         return self._network_phase
 
     @property
     def network_phase_shuf(self):
         if self._network_phase_shuf is None:
-            self._network_phase_shuf = self.get_network_phase(self.rndcnt_indexes,
-                                                         self.rpc_scores_shuf)
+            self._network_phase_shuf = self.get_network_phase(
+                self.rndcnt_indexes, self.rpc_scores_shuf
+            )
 
         return self._network_phase_shuf
 

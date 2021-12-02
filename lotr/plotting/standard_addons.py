@@ -38,9 +38,9 @@ def add_anatomy_scalebar(
 
     ax.plot([xpos, xpos, xpos + xlen], [ypos + ylen, ypos, ypos], **line_params_def)
 
-    labels_dict = dict(horizontal=("ant.", "rt."),
-                       sagittal=("ant.", "dors."),
-                       frontal=("dors.", "rt."))
+    labels_dict = dict(
+        horizontal=("ant.", "rt."), sagittal=("ant.", "dors."), frontal=("dors.", "rt.")
+    )
 
     ax.text(
         xpos - xlen * spacing_coef,
@@ -84,9 +84,15 @@ def add_phase_cbar(*args, **kwargs):
     )
 
 
-def add_dff_cbar(*args, flims=1, labelsize=6, titlesize=8,
-                 ticklabels=["$-$", "$+$"],
-                 title="ΔF", **kwargs):
+def add_dff_cbar(
+    *args,
+    flims=1,
+    labelsize=6,
+    titlesize=8,
+    ticklabels=["$-$", "$+$"],
+    title="ΔF",
+    **kwargs,
+):
     try:
         _ = iter(flims)
     except TypeError:

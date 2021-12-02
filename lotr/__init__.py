@@ -11,6 +11,6 @@ FIGURES_LOCATION = get_figures_location()
 
 A_FISH = DATASET_LOCATION / "210314_f1" / "210314_f1_natmov"
 
-dataset_folders = sorted([
-    f.parent for f in DATASET_LOCATION.glob("*[0-9]_f[0-9]*/*/selected.h5")
-])
+dataset_folders = sorted(
+    [f.parent for f in DATASET_LOCATION.glob("*[0-9]_f[0-9]*/*/selected.h5")]
+)

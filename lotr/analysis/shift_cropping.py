@@ -5,7 +5,7 @@ from tqdm import tqdm
 from lotr import dataset_folders
 from lotr.default_vals import DEFAULT_FN, POST_BOUT_WND_S, PRE_BOUT_WND_S
 from lotr.experiment_class import LotrExperiment
-from lotr.utils import crop, resample_matrix, interpolate
+from lotr.utils import crop, interpolate, resample_matrix
 
 
 def crop_shifts_all_dataset(crop_stimulus=False):
@@ -61,7 +61,7 @@ def crop_shifts_all_dataset(crop_stimulus=False):
             # Interpolate if necessary:
             if exp.fs != fn:
                 fish_time_arr = (
-                        np.arange(1, cropped.shape[0] + 1) / exp.fs - PRE_BOUT_WND_S
+                    np.arange(1, cropped.shape[0] + 1) / exp.fs - PRE_BOUT_WND_S
                 )
                 cropped = resample_matrix(time_arr, fish_time_arr, cropped)
 
@@ -75,6 +75,12 @@ def crop_shifts_all_dataset(crop_stimulus=False):
     events_df = pd.concat(events_df, ignore_index=True)
 
     if crop_stimulus:
-        return all_phase_cropped, all_head_cropped, all_stim_cropped, events_df, time_arr
+        return (
+            all_phase_cropped,
+            all_head_cropped,
+            all_stim_cropped,
+            events_df,
+            time_arr,
+        )
     else:
         return all_phase_cropped, all_head_cropped, events_df, time_arr

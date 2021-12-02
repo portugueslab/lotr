@@ -225,4 +225,3 @@ def nan_phase_jumps(phase_arr):
     nanned_phase[1:][np.abs(np.diff(nanned_phase)) > np.pi] = np.nan
 
     return nanned_phase
-

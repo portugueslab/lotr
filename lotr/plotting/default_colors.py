@@ -15,7 +15,7 @@ COLS = dict(
     phase_light=ListedColormap(get_n_colors(1000, lum=60, sat=45, hshift=90) / 255),
     dff_opp="PiYG",
     ph_plot=[0.08, 0.58, 0.16],
-    th_plot=[0.55, 0.49, 0.],
+    th_plot=[0.55, 0.49, 0.0],
     stim_conditions=dict(
         darkness=".5",
         natural_motion=[0.71, 0.54, 0.15],
@@ -39,6 +39,15 @@ COLS = dict(
         "#5981a3",
     ]
     * 5,
+    qualitative=[
+        "#1b9e77",
+        "#d95f02",
+        "#7570b3",
+        "#e7298a",
+        "#66a61e",
+        "#e6ab02",
+        "#a6761d",
+    ],
 )
 
 

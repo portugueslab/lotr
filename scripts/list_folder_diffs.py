@@ -1,8 +1,6 @@
 from pathlib import Path
 
-remote = Path(
-    "/Volumes/Shared/experiments/E0071_lotr/full_ring"
-)
+remote = Path("/Volumes/Shared/experiments/E0071_lotr/full_ring")
 local = Path("/Users/luigipetrucco/Desktop/all_source_data/full_ring")
 
 local_dirs = set([f.name for f in local.glob("*f[0-9]*/*_f[0-9]*")])

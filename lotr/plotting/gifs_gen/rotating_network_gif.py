@@ -5,11 +5,9 @@ from matplotlib.animation import FuncAnimation
 from lotr import A_FISH, LotrExperiment
 from lotr.behavior import get_fictive_heading
 from lotr.file_utils import get_figures_location
-from lotr.pca import pca_and_phase
 from lotr.plotting import (
     COLS,
     add_cbar,
-    add_fish,
     add_scalebar,
     get_default_phase_col,
 )
@@ -38,10 +36,11 @@ def network_phase_animation(dest):
 
     # Plot parameters
     # ---------------
-    scale_arr = 5000
+    # scale_arr = 5000
     scale_mn = 60
     f_lim = 0.01
-    w_lw, netw_lw = 0.3, 1.5
+    # w_lw, netw_lw = 0.3, 1.5
+    netw_lw = 1.5
     w_c = (0.7,) * 3
 
     # Figure
@@ -56,7 +55,7 @@ def network_phase_animation(dest):
     tx = ax.text(-100, 100, "t = 0 s", fontsize=8)
 
     # Individual weights:
-    weight_actors = []
+    # weight_actors = []
     # for i in range(len(exp.hdn_indexes)):
     #    # comma is essential!
     #    (weights_plot,) = ax.plot(

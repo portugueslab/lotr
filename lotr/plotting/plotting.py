@@ -2,6 +2,8 @@ import numpy as np
 from matplotlib import cm, colors
 from matplotlib import pyplot as plt
 
+from lotr.plotting.general import projection_contours
+
 
 def plot_arrow(seg, ax=None, col="b", alpha=1, s=10, lw=1):
     ax.plot(seg[:, 0], seg[:, 1], lw=lw, c=col, alpha=alpha)
@@ -132,19 +134,26 @@ def color_plot(x, y, ax=None, c=None, vlims=None, cmap="twilight", **kwargs):
     return dummy_scatter
 
 
-def tick_with_bars(df, ax=None, cols=None, moment="quantiles",
-                   label="_nolegend_", xdisperse=0,
-                   s=0.04, lw=1):
+def tick_with_bars(
+    df,
+    ax=None,
+    cols=None,
+    moment="quantiles",
+    label="_nolegend_",
+    xdisperse=0,
+    s=0.04,
+    lw=1,
+):
     if ax is None:
         ax = plt.gca()
 
     if type(xdisperse) is bool:  # if we just passed true, infer from s
-        xdisperse = s*2
+        xdisperse = s * 2
 
     res_df = df.quantile([0.75, 0.5, 0.25])
 
     for i in range(len(res_df.columns)):
-        off = i + (np.random.rand()-0.5) * xdisperse
+        off = i + (np.random.rand() - 0.5) * xdisperse
         ax.plot(
             [off - s, off + s],
             [
@@ -155,7 +164,7 @@ def tick_with_bars(df, ax=None, cols=None, moment="quantiles",
             c=cols[i],
             solid_capstyle="round",
             zorder=100,
-            label="_nolegend_"
+            label="_nolegend_",
         )
         ax.plot(
             [off, off],
@@ -164,7 +173,7 @@ def tick_with_bars(df, ax=None, cols=None, moment="quantiles",
             c=cols[i],
             solid_capstyle="round",
             zorder=100,
-            label=label
+            label=label,
         )
 
 
@@ -222,3 +231,12 @@ def bar_with_bars(
             solid_capstyle="round",
             zorder=100,
         )
+
+
+def plot_projection(mask, i, smooth_wnd=7, resolution=0.5, ax=None, **kwargs):
+    if ax is None:
+        ax = plt.gca()
+    cs = projection_contours(mask.max(i), smooth_wnd=smooth_wnd)
+    cs = cs * resolution
+
+    ax.fill(cs[:, 1], cs[:, 0], **kwargs)

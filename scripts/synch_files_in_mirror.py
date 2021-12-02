@@ -1,13 +1,12 @@
 from pathlib import Path
-from tqdm import tqdm
 from shutil import copy
+
+from tqdm import tqdm
 
 file_patterns = ["*centering_mtx.npy*"]
 overwrite = False
 
-dest_master_path = Path(
-    "/Volumes/Shared/experiments/E0071_lotr/full_ring"
-)
+dest_master_path = Path("/Volumes/Shared/experiments/E0071_lotr/full_ring")
 master_path = Path("/Users/luigipetrucco/Desktop/all_source_data/full_ring")
 
 

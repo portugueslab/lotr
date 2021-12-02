@@ -46,8 +46,6 @@ def reshape_stack(suite2p_stack):
     return source_space.map_stack_to(target_space, suite2p_stack)
 
 
-
-
 def transform_points(pts, mat):
     """Transform array of points using a 4x4 transformation matrix,
     adding 1 column for the offset.

@@ -1,7 +1,9 @@
 import numpy as np
+import pandas as pd
 from matplotlib import collections
 from matplotlib import pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+from skimage import measure
 from svgpath2mpl import parse_path
 
 from lotr.utils import get_rot_matrix
@@ -107,7 +109,7 @@ def add_scalebar(
     line_spacing_coef=0.1,
     text_spacing_coef=0.06,
     lw=1,
-    c=(0.2,)*3
+    c=(0.2,) * 3,
 ):
     """Function to add a scale bar to an existing plot. Currently implemented only
     for both axes.
@@ -236,3 +238,13 @@ def get_circle_xy(circle_params):
     th = np.arange(0, 2 * np.pi + SPACING, SPACING)
 
     return np.cos(th) * radius + xpos, np.sin(th) * radius + ypos
+
+
+def smooth(coords, wnd=7):
+    padded = np.concatenate([coords[-wnd:, :], coords, coords[:wnd, :]])
+    return pd.DataFrame(padded).rolling(wnd, center=True).mean().values[wnd:-wnd]
+
+
+def projection_contours(img, smooth_wnd=7, thr=0.5):
+    contour = measure.find_contours(img, thr)[0]
+    return smooth(contour, wnd=smooth_wnd)

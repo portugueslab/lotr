@@ -6,7 +6,11 @@ from shutil import copy
 import pooch
 from tqdm import tqdm
 
-from lotr.default_vals import DATASET_DEFAULT_LOCATION, DATASET_HASH, DATASET_URL
+from lotr.default_vals import (
+    DATASET_DEFAULT_LOCATION,
+    DATASET_HASH,
+    DATASET_URL,
+)
 
 
 def get_dataset_location():

@@ -1,7 +1,5 @@
-
 import flammkuchen as fl
 import numpy as np
-
 import pandas as pd
 from bouter.utilities import (
     polynomial_tail_coefficients,
@@ -11,9 +9,12 @@ from bouter.utilities import (
 from scipy.signal import medfilt
 
 
-def _get_angles(df1, df2, norm=False, lh_thr=1.):
+def _get_angles(df1, df2, norm=False, lh_thr=1.0):
 
-    th = np.arctan2(df2["y"] - df1["y"], df2["x"] - df1["x"],)
+    th = np.arctan2(
+        df2["y"] - df1["y"],
+        df2["x"] - df1["x"],
+    )
     if norm:
         th = th.values - np.mean(th)
 
@@ -75,10 +76,12 @@ def export_dlc_behavior(dlc_file_dir, tail_lh_thr=0.8, medfilt_wnd_s=0.8):
 
     # Use bouter function to fill missing tail segments and computing tail sum:
     thetas_fixes = predictive_tail_fill(thetas.copy())
-    data_dict["tail_sum"] = polynomial_tailsum(polynomial_tail_coefficients(thetas_fixes))
+    data_dict["tail_sum"] = polynomial_tailsum(
+        polynomial_tail_coefficients(thetas_fixes)
+    )
 
     # Get time array syncing it with the behavior log:
-    data_dict["t"] = stytra_time_arr[- data_dict["tail_sum"].shape[0]:]
+    data_dict["t"] = stytra_time_arr[-data_dict["tail_sum"].shape[0] :]
 
     # Wrap together data and put it in dataframe with columns:
     data_df = pd.DataFrame(data_dict)
@@ -89,6 +92,8 @@ def export_dlc_behavior(dlc_file_dir, tail_lh_thr=0.8, medfilt_wnd_s=0.8):
 
     return data_df
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     from lotr import DATASET_LOCATION
+
     to_convert = [f.parent for f in DATASET_LOCATION.glob("*/*/*DLC*.h5")]
