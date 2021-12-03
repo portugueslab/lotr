@@ -71,7 +71,10 @@ def crop_shifts_all_dataset(crop_stimulus=False):
     # Concatenate all the results:
     all_phase_cropped = np.concatenate(all_phase_cropped, axis=1)
     all_head_cropped = np.concatenate(all_head_cropped, axis=1)
-    all_stim_cropped = np.concatenate(all_stim_cropped, axis=1)
+    try:
+        all_stim_cropped = np.concatenate(all_stim_cropped, axis=1)
+    except np.AxisError:
+        all_stim_cropped = None
     events_df = pd.concat(events_df, ignore_index=True)
 
     if crop_stimulus:
