@@ -16,3 +16,4 @@ pooch
 bg_space
 ipynbname
 bg-atlasapi
+scikit-image
