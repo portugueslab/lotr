@@ -246,5 +246,5 @@ def smooth(coords, wnd=7):
 
 
 def projection_contours(img, smooth_wnd=7, thr=0.5):
-    contour = measure.find_contours(img, thr)[0]
-    return smooth(contour, wnd=smooth_wnd)
+    contours = measure.find_contours(img, thr)
+    return [smooth(c, wnd=smooth_wnd) for c in contours]

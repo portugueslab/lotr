@@ -236,7 +236,7 @@ def bar_with_bars(
 def plot_projection(mask, i, smooth_wnd=7, resolution=0.5, ax=None, **kwargs):
     if ax is None:
         ax = plt.gca()
-    cs = projection_contours(mask.max(i), smooth_wnd=smooth_wnd)
-    cs = cs * resolution
-
-    ax.fill(cs[:, 1], cs[:, 0], **kwargs)
+    contours = projection_contours(mask.max(i), smooth_wnd=smooth_wnd)
+    for contour in contours:
+        contour *= resolution
+        ax.fill(contour[:, 1], contour[:, 0], **kwargs)

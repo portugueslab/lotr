@@ -15,7 +15,8 @@ class AtlasPlotter:
         mask_slices=None,
         fontsize=14,
         bounds_dict=None,
-        fill_kw=None
+        fill_kw=None,
+        smooth_wnd=15
     ):
         if atlas is None:
             atlas = BrainGlobeAtlas("ipn_zfish_0.5um")
@@ -37,7 +38,7 @@ class AtlasPlotter:
         # Compute contours only once:
         self.contours_dict = dict()
         for s in self.visible_structures:
-            projection_dict = [self.project_mask(s, p) for p in self.space.sections]
+            projection_dict = [self.project_mask(s, p, smooth_wnd=smooth_wnd) for p in self.space.sections]
             self.contours_dict[s] = projection_dict
 
         self.projections = self.space.sections if projections is None else projections
@@ -72,7 +73,7 @@ class AtlasPlotter:
             mask.max(proj_i), smooth_wnd=smooth_wnd, thr=0.5
         )
 
-        return contours * self.space.resolution[0]
+        return [c * self.space.resolution[0] for c in contours]
 
     def get_switch(self, projection):
         if self.custom_switch is None:
@@ -107,12 +108,12 @@ class AtlasPlotter:
         swtch = self.get_switch(projection)
 
         for structure in self.visible_structures:
-            cs = self.contours_dict[structure][projection_idx]
-            ax.fill(
-                cs[:, swtch],
-                cs[:, 1 - swtch],
-                **self.fill_kw
-            )
+            for cs in self.contours_dict[structure][projection_idx]:
+                ax.fill(
+                    cs[:, swtch],
+                    cs[:, 1 - swtch],
+                    **self.fill_kw
+                )
 
         if title:
             ax.set_title(f"{projection} view")
