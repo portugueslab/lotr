@@ -8,12 +8,13 @@ import numpy as np
 # Specify where the dataset is stored.
 DATASET_DEFAULT_LOCATION = r"\\FUNES\Shared\experiments\E0071_lotr\full_ring"
 
-# Specify remote location for the dataset;
+# Specify remote location for the dataset:
 DATASET_URL = "https://zenodo.org/record/5610033/files/"
 DATASET_HASH = "md5:0b25154e89c761a817d21bc4f438d6d9"
 
-# Minimum bias value that defines a turn:
-TURN_BIAS = 0.2
+# Minimum bias value that defines a turn.
+# This was defined based on trimodal curve fit over all bouts in the dataset
+TURN_BIAS = 0.239
 
 # Tau for the computation of the regressor. Longer than expected GCaMP tau
 # as from trace observation motor-associated transients seem to decay slower

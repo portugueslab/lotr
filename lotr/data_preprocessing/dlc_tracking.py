@@ -95,5 +95,10 @@ def export_dlc_behavior(dlc_file_dir, tail_lh_thr=0.8, medfilt_wnd_s=0.8):
 
 if __name__ == "__main__":
     from lotr import DATASET_LOCATION
+    from tqdm import tqdm
+    from pathlib import Path
 
     to_convert = [f.parent for f in DATASET_LOCATION.glob("*/*/*DLC*.h5")]
+    to_convert = [Path("/Users/luigipetrucco/Google Drive/data/all_source_data/full_ring/211203_f0/211203_f0beyes_cl")]
+    for f in tqdm(to_convert):
+        export_dlc_behavior(f)

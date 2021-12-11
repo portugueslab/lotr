@@ -47,7 +47,7 @@ class LotrExperiment(EmbeddedExperiment):
         plt.scatter(exp.coords_um[:, 1], exp.coords_um[:, 2])
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, selected=None, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.microscope_config = self["imaging"]["microscope_config"]
@@ -58,7 +58,7 @@ class LotrExperiment(EmbeddedExperiment):
         self._data_shape = None
         self._bouts_df = None
         self._traces = None
-        self._hdn_indexes = None
+        self._hdn_indexes = selected
         self._motor_regressors = None
         self._coords = None
         self._raw_traces = None
@@ -188,9 +188,12 @@ class LotrExperiment(EmbeddedExperiment):
 
     @property
     def morphed_coords(self):
-        transform_mat = np.load(self.root / "centering_mtx.npy")
-
-        return transform_points(self.coords, transform_mat)
+        try:
+            transform_mat = np.load(self.root / "centering_mtx.npy")
+            return transform_points(self.coords, transform_mat)
+        except FileNotFoundError:
+            raise Warning("No centering_mtx.npy file found for morphing, returning raw")
+            return self.coords
 
     @property
     def morphed_coords_um(self):

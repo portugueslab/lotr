@@ -35,11 +35,16 @@ def crop_shifts_all_dataset(crop_stimulus=False):
     )
     for path in tqdm(dataset_folders):
         exp = LotrExperiment(path)
-        stim_df = exp.stimulus_log
-        if "cl2D_theta" in stim_df.columns and crop_stimulus:
-            stim_interp = interpolate(stim_df["t"], stim_df["cl2D_theta"], exp.time_arr)
-        else:
-            stim_interp = np.full(exp.n_pts, np.nan)
+
+
+        stim_interp = np.full(exp.n_pts, np.nan)
+        try:
+            stim_df = exp.stimulus_log
+            if "cl2D_theta" in stim_df.columns and crop_stimulus:
+                stim_interp = interpolate(stim_df["t"], stim_df["cl2D_theta"], exp.time_arr)
+        except AttributeError:
+            pass
+
         # Crop both the fictive heading (cumulative tail theta sum) and network phase
         # in the same way:
         for dest_list, to_crop in zip(
