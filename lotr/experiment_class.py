@@ -7,7 +7,7 @@ from bouter import EmbeddedExperiment
 from lotr.behavior import get_fictive_heading
 from lotr.data_preprocessing.anatomy import reshape_stack, transform_points
 from lotr.data_preprocessing.stimulus import get_all_trials_df
-from lotr.default_vals import LIGHTSHEET_CAMERA_RES_XY, PCA_TIME_PAD_S
+from lotr.default_vals import LIGHTSHEET_CAMERA_RES_XY, PCA_TIME_PAD_S, TO_IPNREF_MTX
 from lotr.pca import pca_and_phase
 from lotr.plotting import color_stack
 from lotr.rpca_calculation import get_zero_mean_weights, reorient_pcs
@@ -187,9 +187,13 @@ class LotrExperiment(EmbeddedExperiment):
         return self.coords * self.voxel_size_um
 
     @property
+    def trasform_mat_to_lsref(self):
+        return np.load(self.root / "centering_mtx.npy")
+
+    @property
     def morphed_coords(self):
         try:
-            transform_mat = np.load(self.root / "centering_mtx.npy")
+            transform_mat = self.trasform_mat_to_lsref
             return transform_points(self.coords, transform_mat)
         except FileNotFoundError:
             raise Warning("No centering_mtx.npy file found for morphing, returning raw")
@@ -198,6 +202,10 @@ class LotrExperiment(EmbeddedExperiment):
     @property
     def morphed_coords_um(self):
         return self.morphed_coords * self.voxel_size_um
+
+    @property
+    def ipnref_coords_um(self):
+        return transform_points(self.morphed_coords_um, TO_IPNREF_MTX)
 
     @property
     def hdn_indexes(self):

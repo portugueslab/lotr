@@ -49,6 +49,17 @@ def reshape_stack(suite2p_stack):
 def transform_points(pts, mat):
     """Transform array of points using a 4x4 transformation matrix,
     adding 1 column for the offset.
+
+    Parameters
+    ----------
+    pts : np.array
+        (3,) array  or (n_pts, 3) matrix of coordinates.
+    mat : np.array
+        (4, 4) trasformation matrix.
+
+    Returns
+    -------
+
     """
 
     pts = np.array(pts)

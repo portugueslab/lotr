@@ -20,17 +20,23 @@ def get_nb_figures_location():
     return fig_location
 
 
-def savefig(name, fig=None, format="pdf"):
+def savefig(name, fig=None, folder=None, format="pdf"):
     """Function to centralize figure saving."""
     if fig is None:
         fig = plt.gcf()
 
-    if type(name) == str:
-        folder = get_nb_figures_location()
+    if folder is not None:
         name = name.split(".")[0]
-    else:  # assuming Path object here
-        folder = name.parent
-        name = name.stem  # remove format if specified
+        folder = get_figures_location() / folder
+        if not folder.exists():
+            folder.mkdir(exist_ok=True)
+    else:
+        if type(name) == str:
+            folder = get_nb_figures_location()
+            name = name.split(".")[0]
+        else:  # assuming Path object here
+            folder = name.parent
+            name = name.stem  # remove format if specified
 
     fig.savefig(folder / f"{name}.{format}", dpi=300)
 
