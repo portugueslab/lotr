@@ -1,17 +1,15 @@
-import ipynbname
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 
-from lotr.file_utils import get_figures_location
+from lotr.file_utils import get_figures_location, get_nb_name
 
 
 def get_nb_figures_location():
     """Using the ipynbname library here could be a bit brittle - but let's give this
     a try.
     """
-    try:
-        notebook_name = ipynbname.name()
-    except IndexError:
+    notebook_name = get_nb_name()
+    if notebook_name is None:
         return get_figures_location()
 
     fig_location = get_figures_location() / notebook_name

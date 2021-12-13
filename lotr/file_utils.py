@@ -2,6 +2,7 @@ import re
 import tempfile
 from pathlib import Path
 from shutil import copy
+import ipynbname
 
 import pooch
 from tqdm import tqdm
@@ -95,3 +96,10 @@ def mirror_fish_folder(source_path, dest_path, file_patterns=None, overwrite=Fal
         for file in source_path.glob(pattern):
             if overwrite or not (dest_path / file.name).exists():
                 copy(file, dest_path / file.name)
+
+
+def get_nb_name():
+    try:
+        return ipynbname.name()
+    except IndexError:
+        pass
