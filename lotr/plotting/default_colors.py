@@ -4,7 +4,7 @@ from matplotlib.colors import ListedColormap
 from lotr.plotting.color_utils import get_continuous_colors, get_n_colors
 
 COLS = dict(
-    sides=dict(lf=(0.0, 0.623, 0.886), rt=(0.835, 0.364, 0.282), fw=(0.5,)*3),
+    sides=dict(lf=(0.0, 0.623, 0.886), rt=(0.835, 0.364, 0.282), fw=(0.5,) * 3),
     dff_img="Greens",
     dff_plot="gray",
     time="viridis",

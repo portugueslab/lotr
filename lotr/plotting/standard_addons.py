@@ -18,7 +18,7 @@ def add_anatomy_scalebar(
     disable_axis=True,
     equalize_axis=True,
     spacing_coef=0.06,
-    cartesian=False
+    cartesian=False,
 ):
     """"""
 

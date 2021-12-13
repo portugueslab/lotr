@@ -2,7 +2,7 @@ import numpy as np
 from bg_atlasapi import BrainGlobeAtlas
 from matplotlib import pyplot as plt
 
-from lotr.plotting.general import projection_contours, despine
+from lotr.plotting.general import despine, projection_contours
 
 
 class AtlasPlotter:
@@ -16,7 +16,7 @@ class AtlasPlotter:
         fontsize=14,
         bounds_dict=None,
         fill_kw=None,
-        smooth_wnd=15
+        smooth_wnd=15,
     ):
         if atlas is None:
             atlas = BrainGlobeAtlas("ipn_zfish_0.5um")
@@ -38,12 +38,17 @@ class AtlasPlotter:
         # Compute contours only once:
         self.contours_dict = dict()
         for s in self.visible_structures:
-            projection_dict = [self.project_mask(s, p, smooth_wnd=smooth_wnd) for p in self.space.sections]
+            projection_dict = [
+                self.project_mask(s, p, smooth_wnd=smooth_wnd)
+                for p in self.space.sections
+            ]
             self.contours_dict[s] = projection_dict
 
         self.projections = self.space.sections if projections is None else projections
 
-        self.fill_kw = dict(alpha=1, facecolor="none", fill=False, linewidth=0.5, edgecolor=".03")
+        self.fill_kw = dict(
+            alpha=1, facecolor="none", fill=False, linewidth=0.5, edgecolor=".03"
+        )
         if fill_kw is not None:
             self.fill_kw.update(fill_kw)
 
@@ -69,9 +74,7 @@ class AtlasPlotter:
 
         mask = self.atlas.get_structure_mask(structure)[self.mask_slices[proj_lab]]
 
-        contours = projection_contours(
-            mask.max(proj_i), smooth_wnd=smooth_wnd, thr=0.5
-        )
+        contours = projection_contours(mask.max(proj_i), smooth_wnd=smooth_wnd, thr=0.5)
 
         return [c * self.space.resolution[0] for c in contours]
 
@@ -109,11 +112,7 @@ class AtlasPlotter:
 
         for structure in self.visible_structures:
             for cs in self.contours_dict[structure][projection_idx]:
-                ax.fill(
-                    cs[:, swtch],
-                    cs[:, 1 - swtch],
-                    **self.fill_kw
-                )
+                ax.fill(cs[:, swtch], cs[:, 1 - swtch], **self.fill_kw)
 
         if title:
             ax.set_title(f"{projection} view")
@@ -147,7 +146,7 @@ class AtlasPlotter:
             cs[~sel, :] = np.nan
         cs = np.delete(cs, idx, axis=1)[:, :]
 
-        l, = ax.plot(cs[:, swtch], cs[:, 1 - swtch], **kwargs)
+        (l,) = ax.plot(cs[:, swtch], cs[:, 1 - swtch], **kwargs)
 
         if neuron.soma_idx is not None and soma_s > 0:
             cs = neuron.coords_ipn[neuron.soma_idx : neuron.soma_idx + 1, :]
@@ -161,24 +160,17 @@ class AtlasPlotter:
                 linewidth=0,
             )
 
-    def ax_scatterplot(self, ax,
-        projection, coords, **kwargs):
+    def ax_scatterplot(self, ax, projection, coords, **kwargs):
 
         idx = self.space.plane_normals[projection].index(1)
         swtch = self.get_switch(projection)
         coords = np.delete(coords, idx, axis=1)[:, :]
 
-        ax.scatter(
-            coords[:, swtch],
-            coords[:, 1 - swtch],
-            **kwargs
-        )
+        ax.scatter(coords[:, swtch], coords[:, 1 - swtch], **kwargs)
 
     def axs_scatterplot(self, axs, coords, **kwargs):
         for i, projection in enumerate(self.projections):
-            self.ax_scatterplot(
-                axs[i], projection, coords, **kwargs
-            )
+            self.ax_scatterplot(axs[i], projection, coords, **kwargs)
 
     def plot_neurons(self, axs, neurons, select="all", **kwargs):
         """Plot neurons projections over a triplet of axs"""

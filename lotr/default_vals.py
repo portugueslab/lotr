@@ -46,7 +46,11 @@ ANATOMICAL_ORIENT_FIGURES = "ipl"
 LIGHTSHEET_CAMERA_RES_XY = (0.6, 0.6)
 
 # Matrix from centered ls coordinates to IPN reference:
-TO_IPNREF_MTX = np.array([[0., 0., -1., 30.],
-                          [-1., 0., 0., 75.],
-                          [0., -1., 0., 102.5],
-                          [0., 0., 0., 0.5]])
+TO_IPNREF_MTX = np.array(
+    [
+        [0.0, 0.0, -1.0, 30.0],
+        [-1.0, 0.0, 0.0, 75.0],
+        [0.0, -1.0, 0.0, 102.5],
+        [0.0, 0.0, 0.0, 0.5],
+    ]
+)

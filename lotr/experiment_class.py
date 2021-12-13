@@ -7,7 +7,11 @@ from bouter import EmbeddedExperiment
 from lotr.behavior import get_fictive_heading
 from lotr.data_preprocessing.anatomy import reshape_stack, transform_points
 from lotr.data_preprocessing.stimulus import get_all_trials_df
-from lotr.default_vals import LIGHTSHEET_CAMERA_RES_XY, PCA_TIME_PAD_S, TO_IPNREF_MTX
+from lotr.default_vals import (
+    LIGHTSHEET_CAMERA_RES_XY,
+    PCA_TIME_PAD_S,
+    TO_IPNREF_MTX,
+)
 from lotr.pca import pca_and_phase
 from lotr.plotting import color_stack
 from lotr.rpca_calculation import get_zero_mean_weights, reorient_pcs

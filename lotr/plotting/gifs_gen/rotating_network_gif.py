@@ -5,12 +5,7 @@ from matplotlib.animation import FuncAnimation
 from lotr import A_FISH, LotrExperiment
 from lotr.behavior import get_fictive_heading
 from lotr.file_utils import get_figures_location
-from lotr.plotting import (
-    COLS,
-    add_cbar,
-    add_scalebar,
-    get_default_phase_col,
-)
+from lotr.plotting import COLS, add_cbar, add_scalebar, get_default_phase_col
 from lotr.rpca_calculation import get_zero_mean_weights
 from lotr.utils import convolve_with_tau, get_rot_matrix, linear_regression
 
