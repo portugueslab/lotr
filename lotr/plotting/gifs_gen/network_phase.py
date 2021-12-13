@@ -10,9 +10,11 @@ from lotr.rpca_calculation import get_zero_mean_weights
 from lotr.utils import get_vect_angle
 
 
-def network_phase_animation(dest=None, frames=list(range(0, 4000, 5))):
+def network_phase_animation(dest=None, frames=None):
+    if frames is None:
+        frames = list(range(0, 4000, 5))
     if dest is None:
-        dest = get_figures_location() / "network_phase_long.mp4"
+        dest = get_figures_location() / f"network_phase_t{frames[0]}-{frames[-1]}+{frames[1]}.mp4"
     # Data preparation
     # ----------------
     # Compute quantities to plot:
@@ -55,7 +57,7 @@ def network_phase_animation(dest=None, frames=list(range(0, 4000, 5))):
         )
         weight_actors.append(weights_plot)
 
-    add_scalebar(ax, xlabel="rPC1", ylabel="-rPC2", xlen=30, ylen=30)
+    add_scalebar(ax, xlabel="rPC1", ylabel="rPC2", xlen=30, ylen=30)
 
     # Network average:
     (network_phase_plot,) = ax.plot(
@@ -131,6 +133,5 @@ def network_phase_animation(dest=None, frames=list(range(0, 4000, 5))):
 if __name__ == "__main__":
     dest = get_figures_location() / "gifs"
     dest.mkdir(exist_ok=True)
-    network_phase_animation(
-        dest / "network_phase_long.mp4", frames=list(range(0, 4000, 5))
+    network_phase_animation(frames=list(range(0, 4000, 5))
     )

@@ -56,3 +56,5 @@ TO_IPNREF_MTX = np.array(
 )
 
 RESULTS_LOG_FILE = "results_log.txt"
+
+RESULTS_NDIGITS = 3

@@ -2,8 +2,8 @@ import re
 import tempfile
 from pathlib import Path
 from shutil import copy
-import ipynbname
 
+import ipynbname
 import pooch
 from tqdm import tqdm
 
