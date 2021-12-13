@@ -161,6 +161,25 @@ class AtlasPlotter:
                 linewidth=0,
             )
 
+    def ax_scatterplot(self, ax,
+        projection, coords, **kwargs):
+
+        idx = self.space.plane_normals[projection].index(1)
+        swtch = self.get_switch(projection)
+        coords = np.delete(coords, idx, axis=1)[:, :]
+
+        ax.scatter(
+            coords[:, swtch],
+            coords[:, 1 - swtch],
+            **kwargs
+        )
+
+    def axs_scatterplot(self, axs, coords, **kwargs):
+        for i, projection in enumerate(self.projections):
+            self.ax_scatterplot(
+                axs[i], projection, coords, **kwargs
+            )
+
     def plot_neurons(self, axs, neurons, select="all", **kwargs):
         """Plot neurons projections over a triplet of axs"""
         if type(neurons) is not list:
