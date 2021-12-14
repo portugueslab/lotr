@@ -15,9 +15,11 @@ test_dict = dict(ttest_ind=ttest_ind,
 
 
 def _round_to_ndig(x):
+    if x == 0:
+        return x
     log = np.floor(np.log10(abs(x)))
     rounded = round(x, -int(log) + RESULTS_NDIGITS - 1)
-    return str(rounded)
+    return rounded
 
 
 def _format_number(x):
