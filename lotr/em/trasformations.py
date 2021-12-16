@@ -1,4 +1,5 @@
 import numpy as np
+from lotr.data_preprocessing.anatomy import transform_points
 
 # Old, manually found matrix:
 em_2_mpinref = np.array(
@@ -43,22 +44,17 @@ em_2_ipnref = (
     )
 )
 
+ipn_to_mpin = np.eye(4)
+ipn_to_mpin[:-1, 3] = [410, 100, 200]
 
-def trasform_pts(pts, mat):
-    """Transform array of points using a 4x4 transformation matrix,
-    adding 1 column for the offset.
-    """
 
-    pts = np.array(pts)
-    if len(pts.shape) == 1:
-        pts = pts[np.newaxis, :]
-    pts = np.insert(pts, pts.shape[1], np.ones(pts.shape[0]), axis=1)
-    return (mat @ pts.T).T[:, :3]
+def em2mpinreforiginal(pts):
+    return transform_points(pts, em_2_mpinref)
 
 
 def em2mpinref(pts):
-    return trasform_pts(pts, em_2_mpinref)
+    return transform_points(pts, ipn_to_mpin @ em_2_ipnref)
 
 
 def em2ipnref(pts):
-    return trasform_pts(pts, em_2_ipnref)
+    return transform_points(pts, em_2_ipnref)
