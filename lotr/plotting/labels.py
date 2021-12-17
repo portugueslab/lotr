@@ -87,7 +87,7 @@ def get_pval_stars(test_result):
         test_result = test_result.pvalue
 
     if test_result <= 0.0001:
-        return "***"
+        return "****"
     if test_result <= 0.001:
         return "***"
     elif test_result <= 0.01:
