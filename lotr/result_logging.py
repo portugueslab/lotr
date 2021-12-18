@@ -36,11 +36,15 @@ class ResultsLogger:
 
         self.log_filename = log_filename
 
-        self.create_reslog_file()
+        if self.log_filename.exists():
+            configprs = self.get_config_parser()
+            # TODO maybe there's a smarter way:
+            dataset_raw_read = configprs["log_info"]["dataset"]
+            self.dataset = dataset_raw_read.split("'")[1::2]
+        else:
+            self.dataset = [d.name for d in dataset_folders]
 
-    @property
-    def dataset(self):
-        return set([d.name for d in dataset_folders])
+        self.create_reslog_file()
 
     def get_config_parser(self):
         configparser_obj = configparser.ConfigParser()
@@ -48,17 +52,18 @@ class ResultsLogger:
         return configparser_obj
 
     def create_reslog_file(self):
-        config = configparser.ConfigParser()
-        config["log_info"] = {
-            "created": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "dataset": self.dataset,
-        }
         if not self.log_filename.exists():
+            config = configparser.ConfigParser()
+            config["log_info"] = {
+                "created": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "dataset": self.dataset,
+            }
+
             with open(self.log_filename, "w") as configfile:
                 config.write(configfile)
 
     def check_dataset_consistency(self, dataset_to_check):
-        return all([d in self.dataset for d in dataset_to_check])
+        assert all([d in self.dataset for d in dataset_to_check])
 
     def add_entry(self, name, values, fids, units="", moment="mean", n_items=None):
         # Check number of values match number of fish
@@ -76,6 +81,9 @@ class ResultsLogger:
         elif moment == "median":
             value = np.median(values)
             interval = np.percentile(values, [25, 75])
+        elif moment == "minmax":
+            value = np.median(values)
+            interval = (np.min(values), np.max(values))
         else:
             raise ValueError(f"Invalid moment specified: {moment}")
 

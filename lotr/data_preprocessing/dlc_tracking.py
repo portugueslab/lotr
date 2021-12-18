@@ -81,7 +81,7 @@ def export_dlc_behavior(dlc_file_dir, tail_lh_thr=0.8, medfilt_wnd_s=0.8):
     )
 
     # Get time array syncing it with the behavior log:
-    data_dict["t"] = stytra_time_arr[-data_dict["tail_sum"].shape[0] :]
+    data_dict["t"] = stytra_time_arr[data_dict["tail_sum"].shape[0] :]
 
     # Wrap together data and put it in dataframe with columns:
     data_df = pd.DataFrame(data_dict)
