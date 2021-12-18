@@ -70,6 +70,7 @@ class ResultsLogger:
         assert len(values) == len(fids)
         if type(fids[0]) is not str:
             fids = [f.name for f in fids]
+        fids = list(fids)
 
         self.check_dataset_consistency(fids)
         if set(fids) == self.dataset:
