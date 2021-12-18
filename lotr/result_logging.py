@@ -42,7 +42,7 @@ class ResultsLogger:
             dataset_raw_read = configprs["log_info"]["dataset"]
             self.dataset = dataset_raw_read.split("'")[1::2]
         else:
-            self.dataset = [d.name for d in dataset_folders]
+            self.dataset = set([d.name for d in dataset_folders])
 
         self.create_reslog_file()
 
