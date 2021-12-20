@@ -10,7 +10,7 @@ from lotr.em.tracing_tree import (
 )
 
 from .skeleton_mesh import make_cylinder_tree, make_full_neuron
-from .trasformations import em2ipnref, em2mpinref
+from .transformations import em2ipnref, em2mpinref
 
 
 def _find_comment_idx(pts_df, key):

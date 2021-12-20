@@ -225,3 +225,27 @@ def nan_phase_jumps(phase_arr):
     nanned_phase[1:][np.abs(np.diff(nanned_phase)) > np.pi] = np.nan
 
     return nanned_phase
+
+@njit
+def circ_corr(th, ph):
+    """Circular correlation coefficient between arrays.
+    Definition after Fisher&Lee, Biometrika 1983.
+
+    Parameters
+    ----------
+    th : np.array
+        1D array.
+    ph : np.array
+        Second array, mush have same length of th.
+
+    Returns
+    -------
+    float
+        Fisher-Lee circular correlation coefficient.
+
+    """
+    n = len(th)
+    num = sum([sum([np.sin(th[i] - th[j]) * np.sin(ph[i] - ph[j]) for i in range(j)]) for j in range(n)])
+    den1 = sum([sum([np.sin(th[i] - th[j])**2 for i in range(j)]) for j in range(n)]) ** (1/2)
+    den2 = sum([sum([np.sin(ph[i] - ph[j])**2 for i in range(j)]) for j in range(n)]) ** (1/2)
+    return num / (den1 * den2)
