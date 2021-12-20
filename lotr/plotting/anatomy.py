@@ -23,9 +23,11 @@ class AtlasPlotter:
         self.atlas = atlas
         self.space = self.atlas.space
 
-        self.mask_slices = {k: (slice(None, None),) * 3 for k in self.space.sections}
-        if mask_slices is not None:
-            self.mask_slices.update(mask_slices)
+        self.mask_slices = {k: [slice(None, None),] * 3 for k in self.space.sections}
+        for i, k in enumerate(self.space.sections):
+            if k in mask_slices.keys():
+                self.mask_slices[k][i] = mask_slices[k]
+            self.mask_slices[k] = tuple(self.mask_slices[k])
 
         if structures is None:
             structures = [k for k in self.atlas.structures.keys()]

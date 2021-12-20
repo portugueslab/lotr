@@ -408,3 +408,7 @@ class LotrExperiment(EmbeddedExperiment):
         full_val_arr = np.full(self.n_rois, np.nan)
         full_val_arr[indexes] = values
         return color_stack(self.rois_stack, variable=full_val_arr, **kwargs)
+
+    @property
+    def exp_code(self):
+        return "f" + str(hash(self.root.name))[-5:]

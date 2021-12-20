@@ -227,7 +227,7 @@ def nan_phase_jumps(phase_arr):
     return nanned_phase
 
 @njit
-def circ_corr(th, ph):
+def circular_corr(th, ph):
     """Circular correlation coefficient between arrays.
     Definition after Fisher&Lee, Biometrika 1983.
 
