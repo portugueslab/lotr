@@ -2,6 +2,8 @@ from matplotlib import  pyplot as plt
 import flammkuchen as fl
 from matplotlib.animation import FuncAnimation
 from tqdm import tqdm
+from lotr import LotrExperiment
+from lotr.plotting import COLS
 
 import seaborn as sns
 sns.set(style="ticks", palette="deep")
@@ -14,6 +16,7 @@ plt.rcParams['font.sans-serif'] = ['Libertinus Sans']
 import numpy as np
 from lotr.plotting.stack_coloring import _fill_roi_stack
 from lotr import A_FISH
+
 
 def make_proj(roi_stack, traces, idxs, i):
     n_cells = traces.shape[1]
@@ -28,9 +31,17 @@ def make_proj(roi_stack, traces, idxs, i):
 #                      fictive_trajectory_and_fit, fit_phase_neurons
 
 
-FILENAMES=['raw_all_movie.mp4', 'raw_selected_movie.mp4']
+FILENAMES = ['raw_all_movie.mp4', 'raw_selected_movie_new.mp4']
 FN = 5
 master_path = A_FISH.parent
+exp = LotrExperiment(A_FISH)
+
+arr = np.zeros(exp.n_rois, dtype=np.int) - 1
+arr[exp.hdn_indexes] = 1
+
+rois = exp.rois_stack
+ring_rois = exp.color_rois_by(arr, color_scheme={1: COLS["ring"]}, categorical=True)
+proj = ring_rois.mean(0)
 
 # 13 excluded
 for path in tqdm(list(master_path.glob("*_f*"))):
@@ -52,6 +63,8 @@ for path in tqdm(list(master_path.glob("*_f*"))):
                                  selected, 0).T,
                                origin="lower",
                                cmap="gray", vmin=-0.5, vmax=0.3)
+        ax.contour(proj[:, :, 0] > 0, levels=1, colors=[COLS["ring"]], linewidths=1)
+
         tx = ax.text(70, 10, f"{0 / 5:3.0f} s", ha="right", c="w")
         actors = (im, tx)
 
