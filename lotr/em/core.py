@@ -78,7 +78,7 @@ class EmNeuron:
             all=self.edges, dendrites=self.dendrites_edges, axon=self.axon_edges
         )
 
-        self.mirror_right = False
+        self.mirror = False
 
     # @property
     # def side(self):
@@ -102,14 +102,13 @@ class EmNeuron:
         if self._coords_ipn is None:
             self._coords_ipn = em2ipnref(self.coords_em)
 
-        out_coords = self._coords_ipn
+        out_coords = self._coords_ipn.copy()
         m = MIDLINES["ipn"]
-        if (
-            (self.soma_idx is not None)
-            and (out_coords[self.soma_idx, 2] > 115)
-            and self.mirror_right
-        ):
+        if (self.soma_idx is not None) and (out_coords[self.soma_idx, 2] > 115) and (self.mirror == "right"):
             out_coords[:, 2] = m - (out_coords[:, 2] - m)
+        elif self.soma_idx is not None and (out_coords[self.soma_idx, 2] < 115) and (self.mirror == "left"):
+            out_coords[:, 2] = m + (m - out_coords[:, 2])
+
         return out_coords
 
     @property
