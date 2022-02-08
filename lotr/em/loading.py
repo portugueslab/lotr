@@ -16,6 +16,11 @@ def neuron_from_xml(path):
     return neuron
 
 
+def load_skeletons_dict_from_zip(path):
+    segments = load_skeletons_from_zip(path)
+    return {s.id: s for s in segments}
+
+
 def load_skeletons_from_zip(path, with_axon_only=False):
     content_name = "annotation.xml"
     with ZipFile(path, "r") as zip_obj:
