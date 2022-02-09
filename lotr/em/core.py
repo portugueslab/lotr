@@ -104,9 +104,17 @@ class EmNeuron:
 
         out_coords = self._coords_ipn.copy()
         m = MIDLINES["ipn"]
-        if (self.soma_idx is not None) and (out_coords[self.soma_idx, 2] > 115) and (self.mirror == "right"):
+        if (
+            (self.soma_idx is not None)
+            and (out_coords[self.soma_idx, 2] > 115)
+            and (self.mirror == "right")
+        ):
             out_coords[:, 2] = m - (out_coords[:, 2] - m)
-        elif self.soma_idx is not None and (out_coords[self.soma_idx, 2] < 115) and (self.mirror == "left"):
+        elif (
+            self.soma_idx is not None
+            and (out_coords[self.soma_idx, 2] < 115)
+            and (self.mirror == "left")
+        ):
             out_coords[:, 2] = m + (m - out_coords[:, 2])
 
         return out_coords

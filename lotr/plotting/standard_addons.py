@@ -19,6 +19,7 @@ def add_anatomy_scalebar(
     equalize_axis=True,
     spacing_coef=0.06,
     cartesian=False,
+    switchlabels=False,
 ):
     """"""
 
@@ -37,18 +38,28 @@ def add_anatomy_scalebar(
     xlen, ylen = length, length
     if cartesian:
         ylen = -ylen
+        labels_dict = dict(
+            horizontal=("ant.", "rt."),
+            sagittal=("post.", "dors."),
+            frontal=("dors.", "rt."),
+        )
+    else:
+        labels_dict = dict(
+            horizontal=("ant.", "rt."),
+            sagittal=("ant.", "dors."),
+            frontal=("dors.", "rt."),
+        )
     xpos, ypos = pos
 
     ax.plot([xpos, xpos, xpos + xlen], [ypos + ylen, ypos, ypos], **line_params_def)
 
-    labels_dict = dict(
-        horizontal=("ant.", "rt."), sagittal=("ant.", "dors."), frontal=("dors.", "rt.")
-    )
+    # invert labels if required:
+    labels = [labels_dict[plane][i] for i in (int(switchlabels), 1 - switchlabels)]
 
     ax.text(
         xpos - xlen * spacing_coef,
         ypos + ylen,
-        labels_dict[plane][0],
+        labels[0],
         ha="right",
         va="top",
         **text_params_def,
@@ -56,8 +67,8 @@ def add_anatomy_scalebar(
     ax.text(
         xpos + xlen,
         ypos + ylen * spacing_coef,
-        labels_dict[plane][1],
-        ha="right",
+        labels[1],
+        ha="center",
         va="bottom",
         **text_params_def,
     )

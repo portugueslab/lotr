@@ -39,7 +39,7 @@ def get_all_trials_df(exp):
             ("clol", "closed_loop"),
             ("2dvr", "seamless_image"),
             ("gainmod", "cl2d"),
-            ("cl", "cl2D")
+            ("cl", "cl2D"),
         ],
         natural_motion=[("clol", "open_loop"), ("natmov", "bg")],
         directional_motion=[("cwccw", "bg"), ("2dvr", "bg"), ("spont", "bg")],

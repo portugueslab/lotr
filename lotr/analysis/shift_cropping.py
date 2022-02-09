@@ -35,7 +35,7 @@ def crop_shifts_all_dataset(crop_stimulus=False):
     )
     for path in tqdm(dataset_folders):
         exp = LotrExperiment(path)
-        #TODO recompute to avoid this bugfix
+        # TODO recompute to avoid this bugfix
         exp.bouts_df["fid"] = path.name
 
         stim_interp = np.full(exp.n_pts, np.nan)

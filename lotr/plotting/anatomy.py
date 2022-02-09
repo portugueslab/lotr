@@ -3,6 +3,7 @@ from bg_atlasapi import BrainGlobeAtlas
 from matplotlib import pyplot as plt
 
 from lotr.plotting.general import despine, projection_contours
+from lotr.plotting.standard_addons import add_anatomy_scalebar
 
 
 class AtlasPlotter:
@@ -23,9 +24,15 @@ class AtlasPlotter:
         self.atlas = atlas
         self.space = self.atlas.space
 
-        self.mask_slices = {k: [slice(None, None),] * 3 for k in self.space.sections}
+        self.mask_slices = {
+            k: [
+                slice(None, None),
+            ]
+            * 3
+            for k in self.space.sections
+        }
         for i, k in enumerate(self.space.sections):
-            if k in mask_slices.keys():
+            if mask_slices is not None and k in mask_slices.keys():
                 self.mask_slices[k][i] = mask_slices[k]
             self.mask_slices[k] = tuple(self.mask_slices[k])
 
@@ -119,10 +126,41 @@ class AtlasPlotter:
         if title:
             ax.set_title(f"{projection} view")
 
+        if labels:
+            labels_txt = self.get_labels(projection)
+            s = 10
+            s_px = int(s / self.space.resolution[0])
+
+            o = 10
+            lw = 0.5
+            col = (0.3,) * 3
+            position = (bs[1][0] + o * 1.5, bs[0][1] - o)
+            add_anatomy_scalebar(
+                ax=ax,
+                length=s_px,
+                pos=position,
+                lw=lw,
+                c=col,
+                plane=projection,
+                cartesian=True,
+                switchlabels=1 - swtch,
+            )
+
+            """
+            ax.plot([bs[1][0] + o, bs[1][0] + s_px + o],
+                    [bs[0][1] - o, bs[0][1] - o], linewidth=lw, c=col)
+            ax.plot([bs[1][0] + o, bs[1][0] + o],
+                    [bs[0][1] - o, bs[0][1] - s_px - o], linewidth=lw, c=col)
+            ax.text(bs[1][0] + o, bs[0][1] - s_px - o * 2, labels_txt[0],
+                    ha="center", va="bottom", fontsize=self.font_size, color=col)
+            ax.text(bs[1][0] + s_px + o * 2, bs[0][1] - o, labels_txt[1],
+                    ha="left", va="center", fontsize=self.font_size, color=col)
+            """
+
         ax.set_xlim((bs[1][0], bs[1][1]))
         ax.set_ylim((bs[0][1], bs[0][0]))
-        ax.set_aspect("equal")
-        despine(ax, "all")
+        # ax.set_aspect("equal")
+        # despine(ax, "all")
 
     def plot_neuron_projection(
         self,
@@ -198,6 +236,8 @@ class AtlasPlotter:
 
         if axs is None:
             f, axs = plt.subplots(1, 3, figsize=figsize)
+        else:
+            f = plt.gcf()
         for i, projection in enumerate(self.projections):
             self.plot_on_axis(axs[i], projection, edge=edge, labels=labels, title=title)
 
