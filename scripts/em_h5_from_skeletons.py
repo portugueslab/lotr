@@ -6,8 +6,6 @@ from lotr import DATASET_LOCATION
 data_folder = DATASET_LOCATION.parent / "anatomy" / "annotated_traced_neurons"
 
 files = list([f for f in data_folder.glob("*.zip") if "synapses" not in f.name])
-for f in files:
-    print(f)
 
 # Make sure we don't have spurious annotations
 assert len(files) == 6

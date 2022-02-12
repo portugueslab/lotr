@@ -23,7 +23,7 @@ def _find_comment_idx(pts_df, key):
         return
 
 
-MIDLINES = dict(ipn=109)
+MIDLINES = dict(ipn=109, mpin=284)
 
 
 class EmNeuron:
@@ -119,17 +119,26 @@ class EmNeuron:
 
         return out_coords
 
-    @property
-    def coords_unilat(self):
-        MIDLINE = 284
+    def _get_coords_unilat(self, coords, midline):
         # Find dendrites centroid, and flip cell if on left side of midline
-        centroid = np.median(self.coords_mpin[self.dendr_idxs, :], 0)
-        if centroid[2] > MIDLINE:
-            return self.coords_mpin
+        if self.is_axon:
+            centroid = np.median(coords[self.axon_idxs, :], 0)
         else:
-            new_coords = self.coords_mpin.copy()
-            new_coords[:, 2] = MIDLINE - (new_coords[:, 2] - MIDLINE)
+            centroid = np.median(coords[self.dendr_idxs, :], 0)
+        if centroid[2] > midline:
+            return coords
+        else:
+            new_coords = coords.copy()
+            new_coords[:, 2] = midline - (new_coords[:, 2] - midline)
             return new_coords
+
+    @property
+    def coords_unilat_mpin(self):
+        return self._get_coords_unilat(self.coords_mpin, MIDLINES["mpin"])
+
+    @property
+    def coords_unilat_ipn(self):
+        return self._get_coords_unilat(self.coords_ipn, MIDLINES["ipn"])
 
     @property
     def has_axon(self):
@@ -187,9 +196,12 @@ class EmNeuron:
     ):
         N_SECTIONS = 7
         SOMA_SUBDIVS = 4
+
+        coords = self.get_coords(space).copy()
+        coords[:, 2] = -coords[:, 2]
         if not self.is_axon:
             return make_full_neuron(
-                self.get_coords(space),
+                coords,
                 self.soma_idx,
                 self.dendrites_edges,
                 self.axon_edges,
@@ -201,7 +213,7 @@ class EmNeuron:
             )
         else:
             return make_cylinder_tree(
-                self.get_coords(space),
+                coords,
                 self.axon_edges,
                 n_sections=N_SECTIONS,
                 radius=axon_radius,
