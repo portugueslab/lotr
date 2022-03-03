@@ -127,7 +127,6 @@ class AtlasPlotter:
             ax.set_title(f"{projection} view")
 
         if labels:
-            labels_txt = self.get_labels(projection)
             s = 10
             s_px = int(s / self.space.resolution[0])
 
@@ -145,6 +144,9 @@ class AtlasPlotter:
                 cartesian=True,
                 switchlabels=1 - swtch,
             )
+        else:
+            ax.axis("equal")
+            ax.axis("off")
 
             """
             ax.plot([bs[1][0] + o, bs[1][0] + s_px + o],

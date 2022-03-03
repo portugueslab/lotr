@@ -119,6 +119,17 @@ class EmNeuron:
 
         return out_coords
 
+    @property
+    def is_left(self):
+        # This is duplicated with the soma side finding and "mirror" attribute.
+        # Horrible but I don't want to break notebooks now.
+        if self.is_axon:
+            centroid = np.median(self.coords_ipn[self.axon_idxs, :], 0)
+        else:
+            centroid = np.median(self.coords_ipn[self.dendr_idxs, :], 0)
+
+        return centroid[2] > MIDLINES["ipn"]
+
     def _get_coords_unilat(self, coords, midline):
         # Find dendrites centroid, and flip cell if on left side of midline
         if self.is_axon:
