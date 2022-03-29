@@ -171,6 +171,7 @@ class AtlasPlotter:
         projection,
         select="all",
         soma_s=30,
+        mirrored=False,
         slice_sel=None,
         **kwargs,
     ):

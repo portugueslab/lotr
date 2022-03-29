@@ -80,12 +80,12 @@ class EmNeuron:
 
         self.mirror = False
 
-    # @property
-    # def side(self):
-    #    if self.coords_ipn[self.soma_idx, :] > 65:
-    #        return "l"
-    #    else:
-    #        return "r"
+    @property
+    def side(self):
+       if self.coords_ipn[self.soma_idx, :] > MIDLINES["ipn"]:
+           return "l"
+       else:
+           return "r"
 
     @property
     def is_axon(self):
@@ -230,7 +230,7 @@ class EmNeuron:
                 radius=axon_radius,
             )
 
-    def generate_plotlines_from_skeleton(self, select="all", space="ipn"):
+    def generate_plotlines_from_skeleton(self, select="all", space="ipn", mirror=False):
 
         return _plotlines_from_skeleton(self.get_coords(space), self.edges_dict[select])
 

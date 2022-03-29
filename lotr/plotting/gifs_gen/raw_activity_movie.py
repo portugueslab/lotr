@@ -4,6 +4,7 @@ from matplotlib.animation import FuncAnimation
 from tqdm import tqdm
 from lotr import LotrExperiment
 from lotr.plotting import COLS
+from lotr.plotting.gifs_gen.gif_utils import make_proj
 
 import seaborn as sns
 
@@ -18,14 +19,6 @@ import numpy as np
 from lotr.plotting.stack_coloring import _fill_roi_stack
 from lotr import A_FISH
 
-
-def make_proj(roi_stack, traces, idxs, i):
-    n_cells = traces.shape[1]
-    filling = np.zeros((n_cells, 1))
-    filling[idxs, 0] = traces[i, idxs]
-    filled = _fill_roi_stack(roi_stack, filling, background=np.array([[0]]))[:, :, :, 0]
-
-    return filled.mean(0)
 
 
 # from motions.imaging.pca import zscore, preprocess_traces, pca_and_phase, \
