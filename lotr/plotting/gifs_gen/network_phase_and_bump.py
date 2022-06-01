@@ -46,9 +46,9 @@ def network_phase_animation(dest=None, frames=None):
     # Figure
     # ------
     # Prepare figure globals:
-    fig, axs = plt.subplots(1, 2, figsize=(6, 3))
-    ax = axs[0]
-    ax_bump = axs[1]
+    fig, axs = plt.subplots(2, 1, figsize=(3, 6))
+    ax = axs[1]
+    ax_bump = axs[0]
 
     # Scatter plot:
     activity_sc = ax.scatter(-pca_scores_t[:, 0], pca_scores_t[:, 1], lw=0)
@@ -111,11 +111,11 @@ def network_phase_animation(dest=None, frames=None):
         im.set_zorder(-1000)
         # cbar.outline.set_visible(False)
 
-        ax.set_xticks([])
-        ax.set_yticks([])
-        ax.set_xlabel("left - right")
-        ax.set_ylabel("posterior - anterior")
-        despine(ax, "all")
+        #ax_bump.set_xticks([])
+        #ax_bump.set_yticks([])
+        ax_bump.set_xlabel("left - right")
+        ax_bump.set_ylabel("posterior - anterior")
+        despine(ax_bump, "all")
 
         add_cbar(
             activity_sc,

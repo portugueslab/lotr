@@ -5,17 +5,20 @@ from lotr.data_preprocessing.preprocessing import preprocess_folder
 if __name__ == "__main__":
     from pathlib import Path
 
-    data_path = Path(r"/Users/luigipetrucco/Desktop/210611_f1")
+    data_path = Path(r"/Volumes/Shared/experiments/E0040_motions_cardinal/v26")
     paths = [f.parent for f in data_path.glob("*/*meta*")]
 
     all_errors = []
     for path in tqdm(paths):
-        preprocess_folder(
+        try:
+            preprocess_folder(
             path,
-            recompute_bout_df=True,
-            recompute_regressors=True,
+            recompute_bout_df=False,
+            recompute_regressors=False,
             recompute_filtering=True,
-        )
+            )
+        except IndexError:
+            print("indexerror", path)
         # print("Problems with path ", path)
         # all_errors.append(str(path))
 
