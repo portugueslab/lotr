@@ -1,7 +1,7 @@
 # LOTR project analysis
 [![tests](https://github.com/portugueslab/lotr/actions/workflows/main.yml/badge.svg)](https://github.com/portugueslab/lotr/actions/workflows/main.yml)
 
-Analysis of the anterior hindbrain motion integration ring attractor.
+Analysis of the anterior hindbrain motion integration ring attractor. Code is developed and tested in a `python==3.8.8` environment.
 
 ### Installation with notebook clean hook
 
