@@ -23,7 +23,13 @@ class AtlasPlotter:
         self.atlas = atlas
         self.space = self.atlas.space
 
-        self.mask_slices = {k: [slice(None, None),] * 3 for k in self.space.sections}
+        self.mask_slices = {
+            k: [
+                slice(None, None),
+            ]
+            * 3
+            for k in self.space.sections
+        }
         for i, k in enumerate(self.space.sections):
             if k in mask_slices.keys():
                 self.mask_slices[k][i] = mask_slices[k]

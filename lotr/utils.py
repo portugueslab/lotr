@@ -226,6 +226,7 @@ def nan_phase_jumps(phase_arr):
 
     return nanned_phase
 
+
 @njit
 def circular_corr(th, ph):
     """Circular correlation coefficient between arrays.
@@ -245,7 +246,16 @@ def circular_corr(th, ph):
 
     """
     n = len(th)
-    num = sum([sum([np.sin(th[i] - th[j]) * np.sin(ph[i] - ph[j]) for i in range(j)]) for j in range(n)])
-    den1 = sum([sum([np.sin(th[i] - th[j])**2 for i in range(j)]) for j in range(n)]) ** (1/2)
-    den2 = sum([sum([np.sin(ph[i] - ph[j])**2 for i in range(j)]) for j in range(n)]) ** (1/2)
+    num = sum(
+        [
+            sum([np.sin(th[i] - th[j]) * np.sin(ph[i] - ph[j]) for i in range(j)])
+            for j in range(n)
+        ]
+    )
+    den1 = sum(
+        [sum([np.sin(th[i] - th[j]) ** 2 for i in range(j)]) for j in range(n)]
+    ) ** (1 / 2)
+    den2 = sum(
+        [sum([np.sin(ph[i] - ph[j]) ** 2 for i in range(j)]) for j in range(n)]
+    ) ** (1 / 2)
     return num / (den1 * den2)

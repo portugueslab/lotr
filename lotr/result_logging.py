@@ -1,17 +1,16 @@
 import configparser
 from datetime import datetime
+
 import numpy as np
+from scipy.stats import ranksums, ttest_ind, ttest_rel, wilcoxon
 
 from lotr import dataset_folders
 from lotr.default_vals import RESULTS_LOG_FILE, RESULTS_NDIGITS
 from lotr.file_utils import get_figures_location
 
-from scipy.stats import ttest_ind, ttest_rel, wilcoxon, ranksums
-
-test_dict = dict(ttest_ind=ttest_ind,
-                         ttest_rel=ttest_rel,
-                         wilcoxon=wilcoxon,
-                         ranksums=ranksums)
+test_dict = dict(
+    ttest_ind=ttest_ind, ttest_rel=ttest_rel, wilcoxon=wilcoxon, ranksums=ranksums
+)
 
 
 def _round_to_ndig(x):

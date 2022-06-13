@@ -1,37 +1,39 @@
-from matplotlib import  pyplot as plt
 import flammkuchen as fl
+import seaborn as sns
+from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
 from tqdm import tqdm
+
 from lotr import LotrExperiment
 from lotr.plotting import COLS
 
-import seaborn as sns
+import numpy as np
+
+from lotr import A_FISH
+from lotr.plotting.stack_coloring import _fill_roi_stack
+
 sns.set(style="ticks", palette="deep")
 cols = sns.color_palette()
 
-plt.rcParams['figure.constrained_layout.use'] = True
-plt.rcParams['font.family'] = 'sans-serif'
-plt.rcParams['font.sans-serif'] = ['Libertinus Sans']
-
-import numpy as np
-from lotr.plotting.stack_coloring import _fill_roi_stack
-from lotr import A_FISH
+plt.rcParams["figure.constrained_layout.use"] = True
+plt.rcParams["font.family"] = "sans-serif"
+plt.rcParams["font.sans-serif"] = ["Libertinus Sans"]
 
 
 def make_proj(roi_stack, traces, idxs, i):
     n_cells = traces.shape[1]
     filling = np.zeros((n_cells, 1))
     filling[idxs, 0] = traces[i, idxs]
-    filled = _fill_roi_stack(roi_stack, filling,
-                              background=np.array([[0]]))[:, :, :, 0]
+    filled = _fill_roi_stack(roi_stack, filling, background=np.array([[0]]))[:, :, :, 0]
 
     return filled.mean(0)
+
 
 # from motions.imaging.pca import zscore, preprocess_traces, pca_and_phase, \
 #                      fictive_trajectory_and_fit, fit_phase_neurons
 
 
-FILENAMES = ['raw_all_movie.mp4', 'raw_selected_movie_new.mp4']
+FILENAMES = ["raw_all_movie.mp4", "raw_selected_movie_new.mp4"]
 FN = 5
 master_path = A_FISH.parent
 exp = LotrExperiment(A_FISH)
@@ -53,16 +55,19 @@ for path in tqdm(list(master_path.glob("*_f*"))):
     n_pts, n_cells = traces.shape
 
     for i, selected in enumerate([np.arange(n_cells), fl.load(path / "selected.h5")]):
-        n_sel, = selected.shape
+        (n_sel,) = selected.shape
 
         fig = plt.figure(figsize=(4, 4))
         ax = fig.add_axes((0.1, 0.1, 0.8, 0.8))
         col = fig.add_axes((0.9, 0.4, 0.015, 0.15))
 
-        im = ax.imshow(make_proj(rois_stack, traces,
-                                 selected, 0).T,
-                               origin="lower",
-                               cmap="gray", vmin=-0.5, vmax=0.3)
+        im = ax.imshow(
+            make_proj(rois_stack, traces, selected, 0).T,
+            origin="lower",
+            cmap="gray",
+            vmin=-0.5,
+            vmax=0.3,
+        )
         ax.contour(proj[:, :, 0] > 0, levels=1, colors=[COLS["ring"]], linewidths=1)
 
         tx = ax.text(70, 10, f"{0 / 5:3.0f} s", ha="right", c="w")
@@ -70,7 +75,6 @@ for path in tqdm(list(master_path.glob("*_f*"))):
 
         cbar = plt.colorbar(im, cax=col, label="norm. dF")
         cbar.set_ticks([])
-
 
         def init():
             im.set_clim(-0.2, 0.5)
@@ -81,21 +85,26 @@ for path in tqdm(list(master_path.glob("*_f*"))):
             ax.set_yticks([])
             ax.set_xlabel("left - right")
             ax.set_ylabel("posterior - anterior")
-            [ax.axes.spines[s].set_visible(False) for s in
-             ["left", "right", "top", "bottom"]]
+            [
+                ax.axes.spines[s].set_visible(False)
+                for s in ["left", "right", "top", "bottom"]
+            ]
             # sns.despine(trim=True)
             return actors
-
 
         def update(frame):
             tx.set_text(f"{frame / 5:3.0f} s")
             im.set_data(make_proj(rois_stack, traces, selected, frame).T)
             return actors
 
-
-        ani = FuncAnimation(fig, update, frames=np.arange(0, n_pts, 10),
-                            interval=50,
-                            init_func=init, blit=True)
+        ani = FuncAnimation(
+            fig,
+            update,
+            frames=np.arange(0, n_pts, 10),
+            interval=50,
+            init_func=init,
+            blit=True,
+        )
         # plt.show()
         ani.save(path / FILENAMES[i])
 
