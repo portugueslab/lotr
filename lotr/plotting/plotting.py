@@ -24,6 +24,7 @@ def plot_arrow(seg, ax=None, col="b", alpha=1, s=10, lw=1):
     )
 
 
+
 def boxplot(data, cols=None, ax=None, widths=0.6, ec=(0.3,) * 3, vertical=True):
     """Plot a cleaned-up boxplot for data list.
 

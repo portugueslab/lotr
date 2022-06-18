@@ -259,3 +259,4 @@ def circular_corr(th, ph):
         [sum([np.sin(ph[i] - ph[j]) ** 2 for i in range(j)]) for j in range(n)]
     ) ** (1 / 2)
     return num / (den1 * den2)
+
