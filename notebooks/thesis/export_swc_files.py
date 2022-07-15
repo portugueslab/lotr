@@ -14,16 +14,17 @@ from motions.em.skeleton_mesh import make_full_neuron
 from tqdm import tqdm
 import os
 
-def insert(originalfile,string):
-    with open(originalfile,'r') as f:
-        with open('newfile.txt','w') as f2:
+
+def insert(originalfile, string):
+    with open(originalfile, "r") as f:
+        with open("newfile.txt", "w") as f2:
             f2.write(string)
             f2.write(f.read())
-    os.rename('newfile.txt',originalfile)
+    os.rename("newfile.txt", originalfile)
+
 
 def find_link_to_soma(soma_node):
-    """Function to find last node linking soma and axon nodes.
-    """
+    """Function to find last node linking soma and axon nodes."""
 
     tovisit = deque()
     tovisit.append(soma_node)
@@ -46,8 +47,7 @@ def find_link_to_soma(soma_node):
 
 
 def label_axon_inplace(axon_node, soma_node):
-    """Label as axons all segments linked to axon and away from soma.
-    """
+    """Label as axons all segments linked to axon and away from soma."""
     link_to_soma_node = find_link_to_soma(soma_node)
     queue = deque()
     queue.append(axon_node)
@@ -75,11 +75,14 @@ def rebase_df(df):
 
     return rebased
 
+
 master_folder = DATASET_LOCATION.parent / "anatomy" / "swc_neurons"
 data_folder = master_folder.parent / "annotated_traced_neurons"
 data_folder.exists()
 for f in list(data_folder.glob("*.nml")):
-    print(f.name,)
+    print(
+        f.name,
+    )
 
 # Create target folder
 swc_em_dest_folder = master_folder / "swc_emspace"
@@ -92,10 +95,12 @@ for f in list(data_folder.glob("*.nml")):
 
     skeletons = []
 
-    for annotation in (list(iter(skeleton.annotations))):
+    for annotation in list(iter(skeleton.annotations)):
 
         # Sort out cases where we are reconstructing an axon:
-        is_axon = ("axon" in annotation.getComment() or "habaxon" in f.name) and ("all_somas" not in f.name)
+        is_axon = ("axon" in annotation.getComment() or "habaxon" in f.name) and (
+            "all_somas" not in f.name
+        )
         print(annotation.getComment(), ["not an axon", "is axon"][is_axon])
 
         # Split large combined annotation into annotations of individual neurons:
@@ -113,39 +118,46 @@ for f in list(data_folder.glob("*.nml")):
             print("placing soma")
             soma_node = None
             for node in list(new_skeleton.getNodes()):
-                if 'soma' in node.getComment().lower():
+                if "soma" in node.getComment().lower():
                     node.setPureComment("soma")
                     node.setRoot()
-                if 'seed' in node.getComment().lower():
+                if "seed" in node.getComment().lower():
                     node.setRoot()
                     node.setPureComment("soma")
                     soma_node = node
 
             try:
-                axon_node = [n for n in new_skeleton.getNodes() if
-                             'axon' in n.getComment().lower()][0]
-                label_axon_inplace(axon_node, [n for n in new_skeleton.getNodes()
-                                               if "soma" in n.getComment()][0])
+                axon_node = [
+                    n
+                    for n in new_skeleton.getNodes()
+                    if "axon" in n.getComment().lower()
+                ][0]
+                label_axon_inplace(
+                    axon_node,
+                    [n for n in new_skeleton.getNodes() if "soma" in n.getComment()][0],
+                )
 
-                [n.setPureComment("dendrite") for n in new_skeleton.getNodes()
-                 if
-                 'soma' not in n.getComment().lower() and 'axon' not in n.getComment().lower()]
+                [
+                    n.setPureComment("dendrite")
+                    for n in new_skeleton.getNodes()
+                    if "soma" not in n.getComment().lower()
+                    and "axon" not in n.getComment().lower()
+                ]
 
             except IndexError:
                 print("No axon found")
                 pass
 
         new_skeleton.reset_all_ids()
-        new_skeleton.toSWC(f"cell_{id_cell}",
-                           dest_folder=str(swc_em_dest_folder), px=True)
+        new_skeleton.toSWC(
+            f"cell_{id_cell}", dest_folder=str(swc_em_dest_folder), px=True
+        )
 
         fname = swc_em_dest_folder / f"cell_{id_cell}.swc"
-        df = pd.read_csv(fname, delimiter=" ",
-                         header=None)
+        df = pd.read_csv(fname, delimiter=" ", header=None)
         df = df.drop_duplicates()
 
-        df.to_csv(fname, sep=" ",
-                  header=False, index=False)
+        df.to_csv(fname, sep=" ", header=False, index=False)
 
 
 swc_ipn_dest_folder = master_folder / "swc_ipnspace"

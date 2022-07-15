@@ -82,10 +82,10 @@ class EmNeuron:
 
     @property
     def side(self):
-       if self.coords_ipn[self.soma_idx, :] > MIDLINES["ipn"]:
-           return "l"
-       else:
-           return "r"
+        if self.coords_ipn[self.soma_idx, :] > MIDLINES["ipn"]:
+            return "l"
+        else:
+            return "r"
 
     @property
     def is_axon(self):

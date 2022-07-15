@@ -20,7 +20,6 @@ from lotr.plotting.stack_coloring import _fill_roi_stack
 from lotr import A_FISH
 
 
-
 # from motions.imaging.pca import zscore, preprocess_traces, pca_and_phase, \
 #                      fictive_trajectory_and_fit, fit_phase_neurons
 

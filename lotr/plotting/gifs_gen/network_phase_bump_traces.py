@@ -12,7 +12,6 @@ from lotr.utils import get_vect_angle
 from lotr.plotting.gifs_gen.gif_utils import make_proj
 
 
-
 def network_phase_animation(dest=None, frames=None):
     if frames is None:
         frames = list(range(0, 4000, 5))
@@ -46,7 +45,9 @@ def network_phase_animation(dest=None, frames=None):
     # Figure
     # ------
     # Prepare figure globals:
-    fig, axs = plt.subplots(1, 3, figsize=(8, 3), gridspec_kw=dict(width_ratios=[.6, .6, 1]))
+    fig, axs = plt.subplots(
+        1, 3, figsize=(8, 3), gridspec_kw=dict(width_ratios=[0.6, 0.6, 1])
+    )
     ax = axs[0]
     ax_bump = axs[1]
     ax_traces = axs[2]
@@ -82,7 +83,6 @@ def network_phase_animation(dest=None, frames=None):
     leg = ax.legend(fontsize=8, frameon=False, bbox_to_anchor=(0.95, 1.1, 0.2, 0.04))
     _, leg_line = leg.get_lines()
 
-
     ## Raw bump
     selected = exp.hdn_indexes
     rois_stack = exp.rois_stack
@@ -98,16 +98,31 @@ def network_phase_animation(dest=None, frames=None):
 
     tx = ax.text(70, 10, f"{0 / 5:3.0f} s", ha="right", c="w")
 
-    sorted_traces = exp.traces[:frames[-1],exp.hdn_indexes][:frames[-1],
-                    np.argsort(exp.rpc_angles)]
+    sorted_traces = exp.traces[: frames[-1], exp.hdn_indexes][
+        : frames[-1], np.argsort(exp.rpc_angles)
+    ]
 
     traces_for_mat = np.full(sorted_traces.shape, np.nan)
-    img_traces = ax_traces.imshow(traces_for_mat.T, vmin=-1.5, vmax=1.5, cmap="gray",
-                                  aspect="auto", extent=[0, frames[-1]/exp.fs, -np.pi, np.pi])
-    plot_phase, = ax_traces.plot([], [], c=COLS["phase"])
+    img_traces = ax_traces.imshow(
+        traces_for_mat.T,
+        vmin=-1.5,
+        vmax=1.5,
+        cmap="gray",
+        aspect="auto",
+        extent=[0, frames[-1] / exp.fs, -np.pi, np.pi],
+    )
+    (plot_phase,) = ax_traces.plot([], [], c=COLS["phase"])
 
     # put together all actors:
-    actors = (activity_sc, tx, network_phase_plot, *weight_actors, leg_line, im, plot_phase)
+    actors = (
+        activity_sc,
+        tx,
+        network_phase_plot,
+        *weight_actors,
+        leg_line,
+        im,
+        plot_phase,
+    )
 
     def init():
         # For some mysterious reasons, some of those specifications need to happen

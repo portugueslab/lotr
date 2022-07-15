@@ -7,7 +7,7 @@ from pathlib import Path
 from lotr import A_FISH, LotrExperiment
 from lotr.file_utils import get_figures_location
 from lotr.pca import pca_and_phase
-from lotr.plotting import  add_scalebar, despine
+from lotr.plotting import add_scalebar, despine
 from lotr.rpca_calculation import get_zero_mean_weights
 from lotr.utils import convolve_with_tau
 
@@ -20,7 +20,11 @@ def rot_coords(contour, alpha):
         @ contour.T
     ).T
 
-contour = rot_coords(np.load(str(Path(__file__).parent.parent / "assets" / "fish_contour.npy")), np.pi/2)
+
+contour = rot_coords(
+    np.load(str(Path(__file__).parent.parent / "assets" / "fish_contour.npy")),
+    np.pi / 2,
+)
 contour[:, 0] *= -1
 contour[:, 0] -= 0.15
 
@@ -45,7 +49,9 @@ def network_phase_animation(dest=None, frames=None):
     norm_activity = get_zero_mean_weights(exp.traces[:, exp.hdn_indexes].T).T
     # avg_vects = np.einsum("ij,ik->jk", norm_activity.T, pca_scores_t[:, :2])
 
-    network_phase = convolve_with_tau(exp.fictive_heading, 5) # get_vect_angle(avg_vects.T)
+    network_phase = convolve_with_tau(
+        exp.fictive_heading, 5
+    )  # get_vect_angle(avg_vects.T)
 
     # Plot parameters
     # ---------------
@@ -74,13 +80,12 @@ def network_phase_animation(dest=None, frames=None):
         lw=netw_lw,
         label="virtual orientation",
         solid_capstyle="round",
-        zorder=-100
+        zorder=-100,
     )
 
     # Legend:
     leg = ax.legend(fontsize=8, frameon=False, bbox_to_anchor=(0.95, 1.1, 0.2, 0.04))
     # leg_line = leg.get_lines()
-
 
     ## Raw bump
     selected = exp.hdn_indexes
@@ -124,7 +129,9 @@ def network_phase_animation(dest=None, frames=None):
             [0, -np.cos(network_phase[frame]) * scale_mn],
             [0, np.sin(network_phase[frame]) * scale_mn],
         )
-        new_col = colmap(network_phase[frame] - network_phase[frame-1] + 0.5)  # get_default_phase_col(network_phase[frame])
+        new_col = colmap(
+            network_phase[frame] - network_phase[frame - 1] + 0.5
+        )  # get_default_phase_col(network_phase[frame])
         # for line in network_phase_plot, leg_line:
         network_phase_plot.set_color(new_col)
         im.set_data(make_proj(rois_stack, exp.traces, selected, frame))

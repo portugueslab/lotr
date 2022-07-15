@@ -11,8 +11,6 @@ from lotr.utils import get_vect_angle
 from lotr.plotting.gifs_gen.gif_utils import make_proj
 
 
-
-
 def network_phase_animation(dest=None, frames=None):
     if frames is None:
         frames = list(range(0, 4000, 5))
@@ -81,7 +79,6 @@ def network_phase_animation(dest=None, frames=None):
     leg = ax.legend(fontsize=8, frameon=False, bbox_to_anchor=(0.95, 1.1, 0.2, 0.04))
     _, leg_line = leg.get_lines()
 
-
     ## Raw bump
     selected = exp.hdn_indexes
     rois_stack = exp.rois_stack
@@ -111,8 +108,8 @@ def network_phase_animation(dest=None, frames=None):
         im.set_zorder(-1000)
         # cbar.outline.set_visible(False)
 
-        #ax_bump.set_xticks([])
-        #ax_bump.set_yticks([])
+        # ax_bump.set_xticks([])
+        # ax_bump.set_yticks([])
         ax_bump.set_xlabel("left - right")
         ax_bump.set_ylabel("posterior - anterior")
         despine(ax_bump, "all")

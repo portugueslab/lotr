@@ -13,6 +13,7 @@ def rot_coords(contour, alpha):
         @ contour.T
     ).T
 
+
 data_path = Path(
     "/Volumes/Shared/experiments/virtual_gradients_experiments/freely_swim_Ruben/data_for_movie.h5"
 )
@@ -33,26 +34,29 @@ coords = coords[s : s + d, :]
 angle = angle[s : s + d]
 
 size = 10
-arrow = np.array([(-0.5, -0.5), (0.5, -0.5), (0., 1.25), (-0.5, -0.5)]) * 20
+arrow = np.array([(-0.5, -0.5), (0.5, -0.5), (0.0, 1.25), (-0.5, -0.5)]) * 20
 space_coef = 10
 xlim = coords[:, 0].min() - size * space_coef, coords[:, 0].max() + size * space_coef
 ylim = coords[:, 1].min() - size * space_coef, coords[:, 1].max() + size * space_coef
 
 c = pltltr.shift_lum(pltltr.COLS["ph_plot"], -0.25)
+
+
 def network_phase_animation(dest=None, frames=None):
     frame = 0
     fig, ax = plt.subplots(
         1,
         2,
         figsize=(6, 2),
-        gridspec_kw=dict(wspace=0,  left=0, right=1, top=1, bottom=0, width_ratios=[2, 1]),
+        gridspec_kw=dict(
+            wspace=0, left=0, right=1, top=1, bottom=0, width_ratios=[2, 1]
+        ),
     )
 
     for a in ax:
         a.axis("off")
     arrow_pts = rot_coords(arrow, angle[frame]) + coords[frame, :]
-    fish_plot, = ax[0].fill(arrow_pts[:, 0], arrow_pts[:, 1], lw=0,
-                            fc=c)
+    (fish_plot,) = ax[0].fill(arrow_pts[:, 0], arrow_pts[:, 1], lw=0, fc=c)
     # ax[0].plot(coords[:, 0], coords[:, 1], lw=1)
 
     cell_angles = np.arange(-np.pi, np.pi, 2 * np.pi / 8)
@@ -68,9 +72,17 @@ def network_phase_animation(dest=None, frames=None):
         )
         ** 4
     )
-    cells_plot = ax[1].scatter(np.sin(cell_angles), np.cos(cell_angles),
-                               c=distances, s=300, cmap="gray_r", lw=0.5,
-                               ec="k", vmin=0, vmax=1.2)
+    cells_plot = ax[1].scatter(
+        np.sin(cell_angles),
+        np.cos(cell_angles),
+        c=distances,
+        s=300,
+        cmap="gray_r",
+        lw=0.5,
+        ec="k",
+        vmin=0,
+        vmax=1.2,
+    )
     for a in cell_angles:
         plt.arrow(
             np.sin(a),
@@ -85,7 +97,6 @@ def network_phase_animation(dest=None, frames=None):
 
     actors = (cells_plot, fish_plot)
 
-
     def init():
         # For some mysterious reasons, some of those specifications need to happen
         # in the init. Therefore, we put here a whole bunch of them:
@@ -95,7 +106,7 @@ def network_phase_animation(dest=None, frames=None):
         pltltr.add_cbar(
             cells_plot,
             ax[1],
-            (0., 0.1, 0.04, 0.2),
+            (0.0, 0.1, 0.04, 0.2),
             ticks=[],
             ticklabels=[],
             titlesize=8,
@@ -103,25 +114,23 @@ def network_phase_animation(dest=None, frames=None):
             orientation="vertical",
         )
 
-
         return actors
 
     def update(frame):
         distances = (
-                np.maximum(
-                    (
-                            np.cos(angle[frame]) * np.cos(cell_angles)
-                            + np.sin(angle[frame]) * np.sin(cell_angles)
-                    ),
-                    0,
-                )
-                ** 4
+            np.maximum(
+                (
+                    np.cos(angle[frame]) * np.cos(cell_angles)
+                    + np.sin(angle[frame]) * np.sin(cell_angles)
+                ),
+                0,
+            )
+            ** 4
         )
         cells_plot.set_array(distances)
 
         arrow_pts = rot_coords(arrow, angle[frame]) + coords[frame, :]
-        new_coords = np.array([arrow_pts[:, 0],
-                               arrow_pts[:, 1]]).T
+        new_coords = np.array([arrow_pts[:, 0], arrow_pts[:, 1]]).T
 
         fish_plot.set_xy(new_coords)
 

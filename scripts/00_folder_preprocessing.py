@@ -12,10 +12,10 @@ if __name__ == "__main__":
     for path in tqdm(paths):
         try:
             preprocess_folder(
-            path,
-            recompute_bout_df=False,
-            recompute_regressors=False,
-            recompute_filtering=True,
+                path,
+                recompute_bout_df=False,
+                recompute_regressors=False,
+                recompute_filtering=True,
             )
         except IndexError:
             print("indexerror", path)
