@@ -1,7 +1,8 @@
-from knossos_utils import knossosdataset
-import numpy as np
-import flammkuchen as fl
 from pathlib import Path
+
+import flammkuchen as fl
+import numpy as np
+from knossos_utils import knossosdataset
 
 config_path = Path("/Users/luigipetrucco/Google Drive/data/em_stack/knossos.conf")
 dir_save_path = Path(r"/Users/luigipetrucco/Desktop/em_stack_highres")

@@ -1,7 +1,8 @@
 import flammkuchen as fl
-from lotr.em.loading import load_skeletons_dict_from_zip
 from tqdm import tqdm
+
 from lotr import DATASET_LOCATION
+from lotr.em.loading import load_skeletons_dict_from_zip
 
 data_folder = DATASET_LOCATION.parent / "anatomy" / "annotated_traced_neurons"
 

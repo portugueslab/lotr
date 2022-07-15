@@ -2,9 +2,10 @@ from pathlib import Path
 
 import flammkuchen as fl
 import numpy as np
-from lotr import plotting as pltltr
 from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
+
+from lotr import plotting as pltltr
 
 
 def rot_coords(contour, alpha):

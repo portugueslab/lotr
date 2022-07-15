@@ -1,12 +1,12 @@
-from matplotlib import pyplot as plt
 import flammkuchen as fl
+import seaborn as sns
+from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
 from tqdm import tqdm
+
 from lotr import LotrExperiment
 from lotr.plotting import COLS
 from lotr.plotting.gifs_gen.gif_utils import make_proj
-
-import seaborn as sns
 
 sns.set(style="ticks", palette="deep")
 cols = sns.color_palette()
@@ -16,9 +16,9 @@ plt.rcParams["font.family"] = "sans-serif"
 plt.rcParams["font.sans-serif"] = ["Libertinus Sans"]
 
 import numpy as np
-from lotr.plotting.stack_coloring import _fill_roi_stack
-from lotr import A_FISH
 
+from lotr import A_FISH
+from lotr.plotting.stack_coloring import _fill_roi_stack
 
 # from motions.imaging.pca import zscore, preprocess_traces, pca_and_phase, \
 #                      fictive_trajectory_and_fit, fit_phase_neurons

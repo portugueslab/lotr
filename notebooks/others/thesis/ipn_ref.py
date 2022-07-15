@@ -1,16 +1,14 @@
-from pathlib import Path
-import requests
 import tarfile
-import tifffile
-import numpy as np
+from pathlib import Path
+
 import flammkuchen as fl
-from skimage.measure import marching_cubes_lewiner
-
-
+import numpy as np
+import requests
+import tifffile
 from allensdk.core.structure_tree import StructureTree
-from bg_atlasgen.wrapup import wrapup_atlas_from_data
-
 from bg_atlasapi.utils import retrieve_over_http
+from bg_atlasgen.wrapup import wrapup_atlas_from_data
+from skimage.measure import marching_cubes_lewiner
 
 # Specify information about the atlas:
 RES_UM = 0.5

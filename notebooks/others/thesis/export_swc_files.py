@@ -1,7 +1,7 @@
+import os
 from collections import deque
 from copy import deepcopy
 from pathlib import Path
-from lotr import DATASET_LOCATION
 
 import flammkuchen as fl
 import numpy as np
@@ -12,7 +12,8 @@ from matplotlib import pyplot as plt
 from motions.em import NeuroSkeleton, load_skeletons_from_xml
 from motions.em.skeleton_mesh import make_full_neuron
 from tqdm import tqdm
-import os
+
+from lotr import DATASET_LOCATION
 
 
 def insert(originalfile, string):

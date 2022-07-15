@@ -1,6 +1,7 @@
-import navis
 from pathlib import Path
+
 import flammkuchen as fl
+import navis
 
 # master_folder = DATASET_LOCATION.parent / "anatomy" / "swc_neurons"
 data_path = Path(

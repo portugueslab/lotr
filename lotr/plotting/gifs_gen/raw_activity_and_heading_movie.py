@@ -1,17 +1,17 @@
+from pathlib import Path
+
 import numpy as np
+from matplotlib import cm
 from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
-from matplotlib import cm
-from pathlib import Path
 
 from lotr import A_FISH, LotrExperiment
 from lotr.file_utils import get_figures_location
 from lotr.pca import pca_and_phase
 from lotr.plotting import add_scalebar, despine
+from lotr.plotting.gifs_gen.gif_utils import make_proj
 from lotr.rpca_calculation import get_zero_mean_weights
 from lotr.utils import convolve_with_tau
-
-from lotr.plotting.gifs_gen.gif_utils import make_proj
 
 
 def rot_coords(contour, alpha):
