@@ -40,7 +40,7 @@ jobs:
           pytest
       - name: Test
         run: |
-          pytest --cov --nbmake "./notebooks/testable/"  -n=auto
+          pytest --cov --nbmake "./notebooks/activity/"  -n=auto
       - name: Coveralls
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
