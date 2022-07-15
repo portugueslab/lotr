@@ -1,10 +1,11 @@
 import flammkuchen as fl
+import numpy as np
 import seaborn as sns
 from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
 from tqdm import tqdm
 
-from lotr import LotrExperiment
+from lotr import A_FISH, LotrExperiment
 from lotr.plotting import COLS
 from lotr.plotting.gifs_gen.gif_utils import make_proj
 
@@ -15,10 +16,6 @@ plt.rcParams["figure.constrained_layout.use"] = True
 plt.rcParams["font.family"] = "sans-serif"
 plt.rcParams["font.sans-serif"] = ["Libertinus Sans"]
 
-import numpy as np
-
-from lotr import A_FISH
-from lotr.plotting.stack_coloring import _fill_roi_stack
 
 # from motions.imaging.pca import zscore, preprocess_traces, pca_and_phase, \
 #                      fictive_trajectory_and_fit, fit_phase_neurons

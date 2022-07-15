@@ -62,7 +62,7 @@ def network_phase_animation(dest=None, frames=None):
 
     cell_angles = np.arange(-np.pi, np.pi, 2 * np.pi / 8)
 
-    l = 1.7
+    l_w = 1.7
     distances = (
         np.maximum(
             (
@@ -101,7 +101,7 @@ def network_phase_animation(dest=None, frames=None):
     def init():
         # For some mysterious reasons, some of those specifications need to happen
         # in the init. Therefore, we put here a whole bunch of them:
-        ax[1].set(xlim=(-l, l), ylim=(-l, l))
+        ax[1].set(xlim=(-l_w, l_w), ylim=(-l_w, l_w))
         ax[0].set(xlim=xlim, ylim=ylim)
 
         pltltr.add_cbar(

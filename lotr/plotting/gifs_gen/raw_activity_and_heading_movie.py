@@ -10,7 +10,6 @@ from lotr.file_utils import get_figures_location
 from lotr.pca import pca_and_phase
 from lotr.plotting import add_scalebar, despine
 from lotr.plotting.gifs_gen.gif_utils import make_proj
-from lotr.rpca_calculation import get_zero_mean_weights
 from lotr.utils import convolve_with_tau
 
 
@@ -46,7 +45,7 @@ def network_phase_animation(dest=None, frames=None):
     )
     pca_scores_t[:, :2] = pca_scores_t[:, :2] - circle_params[:2]
 
-    norm_activity = get_zero_mean_weights(exp.traces[:, exp.hdn_indexes].T).T
+    # norm_activity = get_zero_mean_weights(exp.traces[:, exp.hdn_indexes].T).T
     # avg_vects = np.einsum("ij,ik->jk", norm_activity.T, pca_scores_t[:, :2])
 
     network_phase = convolve_with_tau(
@@ -56,7 +55,7 @@ def network_phase_animation(dest=None, frames=None):
     # Plot parameters
     # ---------------
     scale_mn = 1
-    w_lw, netw_lw = 0.3, 1.5
+    netw_lw = 1.5
     w_c = (0.7,) * 3
     colmap = cm.get_cmap("coolwarm")
 
@@ -84,7 +83,7 @@ def network_phase_animation(dest=None, frames=None):
     )
 
     # Legend:
-    leg = ax.legend(fontsize=8, frameon=False, bbox_to_anchor=(0.95, 1.1, 0.2, 0.04))
+    _ = ax.legend(fontsize=8, frameon=False, bbox_to_anchor=(0.95, 1.1, 0.2, 0.04))
     # leg_line = leg.get_lines()
 
     ## Raw bump

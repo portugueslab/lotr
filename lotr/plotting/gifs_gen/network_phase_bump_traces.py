@@ -7,13 +7,7 @@ from matplotlib.animation import FuncAnimation
 from lotr import A_FISH, LotrExperiment
 from lotr.file_utils import get_figures_location
 from lotr.pca import pca_and_phase
-from lotr.plotting import (
-    COLS,
-    add_cbar,
-    add_scalebar,
-    despine,
-    get_default_phase_col,
-)
+from lotr.plotting import COLS, add_cbar, add_scalebar, despine
 from lotr.plotting.gifs_gen.gif_utils import make_proj
 from lotr.rpca_calculation import get_zero_mean_weights
 from lotr.utils import get_vect_angle
@@ -168,7 +162,7 @@ def network_phase_animation(dest=None, frames=None):
             [0, np.sin(network_phase[frame]) * scale_mn],
         )
 
-        new_col = get_default_phase_col(network_phase[frame])
+        # new_col = get_default_phase_col(network_phase[frame])
         for line in network_phase_plot, leg_line:
             line.set_color(COLS["ph_plot"])
 

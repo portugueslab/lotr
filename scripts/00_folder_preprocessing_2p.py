@@ -22,6 +22,3 @@ if __name__ == "__main__":
             except IndexError:
                 print("indexerror", path)
             # print("Problems with path ", path)
-
-    with open("all_wrong.txt", "w") as f:
-        f.writelines(all_errors)

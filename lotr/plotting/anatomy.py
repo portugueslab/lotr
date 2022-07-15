@@ -2,7 +2,7 @@ import numpy as np
 from bg_atlasapi import BrainGlobeAtlas
 from matplotlib import pyplot as plt
 
-from lotr.plotting.general import despine, projection_contours
+from lotr.plotting.general import projection_contours
 from lotr.plotting.standard_addons import add_anatomy_scalebar
 
 

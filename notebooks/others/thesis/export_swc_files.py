@@ -1,19 +1,13 @@
 import os
 from collections import deque
-from copy import deepcopy
-from pathlib import Path
 
-import flammkuchen as fl
-import numpy as np
 import pandas as pd
 from bg_atlasapi import BrainGlobeAtlas
-from knossos_utils.skeleton import Skeleton, euclidian_distance
-from matplotlib import pyplot as plt
-from motions.em import NeuroSkeleton, load_skeletons_from_xml
-from motions.em.skeleton_mesh import make_full_neuron
+from knossos_utils.skeleton import Skeleton
 from tqdm import tqdm
 
 from lotr import DATASET_LOCATION
+from lotr.em.transformations import em2ipnref
 
 
 def insert(originalfile, string):
@@ -173,7 +167,6 @@ swc_ipnax_dest_folder.mkdir(exist_ok=True)
 swc_ipndend_dest_folder = master_folder / "swc_ipnspace_flip_dend"
 swc_ipndend_dest_folder.mkdir(exist_ok=True)
 
-from lotr.em.transformations import em2ipnref
 
 atlas = BrainGlobeAtlas("ipn_zfish_0.5um")
 midline = atlas.shape[2] // 2
