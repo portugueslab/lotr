@@ -15,12 +15,10 @@ And in the repo local path:
 nb-clean add-filter
 ```
 
-Once analysis notebooks are completed, they should be moved to the `notebooks/testable` folder. All notebooks there will be executed by pytest (no controls on the results though).
-
 ### Regenerate local figures
 To regenerate all figures in the figures folder, run:
 ```
-pytest --cov --nbmake "./notebooks/testable/"  -n=auto
+pytest --cov --nbmake "./notebooks/activity/"  -n=auto
 ```
 
 ### Export all notebooks:
