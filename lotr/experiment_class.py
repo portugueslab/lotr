@@ -112,7 +112,12 @@ class LotrExperiment(EmbeddedExperiment):
             return
 
         except KeyError:
-            print("Fix definition for 2p data!")
+            z_config = self.microscope_config['recording']['dz']
+            voltage_max = self.microscope_config['scanning']['voltage']
+
+            x_res = compute_resolution_for_2p(voltage_max, 355)
+            y_res = compute_resolution_for_2p(voltage_max, 355)
+            return (z_config, x_res, y_res)
 
     @property
     def lr_extent_um(self):
@@ -412,3 +417,14 @@ class LotrExperiment(EmbeddedExperiment):
     @property
     def exp_code(self):
         return "f" + str(hash(self.root.name))[-5:]
+
+def compute_resolution_for_2p(zoom, size_px):
+    # Calibration data:
+    dist_in_um = 10
+    dist_in_px = np.array([21.13, 19.62, 8.93])
+    zooms = np.array([1.5, 3, 4.5])
+    image_max_sizes = np.array([330, 610, 410])
+
+    return np.mean(
+        (dist_in_um / dist_in_px) * (zoom / zooms) * (image_max_sizes / size_px)
+    )
