@@ -47,6 +47,8 @@ Start from these folders if you want to check the main analyses of the paper.
 
 The anatomical visualizations were performed with the notebook in `lotr/notebooks/anatomy`. In particular, the notebooks `Figure 4 panels.ipynb` and `Figure 5 panels.ipynb` contains the EM-related plots of fig 4 and fig 5 of the paper, as well as the relative supplementary figures.
 
+The analyses that concern the 2p data can be found in `lotr/notebooks/2p`. `Figure4.ipynb` generate the plots in fig 4 and fig s19. The `2d_auto-correlation.ipynb` file generate fig 5c,d and fig S21 from the preprocessed data (data are preprocessed in `Fig5_preprocessing.ipynb`).
+
 
 
 ## Developers
