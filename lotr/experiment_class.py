@@ -112,8 +112,8 @@ class LotrExperiment(EmbeddedExperiment):
             return
 
         except KeyError:
-            z_config = self.microscope_config['recording']['dz']
-            voltage_max = self.microscope_config['scanning']['voltage']
+            z_config = self.microscope_config["recording"]["dz"]
+            voltage_max = self.microscope_config["scanning"]["voltage"]
 
             x_res = compute_resolution_for_2p(voltage_max, 355)
             y_res = compute_resolution_for_2p(voltage_max, 355)
@@ -417,6 +417,7 @@ class LotrExperiment(EmbeddedExperiment):
     @property
     def exp_code(self):
         return "f" + str(hash(self.root.name))[-5:]
+
 
 def compute_resolution_for_2p(zoom, size_px):
     # Calibration data:
