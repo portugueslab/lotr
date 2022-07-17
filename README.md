@@ -1,10 +1,10 @@
 # LOTR project analysis
 [![tests](https://github.com/portugueslab/lotr/actions/workflows/main.yml/badge.svg)](https://github.com/portugueslab/lotr/actions/workflows/main.yml)
 
-This repository contains all the code for reproducing analyses and figures for the paper [Petrucco et al, Neural dynamics and architecture of the heading direction circuit in a vertebrate brain](#TODO bioarxive link). 
+This repository contains all the code for reproducing analyses and figures for the paper [Petrucco et al, Neural dynamics and architecture of the heading direction circuit in a vertebrate brain](https://www.biorxiv.org/content/10.1101/2022.04.27.489672v1). 
 
 
-The code is developed and tested in a `python==3.8.8` environment.
+The code is developed and tested in a `python==3.8.8` environment. The repository contains code under ongoing development as the project continues, so there are notebooks and scripts that might not fully work. Refer to the description below to know what is supposed to run smoothly after the installation.
 
 ## Installation:
 Clone the package locally, navigate to the cloned repo, and run
