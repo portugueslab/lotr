@@ -1,0 +1,38 @@
+{
+   "description":"<p>All the code to generate the figures in the paper Petrucco et al, 'Neural dynamics and architecture of the heading direction circuit in a vertebrate brain' (https://www.biorxiv.org/content/10.1101/2022.04.27.489672v1). The README.md contains a complete description of the content.</p>",
+   "title":"Petrucco et al, Neural dynamics and architecture of the heading direction circuit in a vertebrate brain [Code]",
+   "creators":[
+      
+      {
+         "orcid":"0000-0003-4001-0564",
+         "affiliation":"Institute of Neuroscience, Technical University of Munich, Germany",
+         "name":"Petrucco, Luigi"
+      },
+      {
+         "orcid":"0000-0001-5201-2976",
+         "affiliation":"Institute of Neuroscience, Technical University of Munich, Germany",
+         "name":"Lavian, Hagar"
+        
+      },
+     {
+         "affiliation":"Institute of Neuroscience, Technical University of Munich, Germany",
+         "name":"Wu, You Kure"
+        
+      },
+     {
+         "affiliation":"Department of Computational Neuroethology, Max Planck Institute for Neurobiology of Behavior - caesar Bonn, Germany",
+         "name":"Svara, Fabian"
+        
+      },
+     {
+         "orcid":"0000-0002-5108-8204",
+         "name":"\u0160tih, Vilim",
+         "affiliation": "Vara, Berlin, Germany"
+      },
+      {
+         "orcid":"0000-0002-1495-9314",
+         "affiliation":"Institute of Neuroscience, Technical University of Munich, Germany",
+         "name":"Portugues, Ruben"
+      }
+   ]
+}
