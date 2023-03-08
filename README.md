@@ -9,7 +9,12 @@ The code is developed and tested in a `python==3.8.8` environment. The repositor
 ## Installation:
 Clone the package locally, navigate to the cloned repo, and run
 ```shell
- pip install . -e
+ pip install -e .
+```
+
+To install in developer mode to easily run all notebooks, you can install it in developer mode:
+```shell
+ pip install -e ".[dev]"
 ```
 
 ## Description of the repository
@@ -49,6 +54,25 @@ The anatomical visualizations were performed with the notebook in `lotr/notebook
 
 The analyses that concern the 2p data can be found in `lotr/notebooks/2p`. `Figure4.ipynb` generate the plots in fig 4 and fig s19. The `2d_auto-correlation.ipynb` file generate fig 5c,d and fig S21 from the preprocessed data (data are preprocessed in `Fig5_preprocessing.ipynb`).
 
+
+## Quick replication of the paper analyses
+
+If you just want to replicate quickly the analyses in the paper, follow these steps:
+1. Clone this repository locally
+2. Install the repository as described above - developer mode is recommended to quickly run all notebooks from the terminal.
+3. Download the dataset from the Zenodo repository (**TODO** add link) to a local folder.
+4. Create a `.txt` file named `dataset_location.txt` in the repository containing a single line with the path location of the data you downloaded.
+5. Create a `.txt` file named `figures_location.txt` in the repository containing a single line with the path location of the folder you want to generate figures and logs in.
+6. 
+Now you have two options:
+
+**Option 1** To execute all analyses in one run the terminal, navigate inside the repository and run :
+```
+pytest --nbmake "./notebooks/activity/"  -n=auto
+```
+In this way, all the figures will be created in the folder you specified together with the statistical analyses report.
+
+**Option 2** Alternatively, just open the notebooks in the `lotr/notebooks` section and start reading and running them!
 
 
 ## Developers

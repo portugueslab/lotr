@@ -9,6 +9,8 @@ from lotr.utils import linear_regression
 
 
 def fictive_heading_and_fit(phase_unwrapped, bouts_df, fn=5, min_bias=0.05):
+    """Compute fictive heading and perform linear regression with network phase.
+    """
     if "idx_imaging" not in bouts_df.columns:
         bouts_df["idx_imaging"] = np.round(bouts_df["t_start"]).astype(np.int) * fn
 
@@ -78,7 +80,7 @@ def phase_from_fit(x, y):
 
 
 def fit_phase_neurons(traces, phase, disable_bar=False):
-    """Fit a phase to neurons's activity."""
+    """Fit a phase to neurons' activity."""
     n_cells = traces.shape[1]
     cell_phases = np.full(n_cells, np.nan)
     covs = np.full(n_cells, np.nan)
@@ -101,7 +103,9 @@ def fit_phase_neurons(traces, phase, disable_bar=False):
 
 
 def qap_sorting_and_phase(traces, t_lims=None):
-    """Use quadr"""
+    """Use quadratic assignment problem to find an optimal sorting of ROIs.
+    Now outdated method.
+    """
     n_pts, n = traces.shape
 
     if t_lims is None:

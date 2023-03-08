@@ -16,9 +16,8 @@ from lotr.default_vals import (
 
 def get_dataset_location():
     """Handles finding the source data of the analysis.
-    By default, tries to find the repo dataset_location.txt file. If not available,
-    use lab standard location. If also not available, download test dataset from web
-    (for CI).
+    By default, tries to find the repo dataset_location.txt file.
+    If not available, download test dataset from web (for CI).
 
     Returns
     -------
@@ -30,10 +29,7 @@ def get_dataset_location():
         with open(specification_txt, "r") as f:
             return Path(f.read())
 
-    default_path = Path(DATASET_DEFAULT_LOCATION)
-    if default_path.exists():
-        return default_path
-
+    # If we did not find anything, download from zotero example dataset:
     data_pooch = pooch.create(
         path=pooch.os_cache("lotr"),
         base_url=DATASET_URL,

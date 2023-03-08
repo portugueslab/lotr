@@ -85,7 +85,11 @@ def get_fictive_heading(n_pts, bouts_df, min_bias=0.05):
 
 
 def create_motor_regressors(n_pts, df, fn, min_bias=0.05):
-    N_KERNEL_PTS = 1000
+    """Use the get_bouts_props_array to create a dataframe of regressors for left, right, forward swims
+    considering just the direction, the amount of bias, or the vigor.
+    """
+
+    N_KERNEL_PTS = 1000  # This just has to be large enough for the kernel to go to 0
 
     regressors_dict = dict()
 

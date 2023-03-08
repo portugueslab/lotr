@@ -29,6 +29,9 @@ def _format_number(x):
 
 
 class ResultsLogger:
+    """A class to log all statistical results from running the analysis and generating the figures
+    in the notebooks to a single file in the figure folder.
+    """
     def __init__(self, log_filename=None):
         if log_filename is None:
             log_filename = get_figures_location() / RESULTS_LOG_FILE

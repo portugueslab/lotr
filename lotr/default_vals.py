@@ -5,9 +5,6 @@ be defined in the analysis notebooks.
 
 import numpy as np
 
-# Specify where the dataset is stored.
-DATASET_DEFAULT_LOCATION = r"\\FUNES\Shared\experiments\E0071_lotr\full_ring"
-
 # Specify remote location for the dataset:
 DATASET_URL = "https://zenodo.org/record/5610033/files/"
 DATASET_HASH = "md5:0b25154e89c761a817d21bc4f438d6d9"

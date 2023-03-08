@@ -81,7 +81,7 @@ class LotrExperiment(EmbeddedExperiment):
 
     @property
     def fn(self):
-        # TODO remove after complete refactoring
+        # Just an outdated alias for fn
         return self.fs
 
     @property
