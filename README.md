@@ -156,7 +156,7 @@ of that analysis in the notebooks would be very error-prone. Just read a bit thr
 - `1. Fish example 2p data.ipynb`: generate plots on rPC / anatomical distribution of ROIs, and network phase /heading direction relationship. 
 - `2. Autocorrelation.ipynb`: spatial autocorrelation of 2p signals to show how signals from the 2p match the connectivity profile of the EM data.
 
-### `modeling`
+### `modelling`
 - `1. Anticorrelation and PCA - simulated data.ipynb`: demonstrate that simple anticorrelation patterns cannot produce _per-se_ the observed distributions in PC space.
 - `2. Network model.ipynb`: a simple, proof-of-principle model that produces ring-attractor dynamics given a set of reciprocally inhibiting neurons and tonic excitation.
 
