@@ -6,6 +6,7 @@ from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
 
 from lotr import plotting as pltltr
+from lotr.file_utils import get_figures_location
 
 
 def rot_coords(contour, alpha):
@@ -44,6 +45,13 @@ c = pltltr.shift_lum(pltltr.COLS["ph_plot"], -0.25)
 
 
 def network_phase_animation(dest=None, frames=None):
+
+    if dest is None:
+        dest = (
+                get_figures_location()
+                / f"network_phase_bump_traces_t{frames[0]}-{frames[-1]}+{frames[1]}.mp4"
+        )
+
     frame = 0
     fig, ax = plt.subplots(
         1,
@@ -145,12 +153,10 @@ def network_phase_animation(dest=None, frames=None):
         init_func=init,
         blit=True,
     )
-    ani.save("/Users/luigipetrucco/Desktop/running_fish.mp4", dpi=300)
+    ani.save(dest / "running_fish.mp4", dpi=300)
 
     return fig
 
 
 if __name__ == "__main__":
-    dest = Path("/Users/luigipetrucco/Desktop/running_fish")
-    dest.mkdir(exist_ok=True)
     network_phase_animation(frames=list(range(1000, d, 8)))

@@ -193,8 +193,5 @@ def network_phase_animation(dest=None, frames=None):
 
     return fig
 
-
 if __name__ == "__main__":
-    dest = Path("/Users/luigipetrucco/Desktop/figures_cosyne")
-    dest.mkdir(exist_ok=True)
     network_phase_animation(frames=list(range(0, 4000, 5)))

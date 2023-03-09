@@ -4,13 +4,18 @@
 This repository contains all the code for reproducing analyses and figures for the paper [Petrucco et al, Neural dynamics and architecture of the heading direction circuit in a vertebrate brain](https://www.biorxiv.org/content/10.1101/2022.04.27.489672v1). 
 
 
-The code is developed and tested in a `python==3.8.8` environment. The repository contains code under ongoing development as the project continues, so there are notebooks and scripts that might not fully work. Refer to the description below to know what is supposed to run smoothly after the installation.
+The code is developed and tested in a `python==3.8.8` environment. It has been partially tested also in `python==3.9`,
+other versions of Python are not guaranteed to work. We recommend to run this code in a new environment, which you can create with
+```shell
+create -n lotr-env python==3.8.8
+```
 
 ## Installation:
 Clone the package locally, navigate to the cloned repo, and run
 ```shell
  pip install -e .
 ```
+
 
 To install in developer mode to easily run all notebooks, you can install it in developer mode:
 ```shell
@@ -22,6 +27,13 @@ To install in developer mode to easily run all notebooks, you can install it in 
 If the installation fails while installing `tables` with the error `ERROR:: Could not find a local HDF5 installation.`, you might want to try to `conda install pytables` and then run again the installation.
 
 
+### Add kernel to jupyter
+If you have installed the package in a new environment, and you already have a Jupyter installation, you can add the new kernel with:
+```shell
+conda activate lotr-env
+conda install ipykernel
+ipykernel install --name lotr-env
+```
 
 
 ## Description of the repository
@@ -81,6 +93,21 @@ In this way, all the figures will be created in the folder you specified togethe
 
 **Option 2** Alternatively, just open the notebooks in the `lotr/notebooks` section and start reading and running them!
 
+### Statistical tests summary
+A custom results logger function will log all the key numbers from the analysis in a single file that you can find in the figure folder as `results_log.txt`. We are depositing the file we get for the paper figures in this folder, so you can compare your numbers with ours.
+
+
+Under the `[log_info]` are all the ids of experiments that are used for a given logger.
+All other tags refer to specific results that you can read about in the notebooks, for which the n, and the momenta presented in the paper are reported. There is also a list of the fish (and when applicable the ROIs or units) from which the result was produced.
+
+
+### Export all notebooks
+To export all testable notebooks to PDFs that you can just read, you can run the following script:
+```
+python ...lotr/scripts/export_all_notebooks.py
+```
+Exporting the notebooks will also regenerate the figures!
+
 
 ## Developers
 
@@ -96,15 +123,3 @@ And in the repo local path:
 nb-clean add-filter
 ```
 
-### Regenerate local figures
-To regenerate all figures in the figures folder, run:
-```
-pytest --cov --nbmake "./notebooks/activity/"  -n=auto
-```
-
-### Export all notebooks:
-To export all testable notebooks to PDFs, you can run the following script:
-```
-python ...lotr/scripts/export_all_notebooks.py
-```
-Exporting the notebooks will also regenerate figures!

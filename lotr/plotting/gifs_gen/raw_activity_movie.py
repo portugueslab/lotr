@@ -17,10 +17,6 @@ plt.rcParams["font.family"] = "sans-serif"
 plt.rcParams["font.sans-serif"] = ["Libertinus Sans"]
 
 
-# from motions.imaging.pca import zscore, preprocess_traces, pca_and_phase, \
-#                      fictive_trajectory_and_fit, fit_phase_neurons
-
-
 FILENAMES = ["raw_all_movie.mp4", "raw_selected_movie_new.mp4"]
 FN = 5
 master_path = A_FISH.parent
@@ -95,15 +91,3 @@ for path in tqdm(list(master_path.glob("*_f*"))):
         )
         # plt.show()
         ani.save(path / FILENAMES[i])
-
-# time_array = np.arange(n_pts) / FN
-
-# pcaed, phase = pca_and_phase(traces[2000:8000, selected], traces[:, selected])
-# unwrapped_phase = np.unwrap(phase)
-# traj, params = fictive_trajectory_and_fit(unwrapped_phase, bouts_df, min_bias=0.)
-#
-# neuron_phases, _ = fit_phase_neurons(traces[:, selected], phase)
-# sorted_traces = traces[:, selected[np.argsort(neuron_phases)]]
-#
-# norm_phase = phase.copy()
-# norm_phase[np.insert(np.abs(np.diff(phase)), 0, 0) > 0.1] = np.nan
