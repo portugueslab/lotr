@@ -17,6 +17,13 @@ To install in developer mode to easily run all notebooks, you can install it in 
  pip install -e ".[dev]"
 ```
 
+### Troubleshooting for `pytables`
+
+If the installation fails while installing `tables` with the error `ERROR:: Could not find a local HDF5 installation.`, you might want to try to `conda install pytables` and then run again the installation.
+
+
+
+
 ## Description of the repository
 The code is organized in three main parts:
 

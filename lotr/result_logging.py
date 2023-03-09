@@ -42,7 +42,7 @@ class ResultsLogger:
             configprs = self.get_config_parser()
             # TODO maybe there's a smarter way:
             dataset_raw_read = configprs["log_info"]["dataset"]
-            self.dataset = dataset_raw_read.split("'")[1::2]
+            self.dataset = set(dataset_raw_read.split("'")[1::2])
         else:
             self.dataset = set([d.name for d in dataset_folders])
 

@@ -8,7 +8,6 @@ import pooch
 from tqdm import tqdm
 
 from lotr.default_vals import (
-    DATASET_DEFAULT_LOCATION,
     DATASET_HASH,
     DATASET_URL,
 )
@@ -39,7 +38,7 @@ def get_dataset_location():
     unpack = pooch.Unzip(members=None)
     fnames = data_pooch.fetch("sample_dataset.zip", processor=unpack)
 
-    # Ugly finding of super parent folder, as the unzipping has to happen on files
+    # Ugly search of super parent folder, as the unzipping has to happen on files
     return ([Path(f) for f in fnames if Path(f).name == "selected.h5"])[
         0
     ].parent.parent.parent

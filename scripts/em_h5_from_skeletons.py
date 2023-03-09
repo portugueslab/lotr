@@ -4,7 +4,7 @@ from tqdm import tqdm
 from lotr import DATASET_LOCATION
 from lotr.em.loading import load_skeletons_dict_from_zip
 
-data_folder = DATASET_LOCATION.parent / "anatomy" / "annotated_traced_neurons"
+data_folder = DATASET_LOCATION / "anatomy" / "annotated_traced_neurons"
 
 files = list([f for f in data_folder.glob("*.zip") if "synapses" not in f.name])
 

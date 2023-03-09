@@ -71,7 +71,7 @@ def rebase_df(df):
     return rebased
 
 
-master_folder = DATASET_LOCATION.parent / "anatomy" / "swc_neurons"
+master_folder = DATASET_LOCATION / "anatomy" / "swc_neurons"
 data_folder = master_folder.parent / "annotated_traced_neurons"
 data_folder.exists()
 for f in list(data_folder.glob("*.nml")):

@@ -8,14 +8,14 @@ from tqdm import tqdm
 
 from lotr.behavior import get_bouts_props_array
 
-DEST_DIR = Path("/Users/luigipetrucco/Desktop/sample_data_export")
+DEST_DIR = Path()  # specify destination path
 
-PATH_LIST = [
-    "/Users/luigipetrucco/Desktop/source_data_old/210314_f1_natmov",
-    "/Users/luigipetrucco/Desktop/source_data_old/210601_f0_natmov_noeyes",
-    "/Users/luigipetrucco/Desktop/source_data_old/210601_f3_natmov_spont",
-    "/Users/luigipetrucco/Desktop/source_data/210715_f5_clol",
-]
+SOURCE_MASTER_DIR = Path()  # specify source path
+
+fish_folders =
+PATH_LIST = [SOURCE_MASTER_DIR / fish_folder for fish_folder in fish_folders]
+
+["210314_f1_natmov", "210601_f0_natmov_noeyes", "210601_f3_natmov_spont", "210715_f5_clol",]
 
 for path in tqdm(PATH_LIST):
     path = Path(path)
