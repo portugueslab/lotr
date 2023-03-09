@@ -10,7 +10,6 @@ from scipy.signal import medfilt
 
 
 def _get_angles(df1, df2, norm=False, lh_thr=1.0):
-
     th = np.arctan2(
         df2["y"] - df1["y"],
         df2["x"] - df1["x"],
@@ -25,7 +24,6 @@ def _get_angles(df1, df2, norm=False, lh_thr=1.0):
 
 
 def export_dlc_behavior(dlc_file_dir, tail_lh_thr=0.8, medfilt_wnd_s=0.8):
-
     # Load DLC file:
     dlc_filename = next(dlc_file_dir.glob("*DLC*.h5"))
     raw_data_df = fl.load(dlc_filename, "/df_with_missing")

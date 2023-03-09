@@ -91,7 +91,9 @@ pytest --nbmake "./notebooks/activity/"  -n=auto
 ```
 In this way, all the figures will be created in the folder you specified together with the statistical analyses report.
 
-**Option 2** Alternatively, just open the notebooks in the `lotr/notebooks` section and start reading and running them!
+If you get one or two error in the anatomy notebooks related to EM, it is fine, it is due to the parallelization. You can just rerun them with `pytest --nbmake "./notebooks/activity/"`.
+
+**Option 2** Alternatively, just open the notebooks in the `lotr/notebooks` section and run them one by one as you read though them!
 
 ### Statistical tests summary
 A custom results logger function will log all the key numbers from the analysis in a single file that you can find in the figure folder as `results_log.txt`. We are depositing the file we get for the paper figures in this folder, so you can compare your numbers with ours.
@@ -108,10 +110,55 @@ python ...lotr/scripts/export_all_notebooks.py
 ```
 Exporting the notebooks will also regenerate the figures!
 
-## Breakdown of the analysis content
-The code in `notebooks` is organized in three folders:
+## Breakdown of the core analysis code
+The key figures and results of replication can be reproduced by code in `lotr/notebooks`.
 
-- 
+It is organized in four folders:
+
+- `lightsheet`: all analyses for the lightsheet data - the most part of the functional data of the paper.
+- `2p`: analyses for the data shown in Figures 5 and 6 (and supplementary) from two-photon data.
+- `anatomy`: code to generate all the anatomical figures from confocal and EM data, r1pi neurons positions, and EM data quantification.
+- `modeling`: contains proof-of-principle models and simulations that did not make it in the final paper.
+
+
+**NB**: The names & numbering of the notebooks only loosely correspond to the flow in the paper - match every single plot with the location
+of that analysis in the notebooks would be very error-prone. Just read a bit through them and you'll find what you are looking for!
+
+
+### `lightsheet`
+- `0. Bout histogram fitting.ipynb`: show distribution of swim turns and compute thresholds to define directional swims.
+- `1a. Introduction to network phase.ipynb`: a tutorial on how we compute phase.
+- `1b. Anatomical organization of the network.ipynb`: analysis on the anatomical organization of the functional activity. Contains also an explanation of the registration procedure for PCs across fish.
+- `1c. Activation profile.ipynb`: analysis on the shape of the bump.
+- `1d. Anatomy plots.ipynb`: plots on the anatomical distribution or ROIs across fish.
+- `1e. Anatomical selection.ipynb`: an alternative analysis to show that the circular distribution or PC projections is really a feature of the HB and does not come as an artefact from our selection criteria.
+- `1f. Additional illustrative plots.ipynb`: some additional small plot for visualization, mostly of PC projections.
+- `2a. Motor triggered rotations.ipynb`: introduction to how the activity in phase space is moved around by directional swims.
+- `2b. Phase dynamics.ipynb`: look at network phase changes and swims.
+- `2c. Fictive trajectory.ipynb`: introduce the reconstruction of fictive trajectories and compute phase / heading correlations.
+- `2d. Some probability checks.ipynb`: control if there is an increased probability of performing left/right swims given a certain network phase (no, there is not).
+- `2e. Multiple circles example.ipynb`: plot an interesting fish where continuous swimming in one or the other direction produces multiple crossings of the network bump of the whole network.
+- `2f. Motor efferences.ipynb`: compare the position of r1pi neurons compared to the position of neurons whose activity closely map the direction swam by the fish. 
+- `2g. Activation profile stability.ipynb`: investigate the stability of the activation bump in periods of no motion.
+- `2h. Phase stability.ipynb`: understand how much the activity is stable in periods of no swimming; also, decode direction turned from phase changes.
+- `3a. Phase and visual feedback.ipynb`: analyze visual feedback experiments to understand if visual stimuli have an effect on the network phase.
+- `4a. Eye motion.ipynb`: this and the following notebook contain the analysis of the relationship between eye motion and phase changes.
+- `4b. Eye motion-eye regressors.ipynb`: regressor-based analysis for eye- vs. heading-related signals in r1pi.
+- `4c. Eye motion-saccades.ipynb`: compute the saccade-triggered plots shown in the extended data.
+
+### `anatomy`
+- `1. Confocal image - gad1b-GFP and h2b-mCherry.ipynb`: generate images for the gad1b:UAS line from confocal data.
+- `2a. EM reconstruction previews.ipynb`: generate the views of individual EM reconstructed cells, together with the co-registered views with the confocal and functional data.
+- `2b. Synapses plot.ipynb`: show the position of pre- and post-synaptic contacts for an individual cell.
+- `3. EM anatomical organization analysis.ipynb`: analyse the patterns in the distribution of axons and dendrites of r1pi neurons.
+
+### `2p`
+- `1. Fish example 2p data.ipynb`: generate plots on rPC / anatomical distribution of ROIs, and network phase /heading direction relationship. 
+- `2. Autocorrelation.ipynb`: spatial autocorrelation of 2p signals to show how signals from the 2p match the connectivity profile of the EM data.
+
+### `modeling`
+- `1. Anticorrelation and PCA - simulated data.ipynb`: demonstrate that simple anticorrelation patterns cannot produce _per-se_ the observed distributions in PC space.
+- `2. Network model.ipynb`: a simple, proof-of-principle model that produces ring-attractor dynamics given a set of reciprocally inhibiting neurons and tonic excitation.
 
 
 

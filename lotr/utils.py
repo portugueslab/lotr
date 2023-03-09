@@ -203,7 +203,6 @@ def resample_matrix(x, fx, matrix):
 
 
 def convolve_with_tau(array, tau_fs, n_kernel_pts=1000):
-
     kernel = np.exp(-np.arange(n_kernel_pts) / tau_fs)
     kernel = kernel / np.sum(kernel)
 

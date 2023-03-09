@@ -54,7 +54,6 @@ def crop_shifts_all_dataset(crop_stimulus=False):
             [all_phase_cropped, all_head_cropped, all_stim_cropped],
             [np.unwrap(exp.network_phase), exp.fictive_heading, stim_interp],
         ):
-
             # Crop around events:
             cropped = crop(
                 to_crop,

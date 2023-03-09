@@ -82,7 +82,7 @@ def get_all_trials_df(exp):
 
     # Closed pause, loop, natural motion, and directional motion of different kinds:
     for stim_condition, sel_criteria in STIM_MAPPING_DICT.items():
-        for (exp_type, name) in sel_criteria:
+        for exp_type, name in sel_criteria:
             annotated_df.loc[
                 (annotated_df["exp_type"] == exp_type) & (annotated_df["name"] == name),
                 "condition",

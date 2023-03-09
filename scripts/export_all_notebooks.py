@@ -1,3 +1,7 @@
+"""This script can be used to export all relevant notebooks of the paper to pdfs.
+By default the pdfs will be created in the specified figures location.
+"""
+
 import datetime
 import os
 from pathlib import Path

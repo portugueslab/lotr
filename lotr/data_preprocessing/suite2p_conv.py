@@ -1,8 +1,9 @@
-from numba import njit, prange
-import numpy as np
-from pathlib import Path
-import flammkuchen as fl
 import json
+from pathlib import Path
+
+import flammkuchen as fl
+import numpy as np
+from numba import njit, prange
 
 
 def export_suite2p(data_path, output_filename=None, include_all_rois=False):
@@ -41,8 +42,8 @@ def export_suite2p(data_path, output_filename=None, include_all_rois=False):
     suite2p_idxs = []
     k = 1
     for j, a in enumerate(stat):
-        ypix = a['ypix'].flatten()
-        xpix = a['xpix'].flatten()
+        ypix = a["ypix"].flatten()
+        xpix = a["xpix"].flatten()
         # If required, do this only if the ROI is classified as cell. In any case,
         # exclude if the ROI has all 0s in F trace:
         if (iscell[j, 0] or include_all_rois) and not (traces[j, :] == 0).all():
@@ -50,7 +51,9 @@ def export_suite2p(data_path, output_filename=None, include_all_rois=False):
                 i_plane = a["iplane"]
             except KeyError:
                 i_plane = 0
-            rois_stack[i_plane, ypix % rois_stack.shape[1], xpix % rois_stack.shape[2]] = k
+            rois_stack[
+                i_plane, ypix % rois_stack.shape[1], xpix % rois_stack.shape[2]
+            ] = k
             k += 1
             suite2p_idxs.append(j)
 
@@ -64,7 +67,13 @@ def export_suite2p(data_path, output_filename=None, include_all_rois=False):
     for i_plane in range(ops["nplanes"]):
         img_idxs = (i_plane // n[1], i_plane % n[1])
         anatomy_stack[i_plane, :, :] = flat_img[
-            tuple([slice(idx * s, (idx + 1) * s) for idx, s in zip(img_idxs, anatomy_stack.shape[1:])])]
+            tuple(
+                [
+                    slice(idx * s, (idx + 1) * s)
+                    for idx, s in zip(img_idxs, anatomy_stack.shape[1:])
+                ]
+            )
+        ]
 
     # Filter cells if requested:
     if not include_all_rois:
@@ -77,17 +86,22 @@ def export_suite2p(data_path, output_filename=None, include_all_rois=False):
     coords, areas = get_roi_coords_areas(rois_stack)
 
     if output_filename is None:
-        output_filename = data_path.parent.parent  / OUTPUT_FILENAME
+        output_filename = data_path.parent.parent / OUTPUT_FILENAME
     else:
         output_filename = Path(output_filename)
 
-    fl.save(output_filename,
-            dict(traces=traces,
-                 coords=coords,
-                 areas=areas,
-                 anatomy_stack=anatomy_stack,
-                 suite2p_idxs=suite2p_idxs,
-                 rois_stack=rois_stack), compression=None)
+    fl.save(
+        output_filename,
+        dict(
+            traces=traces,
+            coords=coords,
+            areas=areas,
+            anatomy_stack=anatomy_stack,
+            suite2p_idxs=suite2p_idxs,
+            rois_stack=rois_stack,
+        ),
+        compression=None,
+    )
 
 
 def export_suite2p_data_2p(master_path, output_filename=None, include_all_rois=False):
@@ -134,12 +148,14 @@ def export_suite2p_data_2p(master_path, output_filename=None, include_all_rois=F
 
         suite2p_idxs = []
         for j, a in enumerate(stat):
-            ypix = a['ypix'].flatten()
-            xpix = a['xpix'].flatten()
+            ypix = a["ypix"].flatten()
+            xpix = a["xpix"].flatten()
             # If required, do this only if the ROI is classified as cell. In any case, exclude if the ROI has all
             # 0s in F trace:
             if (iscell[j, 0] or include_all_rois) and not (traces[j, :] == 0).all():
-                rois_stack[0, ypix % rois_stack.shape[1], xpix % rois_stack.shape[2]] = k
+                rois_stack[
+                    0, ypix % rois_stack.shape[1], xpix % rois_stack.shape[2]
+                ] = k
                 k += 1
                 suite2p_idxs.append(j)
 
@@ -161,13 +177,19 @@ def export_suite2p_data_2p(master_path, output_filename=None, include_all_rois=F
     else:
         output_filename = Path(output_filename)
 
-    fl.save(output_filename,
-            dict(traces=traces_list,
-                 coords=coords,
-                 areas=areas,
-                 anatomy_stack=np.concatenate(anatomies_planes_list, 0),
-                 suite2p_idxs=suite2p_idxs,
-                 rois_stack=rois_stack), compression=None)
+    fl.save(
+        output_filename,
+        dict(
+            traces=traces_list,
+            coords=coords,
+            areas=areas,
+            anatomy_stack=np.concatenate(anatomies_planes_list, 0),
+            suite2p_idxs=suite2p_idxs,
+            rois_stack=rois_stack,
+        ),
+        compression=None,
+    )
+
 
 @njit(parallel=True)
 def get_roi_coords_areas(rois: np.ndarray):
@@ -219,14 +241,14 @@ def export_suite2p_registered(fish_path, s2p_path=None, output_path=None):
     bin_list = sorted(bin_list)
 
     if output_path is None:
-        output_path = fish_path/OUTPUT_DIRNAME
+        output_path = fish_path / OUTPUT_DIRNAME
     else:
-        output_path = Path(output_path)/OUTPUT_DIRNAME
+        output_path = Path(output_path) / OUTPUT_DIRNAME
     output_path.mkdir()
 
-    with open(fish_path/"original/stack_metadata.json") as f:
+    with open(fish_path / "original/stack_metadata.json") as f:
         meta = f.read()
-    with open(output_path/"stack_metadata.json", "w") as f:
+    with open(output_path / "stack_metadata.json", "w") as f:
         f.write(meta)
     shape = json.loads(meta)["shape_block"]
 
@@ -234,7 +256,7 @@ def export_suite2p_registered(fish_path, s2p_path=None, output_path=None):
         registered = np.fromfile(b, dtype=np.int16)
         registered = registered.reshape(shape)
         fl.save(
-            output_path/"{:04d}.h5".format(i),
+            output_path / "{:04d}.h5".format(i),
             {"stack_4D": registered},
             compression="blosc",
         )

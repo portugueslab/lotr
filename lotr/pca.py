@@ -9,8 +9,7 @@ from lotr.utils import linear_regression
 
 
 def fictive_heading_and_fit(phase_unwrapped, bouts_df, fn=5, min_bias=0.05):
-    """Compute fictive heading and perform linear regression with network phase.
-    """
+    """Compute fictive heading and perform linear regression with network phase."""
     if "idx_imaging" not in bouts_df.columns:
         bouts_df["idx_imaging"] = np.round(bouts_df["t_start"]).astype(np.int) * fn
 

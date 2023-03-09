@@ -7,10 +7,7 @@ import ipynbname
 import pooch
 from tqdm import tqdm
 
-from lotr.default_vals import (
-    DATASET_HASH,
-    DATASET_URL,
-)
+from lotr.default_vals import DATASET_HASH, DATASET_URL
 
 
 def get_dataset_location():
@@ -72,7 +69,6 @@ def mirror_all_subfolders(source_master_path, dest_master_path, file_patterns=No
 
 
 def mirror_fish_folder(source_path, dest_path, file_patterns=None, overwrite=False):
-
     if file_patterns is None:
         file_patterns = [
             "*behavior_log*",

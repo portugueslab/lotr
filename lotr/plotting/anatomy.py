@@ -204,7 +204,6 @@ class AtlasPlotter:
             )
 
     def ax_scatterplot(self, ax, projection, coords, **kwargs):
-
         idx = self.space.plane_normals[projection].index(1)
         swtch = self.get_switch(projection)
         coords = np.delete(coords, idx, axis=1)[:, :]

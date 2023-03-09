@@ -41,7 +41,6 @@ def make_cylinder_tree(coords, edges, n_sections=7, radius=4):
 
     cyl_list = []
     for i, seg in enumerate(edges):
-
         # Generate cylinder:
         cyl = trimesh.creation.cylinder(
             radius=radius,

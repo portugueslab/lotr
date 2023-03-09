@@ -27,8 +27,7 @@ MIDLINES = dict(ipn=109, mpin=284)
 
 
 class EmNeuron:
-    """Class to manipulate tracing data from EM.
-    """
+    """Class to manipulate tracing data from EM."""
 
     def __init__(self, xml_element):
         # This heuristics might have to change if we load from other sources.
@@ -232,7 +231,6 @@ class EmNeuron:
             )
 
     def generate_plotlines_from_skeleton(self, select="all", space="ipn", mirror=False):
-
         return _plotlines_from_skeleton(self.get_coords(space), self.edges_dict[select])
 
     def find_centroid_bifurcation(self, select="all", space="ipn"):

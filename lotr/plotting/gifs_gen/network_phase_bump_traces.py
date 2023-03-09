@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
@@ -192,6 +190,7 @@ def network_phase_animation(dest=None, frames=None):
     ani.save(dest, dpi=300)
 
     return fig
+
 
 if __name__ == "__main__":
     network_phase_animation(frames=list(range(0, 4000, 5)))

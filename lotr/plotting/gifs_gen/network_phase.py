@@ -14,7 +14,10 @@ def network_phase_animation(dest=None, frames=None):
     if frames is None:
         frames = list(range(0, 4000, 5))
     if dest is None:
-        dest = get_figures_location() / f"network_phase_t{frames[0]}-{frames[-1]}+{frames[1]}.mp4"
+        dest = (
+            get_figures_location()
+            / f"network_phase_t{frames[0]}-{frames[-1]}+{frames[1]}.mp4"
+        )
     # Data preparation
     # ----------------
     # Compute quantities to plot:
@@ -133,5 +136,4 @@ def network_phase_animation(dest=None, frames=None):
 if __name__ == "__main__":
     dest = get_figures_location() / "gifs"
     dest.mkdir(exist_ok=True)
-    network_phase_animation(frames=list(range(0, 4000, 5))
-    )
+    network_phase_animation(frames=list(range(0, 4000, 5)))

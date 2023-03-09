@@ -45,11 +45,10 @@ c = pltltr.shift_lum(pltltr.COLS["ph_plot"], -0.25)
 
 
 def network_phase_animation(dest=None, frames=None):
-
     if dest is None:
         dest = (
-                get_figures_location()
-                / f"network_phase_bump_traces_t{frames[0]}-{frames[-1]}+{frames[1]}.mp4"
+            get_figures_location()
+            / f"network_phase_bump_traces_t{frames[0]}-{frames[-1]}+{frames[1]}.mp4"
         )
 
     frame = 0
