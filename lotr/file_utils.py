@@ -38,7 +38,7 @@ def get_dataset_location():
     # Ugly search of super parent folder, as the unzipping has to happen on files
     return ([Path(f) for f in fnames if Path(f).name == "selected.h5"])[
         0
-    ].parent.parent.parent
+    ].parent.parent.parent.parent
 
 
 def get_figures_location():
