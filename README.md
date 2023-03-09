@@ -108,6 +108,12 @@ python ...lotr/scripts/export_all_notebooks.py
 ```
 Exporting the notebooks will also regenerate the figures!
 
+## Breakdown of the analysis content
+The code in `notebooks` is organized in three folders:
+
+- 
+
+
 
 ## Developers
 

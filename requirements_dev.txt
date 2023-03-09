@@ -10,3 +10,4 @@ nb-clean
 nbmake
 pytest-xdist
 nbconvert
+nbqa
