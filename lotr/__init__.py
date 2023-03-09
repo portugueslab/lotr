@@ -16,4 +16,5 @@ dataset_folders = sorted(
     [f.parent for f in DATASET_LOCATION.glob("lightsheet/*[0-9]_f[0-9]*/*/selected.h5")]
 )
 
+print("zuzzurell")
 print(dataset_folders)
