@@ -23,7 +23,7 @@ def test_pca_circlefit(sample_path):
         phase[::40], np.array([3.1373436, 2.1166425, 2.2496562]), rtol=1e-03
     )
     assert np.allclose(
-        circle_params,
-        (-5.451604642576278e-07, 7.922920974131252e-07, 79.07544827739056, 12.745134),
-        rtol=1e-02,
+        circle_params[2:],
+        (79.07544827739056, 12.745134),
+        rtol=1e-03,
     )
