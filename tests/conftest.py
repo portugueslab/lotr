@@ -17,7 +17,7 @@ def pytest_addoption(parser):
 @pytest.fixture(scope="session", autouse=True)
 def sample_path(pytestconfig):
     # Will be executed before the first test
-    path = DATASET_LOCATION / "210314_f1" / "210314_f1_natmov"
+    path = DATASET_LOCATION / "lightsheet" / "210314_f1" / "210314_f1_natmov"
 
     if (
         pytestconfig.getoption("preprocess")
