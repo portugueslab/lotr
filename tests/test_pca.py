@@ -1,9 +1,9 @@
 import numpy as np
 
-np.random.seed(34224)
-
 from lotr import LotrExperiment
 from lotr.pca import pca_and_phase
+
+np.random.seed(34224)
 
 
 def test_pca_circlefit(sample_path):
