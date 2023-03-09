@@ -23,10 +23,10 @@ TRACES_SMOOTH_S = 5
 # (most experiments have this FN already):
 DEFAULT_FN = 5
 
-# window before and after bouts for cropping:
+# window before and after swims for cropping:
 PRE_BOUT_WND_S, POST_BOUT_WND_S = 10, 25
 
-# window in which we will calculate the bout-triggered phase change
+# window in which we will calculate the swm-triggered phase change
 WND_DELTA_PHASE_S = np.array([15, 20])
 
 # Pad time at beginning and end of experiment in seconds when calculating PCA:
