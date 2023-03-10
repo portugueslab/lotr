@@ -148,9 +148,9 @@ of that analysis in the notebooks would be very error-prone. Just read a bit thr
 
 ### `anatomy`
 - `1. Confocal image - gad1b-GFP and h2b-mCherry.ipynb`: generate images for the gad1b:UAS line from confocal data.
-- `2a. EM reconstruction previews.ipynb`: generate the views of individual EM reconstructed cells, together with the co-registered views with the confocal and functional data.
-- `2b. Synapses plot.ipynb`: show the position of pre- and post-synaptic contacts for an individual cell.
-- `3. EM anatomical organization analysis.ipynb`: analyse the patterns in the distribution of axons and dendrites of r1pi neurons.
+- `2. EM reconstruction previews.ipynb`: generate the views of individual EM reconstructed cells, together with the co-registered views with the confocal and functional data.
+- `3. Synapses plot.ipynb`: show the position of pre- and post-synaptic contacts for an individual cell.
+- `4. EM anatomical organization analysis.ipynb`: analyse the patterns in the distribution of axons and dendrites of r1pi neurons.
 
 ### `2p`
 - `1. Fish example 2p data.ipynb`: generate plots on rPC / anatomical distribution of ROIs, and network phase /heading direction relationship. 
