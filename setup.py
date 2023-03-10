@@ -11,7 +11,7 @@ with open("README.md") as f:
 
 setup(
     name="lotr",
-    version="1.0.0",
+    version="1.0.1",
     description="Motion integration analysis",
     install_requires=requirements,
     long_description=long_description,
