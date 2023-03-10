@@ -68,14 +68,19 @@ class ResultsLogger:
     def check_dataset_consistency(self, dataset_to_check):
         assert all([d in self.dataset for d in dataset_to_check])
 
-    def add_entry(self, name, values, fids, units="", moment="mean", n_items=None):
-        # Check number of values match number of fish
+    def add_entry(
+        self, name, values, fids, units="", moment="mean", save_vals=False, n_items=None
+    ):
+        # Check number of values match number of fish:
         assert len(values) == len(fids)
+
+        # If we pass objects (eg Paths) take just the name:
         if type(fids[0]) is not str:
             fids = [f.name for f in fids]
         fids = list(fids)
 
         self.check_dataset_consistency(fids)
+
         if set(fids) == self.dataset:
             fids = "all"
 
@@ -100,31 +105,36 @@ class ResultsLogger:
         cfgparser.set(name, "n_fish", str(len(fids)))
         cfgparser.set(name, "moment", moment)
         cfgparser.set(name, "units", units)
+
+        # Save raw values if specified:
+        if save_vals:
+            cfgparser.set(name, "values", values)
+
+        # Save n items if required:
         if n_items is not None:
             cfgparser.set(name, "n_items", n_items)
-        cfgparser.set(name, "fids", str(fids))
+
+        # Save fish ids or just write "all":
+        fids_log_val = "all" if (set(fids) == self.dataset) else str(fids)
+        cfgparser.set(name, "fids", fids_log_val)
 
         with open(self.log_filename, "w") as configfile:
             cfgparser.write(configfile)
 
     def add_statcomparison(self, name1, name2, vals1, vals2, test):
-        s, p = test_dict[test]
+        s, p = test_dict[test](vals1, vals2)
 
         cfgparser = self.get_config_parser()
 
         assert all([n in cfgparser.sections() for n in [name1, name2]])
 
-        name = [f"{name1} vs {name2}"]
-
+        name = f"{name1} vs {name2}"
         if name not in cfgparser.sections():
             cfgparser.add_section(name)
 
         cfgparser.set(name, "s", _format_number(s))
-        cfgparser.set(name, "p", _format_number(p))
+        cfgparser.set(name, "p_val", _format_number(p))
         cfgparser.set(name, "test", test)
 
-
-if __name__ == "__main__":
-    print(dataset_folders)
-    logger = ResultsLogger()
-    # logger.add_entry("n_ring_neurons", np.arange(len(dataset_folders)), dataset_folders, moment="median")
+        with open(self.log_filename, "w") as configfile:
+            cfgparser.write(configfile)
