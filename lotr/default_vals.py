@@ -6,8 +6,8 @@ be defined in the analysis notebooks.
 import numpy as np
 
 # Specify remote location for the dataset:
-DATASET_URL = "https://zenodo.org/record/7714150/files/"
-DATASET_HASH = "md5:8ab94ea01bee509b8f357a6bbaaa7dae"
+DATASET_URL = "https://zenodo.org/record/7715001/files/"
+DATASET_HASH = "md5:c9e48cfbd875dd88af702b639a9f5bb5"
 # Minimum bias value that defines a turn.
 # This was defined based on trimodal curve fit over all bouts in the dataset
 TURN_BIAS = 0.239
