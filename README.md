@@ -87,7 +87,7 @@ Now you have two options:
 
 **Option 1** To execute all analyses in one run the terminal, navigate inside the repository and run :
 ```
-pytest --nbmake "./notebooks/activity/"  -n=auto
+pytest --nbmake "./notebooks/"  -n=auto
 ```
 In this way, all the figures will be created in the folder you specified together with the statistical analyses report.
 
