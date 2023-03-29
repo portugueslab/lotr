@@ -108,7 +108,7 @@ class ResultsLogger:
 
         # Save raw values if specified:
         if save_vals:
-            cfgparser.set(name, "values", values)
+            cfgparser.set(name, "values", ",".join([str(v) for v in values]))
 
         # Save n items if required:
         if n_items is not None:

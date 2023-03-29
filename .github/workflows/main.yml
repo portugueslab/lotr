@@ -40,7 +40,7 @@ jobs:
           pytest
       - name: Test
         run: |
-          pytest --cov --nbmake -k "1a. or 1b. or 1c. or 1d. or 1e. or 1f. or 2a. or 2b. or 2c. or 2d. or 2f. or 2g."  -n=auto
+          pytest --cov --nbmake -k "1a. or 1b. or 1c. or 1e. or 1f. or 2a. or 2b. or 2c. or 2d. or 2f. or 2g."  -n=auto
       - name: Coveralls
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

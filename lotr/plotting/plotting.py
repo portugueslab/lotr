@@ -119,9 +119,7 @@ def color_plot(x, y, ax=None, c=None, vlims=None, cmap="twilight", **kwargs):
     norm = colors.Normalize(vmin=vlims[0], vmax=vlims[1])
 
     # Required for stupid matplotlib to create a usable palette
-    dummy_scatter = ax.scatter(
-        [None], [None], vmin=vlims[0], vmax=vlims[1], c=[None], cmap=cmap
-    )
+    dummy_scatter = ax.scatter([], [], vmin=vlims[0], vmax=vlims[1], c=[], cmap=cmap)
     for i in range(1, len(x)):
         ax.plot(
             x[i - 1 : i + 1],
