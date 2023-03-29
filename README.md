@@ -1,5 +1,8 @@
 # LOTR project analysis
+[![zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.7715409.svg)](https://doi.org/10.5281/zenodo.7715409)
 [![tests](https://github.com/portugueslab/lotr/actions/workflows/main.yml/badge.svg)](https://github.com/portugueslab/lotr/actions/workflows/main.yml)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/python/black)
 
 This repository contains all the code for reproducing analyses and figures for the paper [Petrucco et al, Neural dynamics and architecture of the heading direction circuit in a vertebrate brain](https://www.biorxiv.org/content/10.1101/2022.04.27.489672v1). 
 
@@ -32,7 +35,7 @@ If you have installed the package in a new environment, and you already have a J
 ```shell
 conda activate lotr-env
 conda install ipykernel
-ipykernel install --name lotr-env
+ipykernel install --name lotr
 ```
 
 
@@ -160,6 +163,9 @@ of that analysis in the notebooks would be very error-prone. Just read a bit thr
 - `1. Anticorrelation and PCA - simulated data.ipynb`: demonstrate that simple anticorrelation patterns cannot produce _per-se_ the observed distributions in PC space.
 - `2. Network model.ipynb`: a simple, proof-of-principle model that produces ring-attractor dynamics given a set of reciprocally inhibiting neurons and tonic excitation.
 
+
+### Support
+Feel free to raise an issue in the repository if you are trying to replicate the analysis and encounter any issue!
 
 
 ## Developers
