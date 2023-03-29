@@ -8,10 +8,10 @@
 This repository contains all the code for reproducing analyses and figures for the paper [Petrucco et al, Neural dynamics and architecture of the heading direction circuit in a vertebrate brain](https://www.biorxiv.org/content/10.1101/2022.04.27.489672v1). 
 
 
-The code is developed and tested in a `python==3.8.8` environment. It has been partially tested also in `python==3.9`,
+The code is developed and tested in a `python==3.8.16` environment. It has been partially tested also in `python==3.9`,
 other versions of Python are not guaranteed to work. We recommend to run this code in a new environment, which you can create with
 ```shell
-create -n lotr-env python==3.8.8
+create -n lotr-env python==3.8.16
 ```
 
 ## Installation:
@@ -38,6 +38,7 @@ conda activate lotr-env
 conda install ipykernel
 ipykernel install --name lotr
 ```
+Make sure that your Jupyter is configured to make correct use of the `matplotlib widgets` backends for the plots. Alternatively, you can remove the specification from the notebooks and leave the standard `matplotlib inline` instead.
 
 
 ## Description of the repository
