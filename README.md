@@ -1,5 +1,6 @@
 # LOTR project analysis
 ![Version](https://img.shields.io/github/v/tag/portugueslab/lotr.svg)
+[![Coverage Status](https://coveralls.io/repos/github/portugueslab/lotr/badge.svg?branch=main)](https://coveralls.io/github/portugueslab/lotr?branch=main)
 [![zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.7715409.svg)](https://doi.org/10.5281/zenodo.7715409)
 [![tests](https://github.com/portugueslab/lotr/actions/workflows/main.yml/badge.svg)](https://github.com/portugueslab/lotr/actions/workflows/main.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
